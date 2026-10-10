@@ -1,0 +1,2153 @@
+# Thai (th) catalog. Columns, separated by a TAB:  context <TAB> source <TAB> translation
+#
+#   context  empty                a plain UI string; `source` is the English text in the code
+#            @id                  a command id (e.g. file.saveAs): wins over the English text for
+#                                 that menu item, so one id can read differently from its twin
+#            @plural              `source` is "one|other" (English forms); the translation lists the
+#                                 language's forms separated by "|" (see `plural` in i18n/mod.rs)
+#            anything else        a disambiguating context passed to `tr_ctx`
+#   escapes  \n  \t  \\  inside a column. `{name}` placeholders must appear in both columns.
+#   lines starting with # and blank lines are ignored.
+#
+# Clean-room: every entry was written from the plain meaning of the English label using ordinary
+# Thai computing vocabulary. No proprietary localisation resource, string table or product UI
+# (Acrobat's included) was consulted or copied; add entries the same way.
+# Product and technology names (PdfCraft, PDF, Acrobat JavaScript ...) stay in Latin letters;
+# the trailing "…" of dialog commands is kept.
+# Thai has a single plural form, so `@plural` entries hold one form (see `plural_none` in mod.rs).
+	Menu	เมนู
+	File	ไฟล์
+	Edit	แก้ไข
+	Pages	หน้า
+	View	มุมมอง
+	Help	ช่วยเหลือ
+	Preferences	การตั้งค่า
+	Preferences…	การตั้งค่า…
+	Interface language	ภาษาของอินเทอร์เฟซ
+	Identity	ตัวตน
+	Name on new comments	ชื่อที่แสดงบนความคิดเห็นใหม่
+	Open…	เปิด…
+	Open Recent	เปิดไฟล์ล่าสุด
+	Pin folder to Home…	ปักหมุดโฟลเดอร์ไว้ที่หน้าแรก…
+	Folders	โฟลเดอร์
+	Pin a folder…	ปักหมุดโฟลเดอร์…
+	Pin a folder to Home	ปักหมุดโฟลเดอร์ไว้ที่หน้าแรก
+	Pin a folder to list its newest PDFs here, such as where your scanner or a synced cloud drive saves them.	ปักหมุดโฟลเดอร์เพื่อแสดง PDF ใหม่ล่าสุดของโฟลเดอร์นั้นที่นี่ เช่นโฟลเดอร์ที่เครื่องสแกนหรือไดรฟ์คลาวด์ที่ซิงค์ไว้บันทึกไฟล์
+	Unpin	เลิกปักหมุด
+	Unpin {folder}	เลิกปักหมุด {folder}
+	Looking for PDFs…	กำลังค้นหา PDF…
+	This folder isn't available right now. It may have moved, or its drive or cloud sync is offline.	ขณะนี้โฟลเดอร์นี้ใช้งานไม่ได้ อาจถูกย้ายไปแล้ว หรือไดรฟ์หรือการซิงค์คลาวด์ออฟไลน์อยู่
+	No PDFs in this folder yet	ยังไม่มี PDF ในโฟลเดอร์นี้
+	Show less	แสดงน้อยลง
+	Show {n} more	แสดงอีก {n} รายการ
+	The newest {n} of {total} PDFs	PDF ใหม่ล่าสุด {n} จาก {total} ไฟล์
+	Pinned folders need the desktop app	โฟลเดอร์ที่ปักหมุดต้องใช้แอปเดสก์ท็อป
+	Choose a folder on this computer to pin	เลือกโฟลเดอร์บนคอมพิวเตอร์เครื่องนี้เพื่อปักหมุด
+	{folder} is already pinned to Home	{folder} ถูกปักหมุดไว้ที่หน้าแรกอยู่แล้ว
+	You can pin up to {n} folders. Unpin one first.	ปักหมุดได้สูงสุด {n} โฟลเดอร์ โปรดเลิกปักหมุดรายการหนึ่งก่อน
+	Pinned {folder} to Home	ปักหมุด {folder} ไว้ที่หน้าแรกแล้ว
+	No recent files	ไม่มีไฟล์ล่าสุด
+	New blank PDF	สร้าง PDF เปล่าใหม่
+	Create PDF from file…	สร้าง PDF จากไฟล์…
+	Create PDF from images…	สร้าง PDF จากรูปภาพ…
+	Create PDF from clipboard	สร้าง PDF จากคลิปบอร์ด
+	Combine files…	รวมไฟล์…
+	Save	บันทึก
+	Save as…	บันทึกเป็น…
+	Close file	ปิดไฟล์
+	Close all	ปิดทั้งหมด
+	Revert	ย้อนกลับ
+	Print…	พิมพ์…
+	Document properties…	คุณสมบัติเอกสาร…
+	Undo	เลิกทำ
+	Redo	ทำซ้ำ
+	Find…	ค้นหา…
+	Advanced search…	ค้นหาขั้นสูง…
+	Copy pages	คัดลอกหน้า
+	Cut pages	ตัดหน้า
+	Paste pages	วางหน้า
+	Fit visible	พอดีกับส่วนที่มองเห็น
+	Marquee zoom	ซูมแบบลากกรอบ
+	Take a snapshot	จับภาพหน้าจอ
+	Full screen mode	โหมดเต็มหน้าจอ
+	Read mode	โหมดอ่าน
+	Switch light / dark theme	สลับธีมสว่าง / มืด
+	Comments panel	แผงความคิดเห็น
+	Form fields panel	แผงฟิลด์แบบฟอร์ม
+	Clear form	ล้างแบบฟอร์ม
+	Find tools and commands…	ค้นหาเครื่องมือและคำสั่ง…
+	Zoom	ซูม
+	Actual size	ขนาดจริง
+	Zoom to page level	ซูมให้พอดีกับหน้า
+	Fit to width	พอดีกับความกว้าง
+	Display theme	ธีมการแสดงผล
+	Side panels	แผงด้านข้าง
+	Enable Acrobat JavaScript	เปิดใช้งาน Acrobat JavaScript
+	OK	ตกลง
+	Join our Discord	เข้าร่วม Discord ของเรา
+	Close	ปิด
+	Next / previous match	ผลลัพธ์ถัดไป / ก่อนหน้า
+	Copy selected text	คัดลอกข้อความที่เลือก
+	Double-click	ดับเบิลคลิก
+	Select a word	เลือกคำ
+	Clear selection / close find	ล้างการเลือก / ปิดการค้นหา
+	Zoom in / out (also pinch or ⌘-scroll)	ซูมเข้า / ออก (หรือใช้การหุบนิ้วหรือ ⌘-เลื่อน)
+	Rotate view	หมุนมุมมอง
+	First / last page	หน้าแรก / หน้าสุดท้าย
+	Previous / next page	หน้าก่อนหน้า / หน้าถัดไป
+	Delete selected pages (Organize)	ลบหน้าที่เลือก (จัดเรียง)
+	Select all pages (Organize)	เลือกทุกหน้า (จัดเรียง)
+	Home	หน้าแรก
+	Open	เปิด
+	Open a PDF (⌘O)	เปิด PDF (⌘O)
+	Dark gray theme	ธีมเทาเข้ม
+	Light theme	ธีมสว่าง
+	All tools	เครื่องมือทั้งหมด
+	Read	อ่าน
+	Convert	แปลง
+	E-Sign	ลงนามอิเล็กทรอนิกส์
+	Print (⌘P)	พิมพ์ (⌘P)
+	Save (M4)	บันทึก (M4)
+	Document properties (⌘D)	คุณสมบัติเอกสาร (⌘D)
+	Find tools and commands	ค้นหาเครื่องมือและคำสั่ง
+	Fit to height	พอดีกับความสูง
+	Zoom in	ซูมเข้า
+	Zoom out	ซูมออก
+	Rotate view clockwise	หมุนมุมมองตามเข็มนาฬิกา
+	Rotate view counterclockwise	หมุนมุมมองทวนเข็มนาฬิกา
+	Page navigation	การนำทางหน้า
+	Previous view	มุมมองก่อนหน้า
+	Next view	มุมมองถัดไป
+	Page display	การแสดงผลหน้า
+	Continuous scrolling	เลื่อนแบบต่อเนื่อง
+	Two-page view	มุมมองแบบสองหน้า
+	Single page	หน้าเดียว
+	Show cover page in two-page view	แสดงหน้าปกในมุมมองแบบสองหน้า
+	Use system setting	ใช้การตั้งค่าของระบบ
+	Light gray	เทาอ่อน
+	Dark gray	เทาเข้ม
+	Comments	ความคิดเห็น
+	Bookmarks	ที่คั่นหน้า
+	Fields	ฟิลด์
+	Layers	เลเยอร์
+	Attachments	ไฟล์แนบ
+	Signatures	ลายเซ็น
+	Accessibility Checker	ตัวตรวจสอบการเข้าถึง
+	Search	ค้นหา
+	Compare	เปรียบเทียบ
+	Page thumbnails	ภาพย่อหน้า
+	Form fields	ฟิลด์แบบฟอร์ม
+	Zoom out (⌘−)	ซูมออก (⌘−)
+	Zoom in (⌘+)	ซูมเข้า (⌘+)
+	Rotate view clockwise (⇧⌘+)	หมุนมุมมองตามเข็มนาฬิกา (⇧⌘+)
+	Toggle fit page / fit width	สลับโหมดพอดีหน้า / พอดีความกว้าง
+	Next page	หน้าถัดไป
+	Previous page	หน้าก่อนหน้า
+	Current page — type a page number or label (such as iv) and press Enter	หน้าปัจจุบัน — พิมพ์เลขหน้าหรือป้ายกำกับ (เช่น iv) แล้วกด Enter
+	Welcome to PdfCraft	ยินดีต้อนรับสู่ PdfCraft
+	An open-source PDF workbench — local, private, and scriptable.	เครื่องมือทำงานกับ PDF แบบโอเพนซอร์ส — ทำงานในเครื่อง เป็นส่วนตัว และเขียนสคริปต์ได้
+	Join the ArtCraft community	เข้าร่วมชุมชน ArtCraft
+	Get help, share feedback and follow development on Discord.	ขอความช่วยเหลือ แชร์ข้อเสนอแนะ และติดตามความคืบหน้าการพัฒนาได้บน Discord
+	Recommended tools	เครื่องมือที่แนะนำ
+	Use now	ใช้งานเลย
+	Open file	เปิดไฟล์
+	Recent	ล่าสุด
+	Files you open in PdfCraft appear here. Drop a PDF anywhere to open it.	ไฟล์ที่คุณเปิดใน PdfCraft จะแสดงที่นี่ ลาก PDF มาวางที่ใดก็ได้เพื่อเปิด
+	Privacy	ความเป็นส่วนตัว
+	PdfCraft works offline. No telemetry, no account, and no cloud processing unless you add a provider.	PdfCraft ทำงานแบบออฟไลน์ ไม่มีการเก็บข้อมูลการใช้งาน ไม่ต้องมีบัญชี และไม่ประมวลผลบนคลาวด์ เว้นแต่คุณจะเพิ่มผู้ให้บริการ
+	Scripts run in a sandbox without file or network access. With JavaScript off, Acrobat's standard format, validate and calculate functions still work.	สคริปต์ทำงานในแซนด์บ็อกซ์ที่ไม่มีสิทธิ์เข้าถึงไฟล์หรือเครือข่าย แม้ปิด JavaScript ฟังก์ชัน format, validate และ calculate มาตรฐานของ Acrobat ก็ยังทำงานได้
+	Back to all tools	กลับไปที่เครื่องมือทั้งหมด
+	Close panel	ปิดแผง
+	View less	แสดงน้อยลง
+	View more	แสดงเพิ่มเติม
+	Available	พร้อมใช้งาน
+	Ready	พร้อม
+	Search tools and commands…	ค้นหาเครื่องมือและคำสั่ง…
+	No matching tools	ไม่พบเครื่องมือที่ตรงกัน
+	Tool	เครื่องมือ
+	Command	คำสั่ง
+	Add a sticky note	เพิ่มโน้ตแบบแปะ
+	Add a text box	เพิ่มกล่องข้อความ
+	Highlight text	ไฮไลต์ข้อความ
+	Underline text	ขีดเส้นใต้ข้อความ
+	Strikethrough text	ขีดฆ่าข้อความ
+	Squiggly underline text	ขีดเส้นใต้แบบหยักข้อความ
+	Draw freehand	วาดเส้นแบบอิสระ
+	Draw a line	วาดเส้นตรง
+	Draw an arrow	วาดลูกศร
+	Draw a rectangle	วาดรูปสี่เหลี่ยมผืนผ้า
+	Draw an oval	วาดรูปวงรี
+	Draw a polygon	วาดรูปหลายเหลี่ยม
+	Draw connected lines	วาดเส้นเชื่อมต่อกัน
+	Draw a cloud	วาดรูปเมฆ
+	Add a callout	เพิ่มคำอธิบาย
+	Insert text	แทรกข้อความ
+	Replace text	แทนที่ข้อความ
+	Attach a file	แนบไฟล์
+	Erase drawings	ลบลายเส้นที่วาด
+	Flatten comments	ทำให้ความคิดเห็นแบนลงในหน้า
+	Import comments…	นำเข้าความคิดเห็น…
+	Add a stamp	เพิ่มตราประทับ
+	Export all comments to data file…	ส่งออกความคิดเห็นทั้งหมดไปยังไฟล์ข้อมูล…
+	Hide all comments	ซ่อนความคิดเห็นทั้งหมด
+	Summarize comments	สรุปความคิดเห็น
+	Import form data…	นำเข้าข้อมูลแบบฟอร์ม…
+	Export form data…	ส่งออกข้อมูลแบบฟอร์ม…
+	PDF/A…	PDF/A…
+	Action Wizard…	ตัวช่วยสร้างการทำงาน…
+	Prepare for distribution…	เตรียมเอกสารสำหรับการเผยแพร่…
+	Optimize scanned documents…	ปรับเอกสารที่สแกนให้เหมาะสม…
+	Compare files…	เปรียบเทียบไฟล์…
+	Detect form fields	ตรวจจับฟิลด์แบบฟอร์ม
+	Merge data files into spreadsheet…	รวมไฟล์ข้อมูลเป็นสเปรดชีต…
+	Flatten form fields	ทำให้ฟิลด์แบบฟอร์มแบนลงในหน้า
+	Prepare a form	เตรียมแบบฟอร์ม
+	Tab order: by rows	ลำดับแท็บ: ตามแถว
+	Tab order: by columns	ลำดับแท็บ: ตามคอลัมน์
+	Tab order: by document structure	ลำดับแท็บ: ตามโครงสร้างเอกสาร
+	Add text	เพิ่มข้อความ
+	Edit text & images	แก้ไขข้อความและรูปภาพ
+	Add or edit links	เพิ่มหรือแก้ไขลิงก์
+	Create links from URLs	สร้างลิงก์จาก URL
+	Remove all links	นำลิงก์ทั้งหมดออก
+	Add Bates numbering…	เพิ่มเลขลำดับ Bates…
+	Add image…	เพิ่มรูปภาพ…
+	Redact text and images	ปกปิดข้อความและรูปภาพ
+	Redact pages…	ปกปิดหน้า…
+	Find text and redact…	ค้นหาข้อความและปกปิด…
+	Redaction properties…	คุณสมบัติการปกปิดข้อมูล…
+	Apply redactions…	ใช้การปกปิดข้อมูล…
+	Clear redaction marks	ล้างเครื่องหมายปกปิดข้อมูล
+	Remove hidden information…	นำข้อมูลที่ซ่อนอยู่ออก…
+	Sanitize document…	ล้างข้อมูลเอกสาร…
+	Field properties…	คุณสมบัติฟิลด์…
+	Add a text field	เพิ่มฟิลด์ข้อความ
+	Add a checkbox	เพิ่มช่องทำเครื่องหมาย
+	Add a radio button	เพิ่มปุ่มตัวเลือก
+	Add a drop-down list	เพิ่มรายการแบบเลื่อนลง
+	Add a list box	เพิ่มกล่องรายการ
+	Add a button	เพิ่มปุ่ม
+	Add an image field	เพิ่มฟิลด์รูปภาพ
+	Add a date field	เพิ่มฟิลด์วันที่
+	Add a digital signature field	เพิ่มฟิลด์ลายเซ็นดิจิทัล
+	Digitally sign	ลงนามดิจิทัล
+	Certify (visible signature)	รับรอง (ลายเซ็นที่มองเห็น)
+	Certify (invisible signature)	รับรอง (ลายเซ็นที่ไม่มองเห็น)
+	Validate all signatures	ตรวจสอบลายเซ็นทั้งหมด
+	Signatures panel	แผงลายเซ็น
+	Fill & Sign: add text	กรอกและลงนาม: เพิ่มข้อความ
+	Fill & Sign: checkmark	กรอกและลงนาม: เครื่องหมายถูก
+	Fill & Sign: cross	กรอกและลงนาม: เครื่องหมายกากบาท
+	Fill & Sign: dot	กรอกและลงนาม: จุด
+	Fill & Sign: line	กรอกและลงนาม: เส้น
+	Fill & Sign: date	กรอกและลงนาม: วันที่
+	Fill & Sign: sign	กรอกและลงนาม: ลงนาม
+	Fill & Sign: initials	กรอกและลงนาม: ชื่อย่อ
+	Export to image…	ส่งออกเป็นรูปภาพ…
+	Reduce file size…	ลดขนาดไฟล์…
+	Optimize PDF…	ปรับ PDF ให้เหมาะสม…
+	Export to text…	ส่งออกเป็นข้อความ…
+	Export to Word…	ส่งออกเป็น Word…
+	Export to HTML…	ส่งออกเป็น HTML…
+	Export to RTF…	ส่งออกเป็น RTF…
+	JavaScript console…	คอนโซล JavaScript…
+	Document JavaScripts…	JavaScript ของเอกสาร…
+	Recognize text…	รู้จำข้อความ…
+	Recognize text in multiple files…	รู้จำข้อความในหลายไฟล์…
+	Check for accessibility…	ตรวจสอบการเข้าถึง…
+	Open accessibility report	เปิดรายงานการเข้าถึง
+	Change reading options…	เปลี่ยนตัวเลือกการอ่าน…
+	Add alternate text…	เพิ่มข้อความทางเลือก…
+	Export all images…	ส่งออกรูปภาพทั้งหมด…
+	Add header & footer…	เพิ่มส่วนหัวและส่วนท้าย…
+	Update header & footer…	อัปเดตส่วนหัวและส่วนท้าย…
+	Remove header & footer	นำส่วนหัวและส่วนท้ายออก
+	Add watermark…	เพิ่มลายน้ำ…
+	Update watermark…	อัปเดตลายน้ำ…
+	Remove watermark	นำลายน้ำออก
+	Add background…	เพิ่มพื้นหลัง…
+	Update background…	อัปเดตพื้นหลัง…
+	Remove background	นำพื้นหลังออก
+	Protect using password…	ป้องกันด้วยรหัสผ่าน…
+	Remove security	นำการรักษาความปลอดภัยออก
+	Security properties…	คุณสมบัติความปลอดภัย…
+	Organize pages	จัดเรียงหน้า
+	New bookmark	ที่คั่นหน้าใหม่
+	Rotate pages clockwise	หมุนหน้าตามเข็มนาฬิกา
+	Rotate pages counterclockwise	หมุนหน้าทวนเข็มนาฬิกา
+	Delete pages	ลบหน้า
+	Insert blank page	แทรกหน้าเปล่า
+	Rotate pages…	หมุนหน้า…
+	Duplicate pages	ทำสำเนาหน้า
+	Crop pages	ครอบตัดหน้า
+	Set page boxes…	กำหนดกล่องหน้า…
+	Insert pages from file…	แทรกหน้าจากไฟล์…
+	Replace pages…	แทนที่หน้า…
+	Extract pages…	แยกหน้าออก…
+	Split document…	แยกเอกสาร…
+	Number pages…	ใส่เลขหน้า…
+	Keyboard shortcuts	ทางลัดแป้นพิมพ์
+	Join the ArtCraft Discord	เข้าร่วม Discord ของ ArtCraft
+	PdfCraft web page	เว็บเพจ PdfCraft
+	PdfCraft on GitHub	PdfCraft บน GitHub
+	ArtCraft website	เว็บไซต์ ArtCraft
+	Check for updates…	ตรวจสอบอัปเดต…
+	About PdfCraft	เกี่ยวกับ PdfCraft
+	Export a PDF	ส่งออก PDF
+	Export to	ส่งออกเป็น
+	Microsoft Word (.docx)	Microsoft Word (.docx)
+	Spreadsheet (.xlsx)	สเปรดชีต (.xlsx)
+	Presentation (.pptx)	งานนำเสนอ (.pptx)
+	Image (PNG)	รูปภาพ (PNG)
+	Export all images	ส่งออกรูปภาพทั้งหมด
+	HTML web page	เว็บเพจ HTML
+	Rich Text Format (.rtf)	Rich Text Format (.rtf)
+	Text (plain)	ข้อความ (ล้วน)
+	PostScript / EPS	PostScript / EPS
+	Fill & Sign	กรอกและลงนาม
+	Fill	กรอก
+	Checkmark	เครื่องหมายถูก
+	Cross	กากบาท
+	Dot	จุด
+	Line	เส้น
+	Date	วันที่
+	Signature	ลายเซ็น
+	Initials	ชื่อย่อ
+	Edit a PDF	แก้ไข PDF
+	Modify page	แก้ไขหน้า
+	Rotate pages	หมุนหน้า
+	Insert pages	แทรกหน้า
+	Extract pages	แยกหน้าออก
+	Add content	เพิ่มเนื้อหา
+	Text	ข้อความ
+	Image	รูปภาพ
+	Header and footer	ส่วนหัวและส่วนท้าย
+	Watermark	ลายน้ำ
+	Link	ลิงก์
+	Bates numbering	การใส่เลขแบบ Bates
+	Background	พื้นหลัง
+	Attach file	แนบไฟล์
+	Create a PDF	สร้าง PDF
+	Create from	สร้างจาก
+	Single file	ไฟล์เดียว
+	Multiple files	หลายไฟล์
+	Images	รูปภาพ
+	Clipboard	คลิปบอร์ด
+	Blank page	หน้าว่าง
+	Combine files	รวมไฟล์
+	Combine	รวมไฟล์
+	Add files to combine	เพิ่มไฟล์ที่จะรวม
+	Page options	ตัวเลือกหน้า
+	Page grid	ตารางหน้า
+	Rotate	หมุน
+	Delete	ลบ
+	Extract	แยกออก
+	Insert	แทรก
+	Replace	แทนที่
+	Split	แยก
+	More	เพิ่มเติม
+	Set page boxes	กำหนดกล่องหน้า
+	Page labels	ป้ายกำกับหน้า
+	Page transitions	การเปลี่ยนหน้า
+	Add comments	เพิ่มความคิดเห็น
+	Markup	มาร์กอัป
+	Sticky note	โน้ตติด
+	Underline	ขีดเส้นใต้
+	Strikethrough	ขีดฆ่า
+	Squiggly underline	ขีดเส้นใต้หยัก
+	Text box	กล่องข้อความ
+	Drawing	การวาด
+	Rectangle	สี่เหลี่ยมผืนผ้า
+	Oval	วงรี
+	Arrow	ลูกศร
+	Cloud	รูปเมฆ
+	Stamp	ตราประทับ
+	Review	ตรวจทาน
+	Comment list	รายการความคิดเห็น
+	Scan & OCR	สแกนและ OCR
+	Recognize text	รู้จำข้อความ
+	In this file	ในไฟล์นี้
+	In multiple files	ในหลายไฟล์
+	Enhance scanned file	ปรับปรุงไฟล์ที่สแกน
+	Correct recognized text	แก้ไขข้อความที่รู้จำได้
+	Protect a PDF	ป้องกัน PDF
+	Protect	ป้องกัน
+	Protect with password	ป้องกันด้วยรหัสผ่าน
+	Remove hidden information	นำข้อมูลที่ซ่อนอยู่ออก
+	Advanced options	ตัวเลือกขั้นสูง
+	Encrypt with certificate	เข้ารหัสด้วยใบรับรอง
+	Security properties	คุณสมบัติด้านความปลอดภัย
+	Redact a PDF	ปกปิดข้อมูลใน PDF
+	Redact	ปกปิดข้อมูล
+	Redact pages	ปกปิดข้อมูลในหน้า
+	Find text and redact	ค้นหาข้อความและปกปิดข้อมูล
+	Set properties	กำหนดคุณสมบัติ
+	Sanitize document	ล้างข้อมูลเอกสาร
+	Compress a PDF	บีบอัด PDF
+	Optimize	ปรับให้เหมาะสม
+	Reduce file size	ลดขนาดไฟล์
+	Advanced optimization	การปรับให้เหมาะสมขั้นสูง
+	Audit space usage	ตรวจสอบการใช้พื้นที่
+	Field list	รายการฟิลด์
+	Field properties	คุณสมบัติฟิลด์
+	Tab order by rows	ลำดับแท็บตามแถว
+	Tab order by columns	ลำดับแท็บตามคอลัมน์
+	Import data	นำเข้าข้อมูล
+	Export data	ส่งออกข้อมูล
+	Add form components	เพิ่มส่วนประกอบแบบฟอร์ม
+	Text field	ฟิลด์ข้อความ
+	Checkbox	ช่องทำเครื่องหมาย
+	Radio button	ปุ่มตัวเลือก
+	Drop-down list	รายการแบบเลื่อนลง
+	List box	กล่องรายการ
+	Button	ปุ่ม
+	Image field	ฟิลด์รูปภาพ
+	Date field	ฟิลด์วันที่
+	Digital signature	ลายเซ็นดิจิทัล
+	Stamps	ตราประทับ
+	Stamp palette	ชุดตราประทับ
+	Use a certificate	ใช้ใบรับรอง
+	Certificates	ใบรับรอง
+	Timestamp	การประทับเวลา
+	Use print production	ใช้การผลิตงานพิมพ์
+	Print production	การผลิตงานพิมพ์
+	Output preview	ตัวอย่างผลลัพธ์
+	Preflight	ตรวจสอบก่อนพิมพ์
+	Convert colors	แปลงสี
+	Add printer marks	เพิ่มเครื่องหมายการพิมพ์
+	Fix hairlines	แก้ไขเส้นบาง
+	Measure objects	วัดวัตถุ
+	Measure	วัด
+	Measuring tool	เครื่องมือวัด
+	Geospatial location	ตำแหน่งทางภูมิศาสตร์
+	Compare files	เปรียบเทียบไฟล์
+	Select files to compare	เลือกไฟล์ที่จะเปรียบเทียบ
+	Use guided actions	ใช้การทำงานแบบมีคำแนะนำ
+	Actions list	รายการการทำงาน
+	Action Wizard	ตัวช่วยสร้างการทำงาน
+	Make accessible	ทำให้เข้าถึงได้
+	Prepare for distribution	เตรียมพร้อมสำหรับการเผยแพร่
+	Optimize scanned documents	ปรับเอกสารที่สแกนให้เหมาะสม
+	Archive documents	เก็บถาวรเอกสาร
+	Prepare for accessibility	เตรียมพร้อมสำหรับการเข้าถึง
+	Accessibility	การเข้าถึง
+	Automatically tag PDF	ติดแท็ก PDF โดยอัตโนมัติ
+	Change reading options	เปลี่ยนตัวเลือกการอ่าน
+	Check for accessibility	ตรวจสอบการเข้าถึง
+	Add alternate text	เพิ่มข้อความทางเลือก
+	Fix reading order	แก้ไขลำดับการอ่าน
+	Apply PDF standards	ใช้มาตรฐาน PDF
+	Standards	มาตรฐาน
+	Save as PDF/A	บันทึกเป็น PDF/A
+	Save as PDF/X	บันทึกเป็น PDF/X
+	Save as PDF/UA	บันทึกเป็น PDF/UA
+	Add search index	เพิ่มดัชนีค้นหา
+	Index	ดัชนี
+	Manage embedded index	จัดการดัชนีที่ฝังไว้
+	Use JavaScript	ใช้ JavaScript
+	JavaScript	JavaScript
+	Console	คอนโซล
+	Document JavaScripts	JavaScript ของเอกสาร
+	Document actions	การทำงานของเอกสาร
+	AI assistant	ผู้ช่วย AI
+	Bring your own model (off by default)	ใช้โมเดลของคุณเอง (ปิดไว้เป็นค่าเริ่มต้น)
+	Summarize	สรุป
+	Ask about this document	ถามเกี่ยวกับเอกสารนี้
+	Translate	แปลภาษา
+	pages	หน้า
+	Planned	ตามแผน
+	Planned for milestone	ตามแผนสำหรับไมล์สโตน
+	open to see what it will include	เปิดเพื่อดูว่าจะมีอะไรบ้าง
+	Optional: needs an AI provider you configure	ไม่บังคับ: ต้องมีผู้ให้บริการ AI ที่คุณตั้งค่าเอง
+	Coming in milestone	กำลังจะมาในไมล์สโตน
+	Items marked Ready work today.	รายการที่ทำเครื่องหมายว่า พร้อม ใช้งานได้แล้ววันนี้
+	Preview	ดูตัวอย่าง
+	Edit fields	แก้ไขฟิลด์
+	Try the form as people filling it in will see it	ลองใช้แบบฟอร์มในมุมมองเดียวกับที่ผู้กรอกจะเห็น
+	Redact all	ปกปิดข้อมูลทั้งหมด
+	Clear all	ล้างทั้งหมด
+	Rotate page	หมุนหน้า
+	Delete page	ลบหน้า
+	Move page	ย้ายหน้า
+	Move pages	ย้ายหน้า
+	Duplicate page	ทำสำเนาหน้า
+	Replace page	แทนที่หน้า
+	Replace pages	แทนที่หน้า
+	Crop page	ครอบตัดหน้า
+	Cancel	ยกเลิก
+	Don't save	ไม่บันทึก
+	Apply	ใช้
+	Run	เรียกใช้
+	Clear	ล้าง
+	Sanitize	ล้างข้อมูล
+	Mark all	ทำเครื่องหมายทั้งหมด
+	Save changes to “{name}” before closing?	บันทึกการเปลี่ยนแปลงใน “{name}” ก่อนปิดหรือไม่?
+	Your changes will be lost if you don't save them.	การเปลี่ยนแปลงของคุณจะสูญหายหากไม่บันทึก
+	Password required	ต้องระบุรหัสผ่าน
+	“{name}” is protected. Enter a password to open it.	“{name}” ถูกป้องกันไว้ กรุณาใส่รหัสผ่านเพื่อเปิด
+	Password	รหัสผ่าน
+	Incorrect password. Try again.	รหัสผ่านไม่ถูกต้อง ลองใหม่อีกครั้ง
+	Recognize Text	รู้จำข้อความ
+	Password protection will be applied when you save	ระบบจะใช้การป้องกันด้วยรหัสผ่านเมื่อคุณบันทึก
+	Saved the print-ready PDF to {path}	บันทึก PDF ที่พร้อมพิมพ์ไปที่ {path} แล้ว
+	Could not save: {e}	บันทึกไม่สำเร็จ: {e}
+	Earlier in tab order	อยู่ก่อนในลำดับแท็บ
+	Later in tab order	อยู่หลังในลำดับแท็บ
+	From:	จาก:
+	To:	ถึง:
+	High Resolution	ความละเอียดสูง
+	Print	พิมพ์
+	Verify to see what the document needs.	ตรวจสอบเพื่อดูว่าเอกสารต้องการอะไรบ้าง
+	Set Page Boxes	กำหนดกล่องหน้า
+	Signature panel	แผงลายเซ็น
+	{month} {day}, {y}	{day} {month} {y}
+	The document's security settings don't allow filling in form fields	การตั้งค่าความปลอดภัยของเอกสารไม่อนุญาตให้กรอกฟิลด์แบบฟอร์ม
+	{name} is read-only	{name} เป็นแบบอ่านอย่างเดียว
+	{name} has no action	{name} ไม่มีการทำงาน
+	Previous month	เดือนก่อนหน้า
+	Next month	เดือนถัดไป
+	January	มกราคม
+	February	กุมภาพันธ์
+	March	มีนาคม
+	April	เมษายน
+	May	พฤษภาคม
+	June	มิถุนายน
+	July	กรกฎาคม
+	August	สิงหาคม
+	September	กันยายน
+	October	ตุลาคม
+	November	พฤศจิกายน
+	December	ธันวาคม
+	Done	เสร็จ
+	This certificate is in your list of trusted certificates.	ใบรับรองนี้อยู่ในรายการใบรับรองที่เชื่อถือได้ของคุณ
+	This certificate is trusted through a certificate above it in the chain.	ใบรับรองนี้ได้รับความเชื่อถือผ่านใบรับรองที่อยู่เหนือขึ้นไปในห่วงโซ่ใบรับรอง
+	This certificate is not trusted. Signatures made with it show an unknown identity.	ใบรับรองนี้ไม่ได้รับความเชื่อถือ ลายเซ็นที่สร้างจากใบรับรองนี้จะแสดงตัวตนที่ไม่รู้จัก
+	Add to Trusted Certificates	เพิ่มในใบรับรองที่เชื่อถือได้
+	Export…	ส่งออก…
+	PDF Optimizer	ตัวปรับ PDF ให้เหมาะสม
+	Discard Objects	ตัดทิ้งวัตถุ
+	Discard User Data	ตัดทิ้งข้อมูลผู้ใช้
+	Clean Up	ทำความสะอาด
+	Color Images	รูปภาพสี
+	Grayscale Images	รูปภาพระดับสีเทา
+	Bicubic downsampling to	ลดความละเอียดแบบไบคิวบิกเป็น
+	for images above	สำหรับรูปภาพที่สูงกว่า
+	Compression	การบีบอัด
+	ZIP	ZIP
+	Retain existing	คงค่าเดิมไว้
+	Minimum	ต่ำสุด
+	Low	ต่ำ
+	High	สูง
+	Maximum	สูงสุด
+	Each image is measured where pages draw it; an image is replaced only if the result is smaller.	รูปภาพแต่ละรูปจะถูกวัดที่ตำแหน่งที่หน้าแสดงรูปนั้น และรูปภาพจะถูกแทนที่ก็ต่อเมื่อผลลัพธ์มีขนาดเล็กลงเท่านั้น
+	Discard all links, actions and JavaScript	ตัดทิ้งลิงก์ การทำงาน และ JavaScript ทั้งหมด
+	Discard alternate images	ตัดทิ้งรูปภาพทางเลือก
+	Discard embedded page thumbnails	ตัดทิ้งภาพย่อหน้าที่ฝังไว้
+	Discard document tags	ตัดทิ้งแท็กของเอกสาร
+	Discard embedded print settings	ตัดทิ้งการตั้งค่าการพิมพ์ที่ฝังไว้
+	Discard bookmarks	ตัดทิ้งที่คั่นหน้า
+	Discard hidden layer content	ตัดทิ้งเนื้อหาเลเยอร์ที่ซ่อนอยู่
+	Discard all comments, forms and multimedia	ตัดทิ้งความคิดเห็น แบบฟอร์ม และมัลติมีเดียทั้งหมด
+	Discard document information and metadata	ตัดทิ้งข้อมูลเอกสารและข้อมูลเมตา
+	Discard all object data (file attachments)	ทิ้งข้อมูลออบเจ็กต์ทั้งหมด (ไฟล์แนบ)
+	Discard private data of other applications	ทิ้งข้อมูลส่วนตัวของแอปพลิเคชันอื่น
+	Discard hidden text	ทิ้งข้อความที่ซ่อนอยู่
+	Use Flate to encode streams that are not encoded	ใช้ Flate เข้ารหัสสตรีมที่ยังไม่ได้เข้ารหัส
+	Remove invalid links and bookmarks	นำลิงก์และที่คั่นหน้าที่ไม่ถูกต้องออก
+	Remove unreferenced named destinations	นำปลายทางที่มีชื่อซึ่งไม่ถูกอ้างอิงออก
+	Compress document structure (object streams)	บีบอัดโครงสร้างเอกสาร (ออบเจ็กต์สตรีม)
+	Remove unused objects and merge identical ones	นำออบเจ็กต์ที่ไม่ได้ใช้ออกและรวมออบเจ็กต์ที่เหมือนกันเข้าด้วยกัน
+	Audit space usage…	ตรวจสอบการใช้พื้นที่…
+	Space Audit	การตรวจสอบพื้นที่
+	Bytes	ไบต์
+	Content Streams	สตรีมเนื้อหา
+	X Object Forms	ฟอร์ม X Object
+	Structure Info	ข้อมูลโครงสร้าง
+	Thumbnails	ภาพขนาดย่อ
+	Named Destinations	ปลายทางที่มีชื่อ
+	Color Spaces	ปริภูมิสี
+	Shadings	การแรเงา
+	Patterns (graphics objects)	ลวดลาย (ออบเจ็กต์กราฟิก)
+	Extended Graphics States	สถานะกราฟิกแบบขยาย
+	Embedded Files	ไฟล์ที่ฝังไว้
+	Document Overhead	ส่วนเกินของเอกสาร
+	Total	รวม
+	Text Field Properties	คุณสมบัติฟิลด์ข้อความ
+	Check Box Properties	คุณสมบัติช่องทำเครื่องหมาย
+	Radio Button Properties	คุณสมบัติปุ่มตัวเลือก
+	Dropdown Properties	คุณสมบัติรายการแบบเลื่อนลง
+	List Box Properties	คุณสมบัติกล่องรายการ
+	Button Properties	คุณสมบัติปุ่ม
+	Digital Signature Properties	คุณสมบัติลายเซ็นดิจิทัล
+	Position	ตำแหน่ง
+	Options	ตัวเลือก
+	Validate	ตรวจสอบความถูกต้อง
+	Calculate	คำนวณ
+	Actions	การทำงาน
+	This field is locked. Unlock it to change its properties.	ฟิลด์นี้ถูกล็อกอยู่ ปลดล็อกเพื่อเปลี่ยนคุณสมบัติ
+	Tooltip:	คำอธิบายเครื่องมือ:
+	Common Properties	คุณสมบัติทั่วไป
+	Read Only	อ่านอย่างเดียว
+	Required	จำเป็น
+	Font Size:	ขนาดฟอนต์:
+	Auto	อัตโนมัติ
+	Text Color:	สีข้อความ:
+	Borders and Colors	เส้นขอบและสี
+	Border Color:	สีเส้นขอบ:
+	Fill Color:	สีพื้น:
+	No color	ไม่มีสี
+	Beveled	ขอบลาด
+	Left:	ซ้าย:
+	Bottom:	ล่าง:
+	Width:	ความกว้าง:
+	Height:	ความสูง:
+	Points from the page's bottom-left corner.	ค่าพิกัดมีหน่วยเป็นพอยต์จากมุมล่างซ้ายของหน้า
+	Alignment:	การจัดแนว:
+	Default Value:	ค่าเริ่มต้น:
+	Multi-line	หลายบรรทัด
+	Scroll long text	เลื่อนดูข้อความยาว
+	Allow Rich Text Formatting	อนุญาตการจัดรูปแบบข้อความแบบ Rich Text
+	Limit of	จำกัด
+	characters	ตัวอักษร
+	Field is used for file selection	ฟิลด์นี้ใช้สำหรับเลือกไฟล์
+	Check spelling	ตรวจสอบการสะกด
+	Comb of	แบบหวี
+	Export Value: {on}	ค่าส่งออก: {on}
+	Check box is checked by default	ช่องทำเครื่องหมายถูกเลือกไว้เป็นค่าเริ่มต้น
+	Button is checked by default	ปุ่มถูกเลือกไว้เป็นค่าเริ่มต้น
+	Buttons with the same name and value are selected in unison	ปุ่มที่มีชื่อและค่าเดียวกันจะถูกเลือกพร้อมกัน
+	Item:	รายการ:
+	Item List	รายการตัวเลือก
+	Up	ขึ้น
+	Delete {o}	ลบ {o}
+	Add the choices people pick from.	เพิ่มตัวเลือกที่ผู้ใช้เลือกได้
+	Default:	ค่าเริ่มต้น:
+	(none)	(ไม่มี)
+	Sort items	เรียงลำดับรายการ
+	Allow user to enter custom text	อนุญาตให้ผู้ใช้ป้อนข้อความเอง
+	Multiple selection	เลือกได้หลายรายการ
+	Commit selected value immediately	ยืนยันค่าที่เลือกทันที
+	Number	ตัวเลข
+	Percentage	เปอร์เซ็นต์
+	Time	เวลา
+	Special	พิเศษ
+	Select format category:	เลือกหมวดหมู่รูปแบบ:
+	The value is shown as typed.	ค่าจะแสดงตามที่พิมพ์ไว้
+	Decimal places:	ตำแหน่งทศนิยม:
+	Separator style:	รูปแบบตัวคั่น:
+	Currency symbol:	สัญลักษณ์สกุลเงิน:
+	Before the number	นำหน้าตัวเลข
+	Negative number style:	รูปแบบจำนวนลบ:
+	Format:	รูปแบบ:
+	Custom:	กำหนดเอง:
+	Zip Code	รหัสไปรษณีย์
+	Zip Code + 4	รหัสไปรษณีย์ + 4
+	Phone Number	หมายเลขโทรศัพท์
+	Social Security Number	หมายเลขประกันสังคม
+	Arbitrary Mask	มาสก์แบบกำหนดเอง
+	Mask:	มาสก์:
+	9 digit, A letter, O letter or digit, X any character	9 แทนตัวเลข, A แทนตัวอักษร, O แทนตัวอักษรหรือตัวเลข, X แทนอักขระใด ๆ
+	Example: {sample}	ตัวอย่าง: {sample}
+	Field value is not validated	ค่าฟิลด์ไม่ถูกตรวจสอบความถูกต้อง
+	Field value is in range:	ค่าฟิลด์อยู่ในช่วง:
+	Add an Action	เพิ่มการทำงาน
+	Select Trigger:	เลือกทริกเกอร์:
+	Mouse Up	เมื่อปล่อยปุ่มเมาส์
+	Mouse Down	เมื่อกดปุ่มเมาส์
+	Mouse Enter	เมื่อเมาส์เข้าสู่
+	Mouse Exit	เมื่อเมาส์ออกจาก
+	On Focus	เมื่อได้รับโฟกัส
+	On Blur	เมื่อเสียโฟกัส
+	Select Action:	เลือกการทำงาน:
+	Open a web link	เปิดลิงก์เว็บ
+	Reset a form	รีเซ็ตแบบฟอร์ม
+	Execute a menu item	เรียกใช้รายการเมนู
+	Show a field	แสดงฟิลด์
+	Hide a field	ซ่อนฟิลด์
+	Submit a form	ส่งแบบฟอร์ม
+	Fields to reset (comma-separated; empty: all)	ฟิลด์ที่จะรีเซ็ต (คั่นด้วยเครื่องหมายจุลภาค; ถ้าเว้นว่างจะรีเซ็ตทั้งหมด)
+	Print, NextPage, PrevPage, FirstPage or LastPage	Print, NextPage, PrevPage, FirstPage หรือ LastPage
+	Field names (comma-separated)	ชื่อฟิลด์ (คั่นด้วยเครื่องหมายจุลภาค)
+	URL to submit to	URL ที่จะส่งไป
+	Script:	สคริปต์:
+	Value:	ค่า:
+	No actions	ไม่มีการทำงาน
+	Value is not calculated	ค่าไม่ถูกคำนวณ
+	Value is the	ค่าคือ
+	sum (+)	ผลบวก (+)
+	product (x)	ผลคูณ (x)
+	average	ค่าเฉลี่ย
+	minimum	ค่าต่ำสุด
+	maximum	ค่าสูงสุด
+	of the following fields:	ของฟิลด์ต่อไปนี้:
+	Simplified field notation:	สัญกรณ์ฟิลด์แบบย่อ:
+	Field names with + - * / and parentheses; put \\ before spaces in names.	ชื่อฟิลด์ที่ใช้ + - * / และวงเล็บ; ใส่ \\ หน้าช่องว่างในชื่อ
+	Format text	จัดรูปแบบข้อความ
+	Bold	ตัวหนา
+	Italic	ตัวเอียง
+	Align left	จัดแนวซ้าย
+	Centre	กึ่งกลาง
+	Align right	จัดแนวขวา
+	Justify	จัดเต็มแนว
+	Standard fonts; text outside Windows-1252 isn't supported yet.	ฟอนต์มาตรฐาน; ยังไม่รองรับข้อความนอกช่วง Windows-1252
+	Edit image	แก้ไขรูปภาพ
+	Rotate counterclockwise	หมุนทวนเข็มนาฬิกา
+	Rotate clockwise	หมุนตามเข็มนาฬิกา
+	Flip horizontal	พลิกแนวนอน
+	Flip vertical	พลิกแนวตั้ง
+	Replace image	แทนที่รูปภาพ
+	Crop (% trimmed from each side)	ครอบตัด (% ที่ตัดออกจากแต่ละด้าน)
+	Click on the page to add text; each click starts a new box, and ✓ finishes. Drag items to move them, drag a corner to resize, double-click text to edit it.	คลิกบนหน้าเพื่อเพิ่มข้อความ; การคลิกแต่ละครั้งจะเริ่มกล่องใหม่ และกด ✓ เพื่อเสร็จสิ้น ลากรายการเพื่อย้ายตำแหน่ง ลากมุมเพื่อปรับขนาด และดับเบิลคลิกข้อความเพื่อแก้ไข
+	Choose an image	เลือกรูปภาพ
+	Export to Image	ส่งออกเป็นรูปภาพ
+	Export to Text	ส่งออกเป็นข้อความ
+	Export All Images	ส่งออกรูปภาพทั้งหมด
+	Resolution	ความละเอียด
+	Format	รูปแบบ
+	Quality	คุณภาพ
+	One {f} file per page, named after the document.	หนึ่งไฟล์ {f} ต่อหน้า ตั้งชื่อตามเอกสาร
+	Exclude images smaller than	ไม่รวมรูปภาพที่เล็กกว่า
+	No limit	ไม่จำกัด
+	Each image once, named after the document and page. JPEG images are saved unchanged; others as PNG.	รูปภาพแต่ละรูปบันทึกครั้งเดียว ตั้งชื่อตามเอกสารและหน้า รูปภาพ JPEG จะถูกบันทึกไว้โดยไม่เปลี่ยนแปลง ส่วนรูปแบบอื่นจะถูกบันทึกเป็น PNG
+	Plain text in reading order; pages are separated by form feeds.	ข้อความล้วนตามลำดับการอ่าน แต่ละหน้าคั่นด้วยอักขระขึ้นหน้าใหม่
+	Create {what}	สร้าง{what}
+	initials	อักษรย่อ
+	signature	ลายเซ็น
+	Create Custom Stamp	สร้างตราประทับกำหนดเอง
+	From {file}	จาก {file}
+	Category:	หมวดหมู่:
+	e.g. My stamps	เช่น ตราประทับของฉัน
+	Name:	ชื่อ:
+	Custom	กำหนดเอง
+	Delete stamp	ลบตราประทับ
+	Create custom stamp…	สร้างตราประทับกำหนดเอง…
+	From a PDF page or an image	จากหน้าของ PDF หรือรูปภาพ
+	Line spacing	ระยะห่างบรรทัด
+	Character spacing	ระยะห่างตัวอักษร
+	Horizontal scale	มาตราส่วนแนวนอน
+	Rotate Clockwise	หมุนตามเข็มนาฬิกา
+	Rotate Counterclockwise	หมุนทวนเข็มนาฬิกา
+	Flip Horizontal	พลิกแนวนอน
+	Flip Vertical	พลิกแนวตั้ง
+	Replace Image…	แทนที่รูปภาพ…
+	Save Image As…	บันทึกภาพเป็น…
+	Check for updates	ตรวจสอบการอัปเดต
+	No check has run yet.	ยังไม่เคยตรวจสอบ
+	Checking for a newer version…	กำลังตรวจสอบเวอร์ชันใหม่…
+	PdfCraft {v} is available.	มี PdfCraft {v} ให้ใช้งานแล้ว
+	You have version {c}. Download the new version from its release page.	คุณใช้เวอร์ชัน {c} อยู่ ดาวน์โหลดเวอร์ชันใหม่ได้จากหน้าเผยแพร่ของเวอร์ชันนั้น
+	PdfCraft {c} is up to date.	PdfCraft {c} เป็นเวอร์ชันล่าสุดแล้ว
+	Couldn't check for updates: {e}	ตรวจสอบการอัปเดตไม่สำเร็จ: {e}
+	You have version {c}. All releases are listed at {page}.	คุณใช้เวอร์ชัน {c} อยู่ รายการเวอร์ชันที่เผยแพร่ทั้งหมดอยู่ที่ {page}
+	Asks GitHub for the latest release. Nothing is downloaded or installed automatically.	สอบถาม GitHub เกี่ยวกับเวอร์ชันล่าสุด ไม่มีการดาวน์โหลดหรือติดตั้งโดยอัตโนมัติ
+	Download	ดาวน์โหลด
+	Later	ไว้ทีหลัง
+	none	ไม่มี
+	Declared conformance: {shown}	ความสอดคล้องที่ประกาศไว้: {shown}
+	Output intent: {list}	เจตนาเอาต์พุต: {list}
+	Conformance level:	ระดับความสอดคล้อง:
+	No problems found: the document conforms to {level}.	ไม่พบปัญหา: เอกสารสอดคล้องกับ {level}
+	 (page {p})	 (หน้า {p})
+	  · not fixable here	  · แก้ไขที่นี่ไม่ได้
+	Verify	ตรวจสอบ
+	Box	กล่อง
+	Units	หน่วย
+	Set to zero	ตั้งค่าเป็นศูนย์
+	Current page ({n})	หน้าปัจจุบัน ({n})
+	Subset	ชุดย่อย
+	Update	อัปเดต
+	Add	เพิ่ม
+	{verb} Header and Footer	{verb}ส่วนหัวและส่วนท้าย
+	{verb} Watermark	{verb}ลายน้ำ
+	{verb} Background	{verb}พื้นหลัง
+	Margins (in)	ระยะขอบ (in)
+	Left Header Text	ข้อความส่วนหัวซ้าย
+	Center Header Text	ข้อความส่วนหัวกลาง
+	Right Header Text	ข้อความส่วนหัวขวา
+	Left Footer Text	ข้อความส่วนท้ายซ้าย
+	Center Footer Text	ข้อความส่วนท้ายกลาง
+	Right Footer Text	ข้อความส่วนท้ายขวา
+	Insert Page Number	แทรกหมายเลขหน้า
+	Insert Date	แทรกวันที่
+	Start page number	หมายเลขหน้าเริ่มต้น
+	Source	แหล่งที่มา
+	Fit to page	พอดีกับหน้า
+	Rotation	การหมุน
+	Appear behind page	แสดงด้านหลังหน้า
+	Appear on top of page	แสดงด้านบนของหน้า
+	From colour	จากสี
+	Page Range Options	ตัวเลือกช่วงหน้า
+	Preview: page {p} of {n}	ตัวอย่างก่อนพิมพ์: หน้า {p} จาก {n}
+	Applies to 1 page	ใช้กับ 1 หน้า
+	Applies to {n} pages	ใช้กับ {n} หน้า
+	Replaces the existing one on those pages.	จะแทนที่ของเดิมบนหน้าเหล่านั้น
+	PDF or image	PDF หรือรูปภาพ
+	No file chosen	ยังไม่ได้เลือกไฟล์
+	Page number	หมายเลขหน้า
+	Scale relative to target page	ปรับมาตราส่วนเทียบกับหน้าเป้าหมาย
+	Link Properties	คุณสมบัติลิงก์
+	Create Link	สร้างลิงก์
+	Link Appearance	รูปลักษณ์ของลิงก์
+	Link Type:	ประเภทลิงก์:
+	Visible Rectangle	สี่เหลี่ยมที่มองเห็นได้
+	Invisible Rectangle	สี่เหลี่ยมที่มองไม่เห็น
+	Highlight Style:	รูปแบบไฮไลต์:
+	Invert	กลับสี
+	Outline	เส้นขอบ
+	Inset	ย่อเข้า
+	Line Thickness:	ความหนาเส้น:
+	Thin	บาง
+	Thick	หนา
+	Line Style:	รูปแบบเส้น:
+	Solid	ทึบ
+	Dashed	ประ
+	Color:	สี:
+	Link Action	การทำงานของลิงก์
+	Open a web page	เปิดหน้าเว็บ
+	Go to a page view	ไปที่มุมมองหน้า
+	Type the web address.	พิมพ์ที่อยู่เว็บ
+	This document has no signatures.	เอกสารนี้ไม่มีลายเซ็น
+	The Keychain's digital IDs couldn't be listed: {e}	ไม่สามารถแสดงรายการ ID ดิจิทัลของ Keychain ได้: {e}
+	Signed and saved to {path}	ลงนามและบันทึกไปที่ {path}
+	Couldn't open revision {n}: {e}	เปิดฉบับแก้ไข {n} ไม่สำเร็จ: {e}
+	Couldn't open the signed version: {e}	เปิดเวอร์ชันที่ลงนามแล้วไม่สำเร็จ: {e}
+	Sign with a Digital ID	ลงนามด้วย ID ดิจิทัล
+	Choose the digital ID that you want to use for signing:	เลือก ID ดิจิทัลที่คุณต้องการใช้ในการลงนาม:
+	Keychain  ·  	Keychain  ·  
+	Windows store  ·  	ที่เก็บ Windows  ·  
+	Issued by: 	ออกโดย: 
+	, Expires: 	, หมดอายุ: 
+	No digital IDs yet.	ยังไม่มี ID ดิจิทัล
+	Configure New Digital ID	กำหนดค่า ID ดิจิทัลใหม่
+	Continue	ดำเนินการต่อ
+	Configure a Digital ID for Signing	กำหนดค่า ID ดิจิทัลสำหรับการลงนาม
+	Use a Digital ID from a file	ใช้ ID ดิจิทัลจากไฟล์
+	Create a new Digital ID (self-signed, saved to a password-protected file)	สร้าง ID ดิจิทัลใหม่ (ลงนามเอง บันทึกไปยังไฟล์ที่ป้องกันด้วยรหัสผ่าน)
+	Name	ชื่อ
+	Organizational Unit	หน่วยงานย่อย
+	Organization Name	ชื่อองค์กร
+	Email Address	ที่อยู่อีเมล
+	Country/Region	ประเทศ/ภูมิภาค
+	Key Algorithm	อัลกอริทึมของคีย์
+	Confirm Password	ยืนยันรหัสผ่าน
+	Valid for 5 years, for digital signatures. Self-signed IDs are usually not trusted by others.	มีอายุ 5 ปี สำหรับลายเซ็นดิจิทัล ID ที่ลงนามเองมักไม่ได้รับความเชื่อถือจากผู้อื่น
+	File (.p12, .pfx)	ไฟล์ (.p12, .pfx)
+	Digital ID	ID ดิจิทัล
+	Browse…	เรียกดู…
+	{verb} as "{name}"	{verb} ในชื่อ "{name}"
+	Certify	รับรอง
+	The signature will be invisible.	ลายเซ็นจะมองไม่เห็น
+	Distinguished name	ชื่อที่แยกแยะ
+	Labels	ป้ายกำกับ
+	Permitted actions after certifying	การทำงานที่อนุญาตหลังการรับรอง
+	No changes allowed	ไม่อนุญาตให้เปลี่ยนแปลง
+	Annotations, form fill-in, and digital signatures	คำอธิบายประกอบ การกรอกแบบฟอร์ม และลายเซ็นดิจิทัล
+	Form fill-in and digital signatures	การกรอกแบบฟอร์มและลายเซ็นดิจิทัล
+	The key is in the macOS Keychain, which may ask to allow PdfCraft to use it.	คีย์อยู่ใน Keychain ของ macOS ซึ่งอาจขออนุญาตให้ PdfCraft ใช้งาน
+	The key is in the Windows certificate store, which may ask to allow PdfCraft to use it.	คีย์อยู่ในที่เก็บใบรับรองของ Windows ซึ่งอาจขออนุญาตให้ PdfCraft ใช้งาน
+	Digital ID password	รหัสผ่าน ID ดิจิทัล
+	Back	ย้อนกลับ
+	Validate all	ตรวจสอบความถูกต้องทั้งหมด
+	Sign this field…	ลงนามในฟิลด์นี้…
+	Signature is valid:	ลายเซ็นถูกต้อง:
+	Signature validity is UNKNOWN:	ไม่ทราบความถูกต้องของลายเซ็น:
+	Signature is INVALID:	ลายเซ็นไม่ถูกต้อง:
+	Signature Details	รายละเอียดลายเซ็น
+	Reason	เหตุผล
+	Signing time	เวลาที่ลงนาม
+	Algorithm	อัลกอริทึม
+	Signer	ผู้ลงนาม
+	Issued by	ออกโดย
+	Valid	ถูกต้อง
+	Field	ฟิลด์
+	Field: {field} on page {p}	ฟิลด์: {field} ในหน้า {p}
+	Add to trusted certificates	เพิ่มในใบรับรองที่เชื่อถือได้
+	View signed version	ดูเวอร์ชันที่ลงนามแล้ว
+	Show certificate…	แสดงใบรับรอง…
+	Export certificate…	ส่งออกใบรับรอง…
+	Certificate Viewer	ตัวดูใบรับรอง
+	This dialog shows the details of a certificate and its chain.	กล่องโต้ตอบนี้แสดงรายละเอียดของใบรับรองและห่วงโซ่การรับรอง
+	Trust	ความเชื่อถือ
+	Issued to	ออกให้แก่
+	Valid from	ใช้ได้ตั้งแต่
+	Valid to	ใช้ได้ถึง
+	Intended usage	วัตถุประสงค์การใช้งาน
+	Any	ใดก็ได้
+	Version	เวอร์ชัน
+	Serial number	หมายเลขซีเรียล
+	Issuer	ผู้ออก
+	Validity starts	วันเริ่มมีผล
+	Validity ends	วันหมดอายุ
+	Public key	คีย์สาธารณะ
+	Key usage	การใช้งานคีย์
+	Not present	ไม่ปรากฏ
+	Self-signed	ลงนามเอง
+	Edit Action	แก้ไขการทำงาน
+	New Action	การทำงานใหม่
+	Action name:	ชื่อการทำงาน:
+	Description:	คำอธิบาย:
+	Steps	ขั้นตอน
+	Add the steps this action runs, in order.	เพิ่มขั้นตอนที่การทำงานนี้ดำเนินการตามลำดับ
+	Add Step	เพิ่มขั้นตอน
+	An action with this name already exists.	มีการทำงานชื่อนี้อยู่แล้ว
+	New Action…	การทำงานใหม่…
+	Edit…	แก้ไข…
+	Add watermark	เพิ่มลายน้ำ
+	Add header	เพิ่มส่วนหัว
+	Add footer	เพิ่มส่วนท้าย
+	Set document title	กำหนดชื่อเรื่องเอกสาร
+	Run a JavaScript	เรียกใช้ JavaScript
+	Prepare for Distribution	เตรียมพร้อมสำหรับการเผยแพร่
+	Remove hidden information and flatten comments and form fields, so recipients see only the pages.	นำข้อมูลที่ซ่อนอยู่ออก และทำให้ความคิดเห็นและฟิลด์แบบฟอร์มแบนลงเป็นส่วนหนึ่งของหน้า เพื่อให้ผู้รับเห็นเฉพาะหน้าเอกสาร
+	Optimize Scanned Documents	ปรับเอกสารที่สแกนแล้วให้เหมาะสม
+	Make scans searchable, then make them smaller.	ทำให้เอกสารที่สแกนสามารถค้นหาได้ แล้วลดขนาดให้เล็กลง
+	Add Page Numbers	เพิ่มหมายเลขหน้า
+	Number every page in the footer.	ใส่หมายเลขทุกหน้าในส่วนท้าย
+	Mark as Confidential	ทำเครื่องหมายเป็นความลับ
+	A diagonal CONFIDENTIAL watermark on every page.	ลายน้ำคำว่า CONFIDENTIAL แบบทแยงบนทุกหน้า
+	Sanitize Documents	ล้างข้อมูลเอกสาร
+	Remove hidden information, metadata, scripts and embedded content, and rewrite the files.	นำข้อมูลที่ซ่อนอยู่ ข้อมูลเมตา สคริปต์ และเนื้อหาที่ฝังไว้ออก แล้วเขียนไฟล์ใหม่
+	Type text	พิมพ์ข้อความ
+	Text to insert	ข้อความที่จะแทรก
+	Replacement text	ข้อความแทนที่
+	Edit text…	แก้ไขข้อความ…
+	Add a sticky note here	เพิ่มสติกกี้โน้ตที่นี่
+	{kind} Properties	คุณสมบัติของ {kind}
+	Appearance	รูปลักษณ์
+	General	ทั่วไป
+	Review History	ประวัติการตรวจทาน
+	This comment's appearance can't be changed yet.	ยังไม่สามารถเปลี่ยนรูปลักษณ์ของความคิดเห็นนี้ได้
+	Icon	ไอคอน
+	Thickness	ความหนา
+	Modified	แก้ไขเมื่อ
+	No status has been set.	ยังไม่ได้ตั้งสถานะ
+	Compare Files	เปรียบเทียบไฟล์
+	Old file:	ไฟล์เก่า:
+	Open the older version first	เปิดเวอร์ชันเก่ากว่าก่อน
+	New file:	ไฟล์ใหม่:
+	Text is compared word by word; the differences are shown on the new file.	ข้อความจะถูกเปรียบเทียบทีละคำ โดยความแตกต่างจะแสดงบนไฟล์ใหม่
+	Compare this file with an older version: Compare files… in All tools.	เปรียบเทียบไฟล์นี้กับเวอร์ชันเก่ากว่า: เปรียบเทียบไฟล์… ในเครื่องมือทั้งหมด
+	No differences in the text.	ไม่พบความแตกต่างในข้อความ
+	{n} {kind}	{n} {kind}
+	Inserted	ถูกแทรก
+	Deleted	ถูกลบ
+	Replaced	ถูกแทนที่
+	Visual	แบบภาพ
+	Mark as comments	ทำเครื่องหมายเป็นความคิดเห็น
+	Report…	รายงาน…
+	{kind} · page {p}	{kind} · หน้า {p}
+	Set Alternate Text	กำหนดข้อความทางเลือก
+	This document has no tagged figures.	เอกสารนี้ไม่มีรูปที่ติดแท็ก
+	 on page {p}	 ในหน้า {p}
+	Figure {i} of {n}{page}	รูปที่ {i} จาก {n}{page}
+	No preview	ไม่มีตัวอย่าง
+	Alternate text	ข้อความทางเลือก
+	Describe the figure	อธิบายรูป
+	Decorative figure	รูปตกแต่ง
+	Previous figure	รูปก่อนหน้า
+	Next figure	รูปถัดไป
+	Save & Close	บันทึกและปิด
+	Accessibility Checker Options	ตัวเลือกตัวตรวจสอบการเข้าถึง
+	Report Options	ตัวเลือกรายงาน
+	Create accessibility report	สร้างรายงานการเข้าถึง
+	Page Range	ช่วงหน้า
+	All pages in document	ทุกหน้าในเอกสาร
+	Checking Options ({on} of 32 in all categories)	ตัวเลือกการตรวจสอบ ({on} จาก 32 ในทุกหมวดหมู่)
+	Show this dialog when the Checker starts	แสดงกล่องโต้ตอบนี้เมื่อตัวตรวจสอบเริ่มทำงาน
+	Select All	เลือกทั้งหมด
+	Clear All	ล้างทั้งหมด
+	Start Checking	เริ่มตรวจสอบ
+	This document hasn't been checked yet.	เอกสารนี้ยังไม่ได้รับการตรวจสอบ
+	No issues found	ไม่พบปัญหา
+	1 issue	1 ปัญหา
+	{n} issues	{n} ปัญหา
+	{label} (1 issue)	{label} (1 ปัญหา)
+	{label} ({n} issues)	{label} ({n} ปัญหา)
+	Check again	ตรวจสอบอีกครั้ง
+	Report	รายงาน
+	Show the accessibility report	แสดงรายงานการเข้าถึง
+	Collapse	ย่อ
+	Expand	ขยาย
+	{rule} - {status}	{rule} - {status}
+	Passed	ผ่าน
+	Failed	ไม่ผ่าน
+	Needs manual check	ต้องตรวจสอบด้วยตนเอง
+	Skipped	ข้ามไป
+	Fix	แก้ไข
+	Skip Rule	ข้ามกฎ
+	Explain	อธิบาย
+	Check Again	ตรวจสอบอีกครั้ง
+	Show Report	แสดงรายงาน
+	Options…	ตัวเลือก…
+	Go to the page	ไปที่หน้านั้น
+	Page Content	เนื้อหาหน้า
+	Forms	แบบฟอร์ม
+	Alternate Text	ข้อความทางเลือก
+	Tables	ตาราง
+	Lists	รายการ
+	Headings	หัวข้อ
+	Accessibility permission flag	แฟล็กสิทธิ์การเข้าถึง
+	Accessibility permission flag is set	ตั้งแฟล็กสิทธิ์การเข้าถึงแล้ว
+	Security settings must allow assistive technology to read the content ("Enable text access for screen reader devices"). Change the document's security to allow it.	การตั้งค่าความปลอดภัยต้องอนุญาตให้เทคโนโลยีสิ่งอำนวยความสะดวกอ่านเนื้อหา ("เปิดการเข้าถึงข้อความสำหรับอุปกรณ์อ่านหน้าจอ") เปลี่ยนการตั้งค่าความปลอดภัยของเอกสารเพื่ออนุญาต
+	Image-only PDF	PDF ที่เป็นภาพเท่านั้น
+	Document is not image-only PDF	เอกสารไม่ใช่ PDF ที่เป็นภาพเท่านั้น
+	Pages that are only pictures of text can't be read aloud or searched. Recognize text (OCR) to add a text layer.	หน้าที่เป็นเพียงภาพของข้อความไม่สามารถอ่านออกเสียงหรือค้นหาได้ ใช้การรู้จำข้อความ (OCR) เพื่อเพิ่มเลเยอร์ข้อความ
+	Document is tagged PDF	เอกสารเป็น PDF ที่ติดแท็ก
+	Tags give the document a logical structure that assistive technology follows. Tag the document (Automatically tag PDF).	แท็กช่วยให้เอกสารมีโครงสร้างเชิงตรรกะที่เทคโนโลยีสิ่งอำนวยความสะดวกปฏิบัติตาม ติดแท็กเอกสาร (ติดแท็ก PDF โดยอัตโนมัติ)
+	Logical Reading Order	ลำดับการอ่านเชิงตรรกะ
+	Document structure provides a logical reading order	โครงสร้างเอกสารมีลำดับการอ่านเชิงตรรกะ
+	Check that the tags read in the order a sighted reader would. Use the Reading Order tool or the Tags panel to correct it.	ตรวจสอบว่าแท็กเรียงตามลำดับที่ผู้มองเห็นจะอ่าน ใช้เครื่องมือลำดับการอ่านหรือแผงแท็กเพื่อแก้ไข
+	Primary language	ภาษาหลัก
+	Text language is specified	ระบุภาษาของข้อความแล้ว
+	Screen readers choose their voice from the document's language. Set it in Document Properties > Advanced > Language.	โปรแกรมอ่านหน้าจอเลือกเสียงตามภาษาของเอกสาร ตั้งค่าได้ที่คุณสมบัติเอกสาร > ขั้นสูง > ภาษา
+	Document title is showing in title bar	ชื่อเรื่องเอกสารแสดงในแถบชื่อเรื่อง
+	The window should show a meaningful title rather than the file name. Set a title and Initial View > Show: Document Title.	หน้าต่างควรแสดงชื่อเรื่องที่มีความหมายแทนชื่อไฟล์ ตั้งชื่อเรื่อง และตั้งมุมมองเริ่มต้น > แสดง: ชื่อเรื่องเอกสาร
+	Bookmarks are present in large documents	เอกสารขนาดใหญ่มีที่คั่นหน้า
+	Documents of more than 20 pages need bookmarks for navigation. Add bookmarks for the main sections.	เอกสารที่มีมากกว่า 20 หน้าจำเป็นต้องมีที่คั่นหน้าเพื่อการนำทาง เพิ่มที่คั่นหน้าสำหรับส่วนหลัก
+	Color contrast	ความคมชัดของสี
+	Document has appropriate color contrast	เอกสารมีความคมชัดของสีที่เหมาะสม
+	Text must contrast enough with its background for people with low vision. Check the colours by eye or with a contrast tool.	ข้อความต้องมีสีที่ตัดกับพื้นหลังมากพอสำหรับผู้มีสายตาเลือนราง ตรวจสอบสีด้วยสายตาหรือใช้เครื่องมือวัดความคมชัด
+	Tagged content	เนื้อหาที่ติดแท็ก
+	All page content is tagged	เนื้อหาทั้งหมดของหน้าติดแท็กแล้ว
+	Everything on a page must be tagged or marked as an artifact (decoration, headers, footers). Tag the untagged content.	ทุกอย่างบนหน้าต้องติดแท็กหรือทำเครื่องหมายเป็นอาร์ติแฟกต์ (องค์ประกอบประดับ ส่วนหัว ส่วนท้าย) ติดแท็กเนื้อหาที่ยังไม่ได้ติดแท็ก
+	Tagged annotations	คำอธิบายประกอบที่ติดแท็ก
+	All annotations are tagged	คำอธิบายประกอบทั้งหมดติดแท็กแล้ว
+	Comments, links and fields must be in the tag tree to be announced. Tag the annotations.	ความคิดเห็น ลิงก์ และฟิลด์ต้องอยู่ในโครงสร้างแท็กจึงจะถูกอ่านออกเสียง ติดแท็กคำอธิบายประกอบ
+	Tab order	ลำดับการกด Tab
+	Tab order is consistent with structure order	ลำดับการกด Tab สอดคล้องกับลำดับโครงสร้าง
+	Pages with links, comments or fields should tab in structure order. The fix sets each page's tab order to Use Document Structure.	หน้าที่มีลิงก์ ความคิดเห็น หรือฟิลด์ควรกด Tab ตามลำดับโครงสร้าง การแก้ไขจะตั้งค่าลำดับการกด Tab ของแต่ละหน้าให้ใช้โครงสร้างเอกสาร
+	Character encoding	การเข้ารหัสอักขระ
+	Reliable character encoding is provided	มีการเข้ารหัสอักขระที่เชื่อถือได้
+	Fonts must map their characters to Unicode so text can be read and copied. Fix the fonts or recreate the PDF.	ฟอนต์ต้องแมปอักขระไปยัง Unicode เพื่อให้สามารถอ่านและคัดลอกข้อความได้ แก้ไขฟอนต์หรือสร้าง PDF ใหม่
+	Tagged multimedia	มัลติมีเดียที่ติดแท็ก
+	All multimedia objects are tagged	วัตถุมัลติมีเดียทั้งหมดติดแท็กแล้ว
+	Video, sound and rich media must be tagged to be announced. Tag the multimedia annotations.	วิดีโอ เสียง และริชมีเดียต้องติดแท็กจึงจะถูกอ่านออกเสียง ติดแท็กคำอธิบายประกอบมัลติมีเดีย
+	Screen flicker	การกะพริบของหน้าจอ
+	Page will not cause screen flicker	หน้าจะไม่ทำให้หน้าจอกะพริบ
+	Animation that flashes can cause seizures. Check scripts and media for flicker.	ภาพเคลื่อนไหวที่มีการกะพริบอาจทำให้เกิดอาการชัก ตรวจสอบสคริปต์และสื่อว่ามีการกะพริบหรือไม่
+	Scripts	สคริปต์
+	No inaccessible scripts	ไม่มีสคริปต์ที่เข้าถึงไม่ได้
+	Timed responses	การตอบสนองแบบมีเวลาจำกัด
+	Page does not require timed responses	หน้าไม่จำเป็นต้องมีการตอบสนองแบบมีเวลาจำกัด
+	People may need more time to respond. Check that nothing has a time limit.	บางคนอาจต้องใช้เวลาตอบสนองมากขึ้น ตรวจสอบว่าไม่มีสิ่งใดมีเวลาจำกัด
+	Navigation links	ลิงก์นำทาง
+	Navigation links are not repetitive	ลิงก์นำทางไม่ซ้ำซ้อน
+	Repeated navigation links should be skippable. Check links that appear on every page.	ลิงก์นำทางที่ซ้ำกันควรข้ามได้ ตรวจสอบลิงก์ที่ปรากฏบนทุกหน้า
+	Tagged form fields	ฟิลด์แบบฟอร์มที่ติดแท็ก
+	All form fields are tagged	ฟิลด์แบบฟอร์มทั้งหมดติดแท็กแล้ว
+	Form fields must be in the tag tree (Form tags) to be announced. Tag the form fields.	ฟิลด์แบบฟอร์มต้องอยู่ในโครงสร้างแท็ก (แท็กแบบฟอร์ม) จึงจะถูกอ่านออกเสียง ติดแท็กฟิลด์แบบฟอร์ม
+	Field descriptions	คำอธิบายฟิลด์
+	All form fields have description	ฟิลด์แบบฟอร์มทั้งหมดมีคำอธิบาย
+	Each field needs a tooltip that says what to enter. Add one in Field Properties > General > Tooltip.	แต่ละฟิลด์ต้องมีคำแนะนำเครื่องมือที่บอกว่าควรกรอกอะไร เพิ่มได้ที่คุณสมบัติฟิลด์ > ทั่วไป > คำแนะนำเครื่องมือ
+	Figures alternate text	ข้อความทางเลือกของรูป
+	Figures require alternate text	รูปต้องมีข้อความทางเลือก
+	Pictures need alternate text that describes them, or must be marked decorative. Add alternate text to each figure.	ภาพต้องมีข้อความทางเลือกที่อธิบายภาพ หรือต้องทำเครื่องหมายว่าเป็นภาพตกแต่ง เพิ่มข้อความทางเลือกให้แต่ละรูป
+	Nested alternate text	ข้อความทางเลือกที่ซ้อนกัน
+	Alternate text that will never be read	ข้อความทางเลือกที่จะไม่ถูกอ่าน
+	Alternate text inside an element that already has alternate text is never read. Remove the inner alternate text.	ข้อความทางเลือกที่อยู่ภายในองค์ประกอบที่มีข้อความทางเลือกอยู่แล้วจะไม่ถูกอ่าน นำข้อความทางเลือกที่ซ้อนอยู่ด้านในออก
+	Associated with content	เชื่อมโยงกับเนื้อหา
+	Alternate text must be associated with some content	ข้อความทางเลือกต้องเชื่อมโยงกับเนื้อหาบางส่วน
+	Alternate text on an element without page content is never reached. Remove it or attach the element to content.	ข้อความทางเลือกบนองค์ประกอบที่ไม่มีเนื้อหาหน้าจะไม่ถูกเข้าถึง นำออกหรือผูกองค์ประกอบนั้นเข้ากับเนื้อหา
+	Hides annotation	ซ่อนคำอธิบายประกอบ
+	Alternate text should not hide annotation	ข้อความทางเลือกไม่ควรซ่อนคำอธิบายประกอบ
+	Alternate text on an element that contains a link or field hides that annotation from assistive technology. Move the alternate text.	ข้อความทางเลือกบนองค์ประกอบที่มีลิงก์หรือฟิลด์จะซ่อนคำอธิบายประกอบนั้นจากเทคโนโลยีสิ่งอำนวยความสะดวก ย้ายข้อความทางเลือก
+	Other elements alternate text	ข้อความทางเลือกขององค์ประกอบอื่น
+	Other elements that require alternate text	องค์ประกอบอื่นที่ต้องมีข้อความทางเลือก
+	Formulas and similar non-text elements need alternate text. Add alternate text to them.	สูตรและองค์ประกอบที่ไม่ใช่ข้อความอื่น ๆ ต้องมีข้อความทางเลือก เพิ่มข้อความทางเลือกให้องค์ประกอบเหล่านั้น
+	Rows	แถว
+	TR must be a child of Table, THead, TBody, or TFoot	TR ต้องเป็นลูกของ Table, THead, TBody หรือ TFoot
+	Table cells belong in a row. Fix the table's tags.	เซลล์ตารางต้องอยู่ในแถว แก้ไขแท็กของตาราง
+	Headers	ส่วนหัว
+	Tables should have headers	ตารางควรมีส่วนหัว
+	Header cells (TH) tell listeners what each column or row holds. Mark the header cells.	เซลล์ส่วนหัว (TH) บอกผู้ฟังว่าแต่ละคอลัมน์หรือแถวมีอะไร ทำเครื่องหมายเซลล์ส่วนหัว
+	Regularity	ความสม่ำเสมอ
+	Tables must contain the same number of columns in each row and rows in each column	ตารางต้องมีจำนวนคอลัมน์เท่ากันในแต่ละแถว และจำนวนแถวเท่ากันในแต่ละคอลัมน์
+	Irregular tables confuse cell navigation. Give every row the same number of cells (counting spans).	ตารางที่ไม่สม่ำเสมอทำให้การนำทางระหว่างเซลล์สับสน ให้ทุกแถวมีจำนวนเซลล์เท่ากัน (นับรวมเซลล์ที่ผสาน)
+	Summary	สรุป
+	Tables must have a summary	ตารางต้องมีคำอธิบายสรุป
+	A summary describes the table's purpose and layout. Add a Summary attribute to each table.	คำอธิบายสรุปบอกถึงวัตถุประสงค์และโครงร่างของตาราง เพิ่มแอตทริบิวต์ Summary ให้แต่ละตาราง
+	List items	รายการ
+	LI must be a child of L	LI ต้องเป็นลูกของ L
+	List items belong in a list. Fix the list's tags.	รายการต้องอยู่ในลิสต์ แก้ไขแท็กของลิสต์
+	Lbl and LBody	Lbl และ LBody
+	Lbl and LBody must be children of LI	Lbl และ LBody ต้องเป็นลูกของ LI
+	List labels and bodies belong in a list item. Fix the list's tags.	ป้ายกำกับและเนื้อความของลิสต์ต้องอยู่ในรายการ แก้ไขแท็กของลิสต์
+	Appropriate nesting	การซ้อนที่เหมาะสม
+	Heading levels shouldn't skip (an H1 followed by an H3). Retag the headings.	ระดับหัวข้อไม่ควรข้าม (H1 ตามด้วย H3) ติดแท็กหัวข้อใหม่
+	TH and TD	TH และ TD
+	TH and TD must be children of TR	TH และ TD ต้องเป็นลูกของ TR
+	Mark Page Range	ทำเครื่องหมายช่วงหน้า
+	Pages from	ตั้งแต่หน้า
+	Single word or phrase	คำหรือวลีเดียว
+	Text to find	ข้อความที่ต้องการค้นหา
+	Patterns	รูปแบบ
+	Phone Numbers	หมายเลขโทรศัพท์
+	Email Addresses	ที่อยู่อีเมล
+	Credit Cards	บัตรเครดิต
+	Social Security Numbers	หมายเลขประกันสังคม
+	Dates	วันที่
+	Text in images isn't found; recognise text (OCR) first.	ไม่พบข้อความในรูปภาพ ให้รู้จำข้อความ (OCR) ก่อน
+	No matches.	ไม่พบรายการที่ตรงกัน
+	{n} match(es) marked for redaction.	ทำเครื่องหมาย {n} รายการที่ตรงกันเพื่อปกปิดข้อมูล
+	Redaction Tool Properties	คุณสมบัติเครื่องมือปกปิดข้อมูล
+	Redacted area fill colour:	สีเติมพื้นที่ที่ปกปิดข้อมูล:
+	Use overlay text	ใช้ข้อความวางทับ
+	Custom text:	ข้อความกำหนดเอง:
+	Font:	ฟอนต์:
+	Font size:	ขนาดฟอนต์:
+	Auto-size text to fit redaction region	ปรับขนาดข้อความอัตโนมัติให้พอดีพื้นที่ปกปิด
+	Font colour:	สีฟอนต์:
+	Repeat overlay text	ทำข้อความวางทับซ้ำ
+	Text alignment:	การจัดแนวข้อความ:
+	Center	กึ่งกลาง
+	Apply redactions	ใช้การปกปิดข้อมูล
+	You are about to apply 1 redaction mark. Text, images and drawings under the marks, and comments and form fields that overlap them, are removed permanently.	คุณกำลังจะใช้เครื่องหมายปกปิดข้อมูล 1 จุด ข้อความ รูปภาพ และภาพวาดที่อยู่ใต้เครื่องหมาย รวมทั้งความคิดเห็นและฟิลด์แบบฟอร์มที่ทับซ้อนกับเครื่องหมาย จะถูกลบอย่างถาวร
+	You are about to apply {n} redaction marks. Text, images and drawings under the marks, and comments and form fields that overlap them, are removed permanently.	คุณกำลังจะใช้เครื่องหมายปกปิดข้อมูล {n} จุด ข้อความ รูปภาพ และภาพวาดที่อยู่ใต้เครื่องหมาย รวมทั้งความคิดเห็นและฟิลด์แบบฟอร์มที่ทับซ้อนกับเครื่องหมาย จะถูกลบอย่างถาวร
+	Save the document afterwards: saving rewrites the whole file so no trace of the removed content stays in it.	จากนั้นให้บันทึกเอกสาร เพราะการบันทึกจะเขียนไฟล์ใหม่ทั้งไฟล์ จึงไม่เหลือร่องรอยของเนื้อหาที่ถูกลบไว้ในไฟล์
+	Select the items to remove from this document.	เลือกรายการที่ต้องการนำออกจากเอกสารนี้
+	Metadata	ข้อมูลเมตา
+	File attachments	ไฟล์แนบ
+	Comments and markups	ความคิดเห็นและเครื่องหมายกำกับ
+	Hidden text	ข้อความที่ซ่อนอยู่
+	Hidden layers	เลเยอร์ที่ซ่อนอยู่
+	Links, actions and JavaScripts	ลิงก์ การทำงาน และ JavaScript
+	Private data of other applications	ข้อมูลส่วนตัวของแอปพลิเคชันอื่น
+	None found	ไม่พบ
+	Form fields are flattened: their values stay visible. Saving rewrites the whole file.	ฟิลด์แบบฟอร์มจะถูกทำให้แบนลงในหน้า โดยค่ายังคงมองเห็นได้ การบันทึกจะเขียนไฟล์ใหม่ทั้งไฟล์
+	Remove	นำออก
+	Sanitizing removes hidden information from the document: metadata, file attachments, comments, form fields (flattened), hidden text and layers, bookmarks, links, actions and scripts, and private application data.	การล้างข้อมูลจะนำข้อมูลที่ซ่อนอยู่ออกจากเอกสาร ได้แก่ ข้อมูลเมตา ไฟล์แนบ ความคิดเห็น ฟิลด์แบบฟอร์ม (ทำให้แบน) ข้อความและเลเยอร์ที่ซ่อนอยู่ ที่คั่นหน้า ลิงก์ การทำงานและสคริปต์ ตลอดจนข้อมูลส่วนตัวของแอปพลิเคชัน
+	Save the document afterwards; saving rewrites the whole file so nothing removed stays in it.	จากนั้นให้บันทึกเอกสาร เพราะการบันทึกจะเขียนไฟล์ใหม่ทั้งไฟล์ จึงไม่มีสิ่งที่ถูกลบตกค้างอยู่ในไฟล์
+	Printer:	เครื่องพิมพ์:
+	Save as PDF	บันทึกเป็น PDF
+	{name} (default)	{name} (ค่าเริ่มต้น)
+	Copies:	จำนวนชุด:
+	Collate	จัดชุด
+	Print in grayscale	พิมพ์เป็นเฉดสีเทา
+	Two-sided:	สองหน้า:
+	Off	ปิด
+	Flip on long edge	พลิกด้านขอบยาว
+	Flip on short edge	พลิกด้านขอบสั้น
+	Paper:	กระดาษ:
+	Pages to Print	หน้าที่จะพิมพ์
+	More options:	ตัวเลือกเพิ่มเติม:
+	All pages in range	ทุกหน้าในช่วง
+	Odd pages only	เฉพาะหน้าคี่
+	Even pages only	เฉพาะหน้าคู่
+	Reverse pages	กลับลำดับหน้า
+	Page Sizing & Handling	การปรับขนาดและจัดการหน้า
+	Size	ขนาด
+	Poster	โปสเตอร์
+	Multiple	หลายหน้า
+	Booklet	สมุดเล่ม
+	Fit	พอดี
+	Shrink oversized pages	ย่อหน้าที่มีขนาดใหญ่เกินไป
+	Custom scale:	มาตราส่วนกำหนดเอง:
+	Tile scale:	มาตราส่วนต่อชิ้น:
+	Overlap:	ส่วนทับซ้อน:
+	Cut marks	เครื่องหมายตัด
+	Pages per sheet:	หน้าต่อแผ่น:
+	Page order:	ลำดับหน้า:
+	Horizontal	แนวนอน
+	Horizontal reversed	แนวนอนย้อนกลับ
+	Vertical	แนวตั้ง
+	Vertical reversed	แนวตั้งย้อนกลับ
+	Print page border	พิมพ์ขอบหน้า
+	Auto-rotate pages	หมุนหน้าอัตโนมัติ
+	Booklet subset:	ชุดย่อยของสมุดเล่ม:
+	Both sides	ทั้งสองด้าน
+	Front side only	เฉพาะด้านหน้า
+	Back side only	เฉพาะด้านหลัง
+	Binding:	การเข้าเล่ม:
+	Left	ซ้าย
+	Right	ขวา
+	Orientation:	การวางแนว:
+	Auto portrait/landscape	แนวตั้ง/แนวนอนอัตโนมัติ
+	Portrait	แนวตั้ง
+	Landscape	แนวนอน
+	Comments & Forms	ความคิดเห็นและแบบฟอร์ม
+	Document	เอกสาร
+	Document and markups	เอกสารและเครื่องหมายกำกับ
+	Document and stamps	เอกสารและตราประทับ
+	Form fields only	เฉพาะฟิลด์แบบฟอร์ม
+	Previous sheet	แผ่นก่อนหน้า
+	Next sheet	แผ่นถัดไป
+	No sheets	ไม่มีแผ่น
+	Sheet {s} of {n}	แผ่น {s} จาก {n}
+	Removed 1 hidden item. Save to remove them from the file.	นำรายการที่ซ่อนอยู่ออกแล้ว 1 รายการ บันทึกเพื่อนำออกจากไฟล์
+	Removed {n} hidden items. Save to remove them from the file.	นำรายการที่ซ่อนอยู่ออกแล้ว {n} รายการ บันทึกเพื่อนำออกจากไฟล์
+	Document sanitized. Save to finish: saving rewrites the whole file.	ล้างข้อมูลเอกสารแล้ว บันทึกเพื่อเสร็จสิ้น การบันทึกจะเขียนไฟล์ใหม่ทั้งไฟล์
+	Applied 1 redaction mark. Save to remove the content from the file.	ใช้เครื่องหมายปกปิดข้อมูลแล้ว 1 จุด บันทึกเพื่อนำเนื้อหาออกจากไฟล์
+	Applied {n} redaction marks. Save to remove the content from the file.	ใช้เครื่องหมายปกปิดข้อมูลแล้ว {n} จุด บันทึกเพื่อนำเนื้อหาออกจากไฟล์
+	JavaScript Console	คอนโซล JavaScript
+	JavaScript is turned off (Preferences ▸ JavaScript).	JavaScript ถูกปิดอยู่ (การตั้งค่า ▸ JavaScript)
+	Output appears here.	ผลลัพธ์จะแสดงที่นี่
+	Script Name:	ชื่อสคริปต์:
+	This document has no document-level scripts.	เอกสารนี้ไม่มีสคริปต์ระดับเอกสาร
+	No form fields were detected	ตรวจไม่พบฟิลด์แบบฟอร์ม
+	Detected 1 form field	ตรวจพบฟิลด์แบบฟอร์ม 1 ฟิลด์
+	Detected {n} form fields	ตรวจพบฟิลด์แบบฟอร์ม {n} ฟิลด์
+	{field}: {e}	{field}: {e}
+	Current page	หน้าปัจจุบัน
+	Selected pages	หน้าที่เลือก
+	Document language	ภาษาของเอกสาร
+	Output	ผลลัพธ์
+	Searchable Image (Exact)	รูปภาพที่ค้นหาได้ (แบบแม่นยำ)
+	Adds invisible text over each word; the page image is not changed	เพิ่มข้อความที่มองไม่เห็นทับบนแต่ละคำ โดยรูปภาพของหน้าไม่เปลี่ยนแปลง
+	Downsample to	ลดความละเอียดเป็น
+	Text recognition isn't installed: its model files are missing. Reinstall PdfCraft, or set PDFCRAFT_MODELS to the folder that holds them.	ยังไม่ได้ติดตั้งการรู้จำข้อความ: ไฟล์โมเดลขาดหายไป กรุณาติดตั้ง PdfCraft ใหม่ หรือกำหนดค่า PDFCRAFT_MODELS ให้ชี้ไปยังโฟลเดอร์ที่เก็บไฟล์เหล่านี้
+	Settings	การตั้งค่า
+	Optional	ไม่บังคับ
+	Planned · {m}	ตามแผน · {m}
+	Planned for milestone {m} — open to see what it will include	วางแผนไว้สำหรับไมล์สโตน {m} — เปิดเพื่อดูว่าจะมีอะไรบ้าง
+	Coming in milestone {m}. Items marked Ready work today.	จะมาในไมล์สโตน {m} รายการที่ทำเครื่องหมายว่า พร้อม ใช้งานได้แล้ววันนี้
+	1 mark	1 เครื่องหมาย
+	{n} marks	{n} เครื่องหมาย
+	Dynamic	ไดนามิก
+	Sign Here	ลงนามที่นี่
+	Standard Business	มาตรฐานธุรกิจ
+	Choose a stamp, then click on the page to place it.	เลือกตราประทับ แล้วคลิกบนหน้าเพื่อวาง
+	Note	โน้ต
+	Polyline	เส้นหลายช่วง
+	Attachment	ไฟล์แนบ
+	Callout	คำอธิบาย
+	Typewriter	เครื่องพิมพ์ดีด
+	Checked	ทำเครื่องหมายถูกแล้ว
+	Unchecked	ยังไม่ได้ทำเครื่องหมายถูก
+	Marked	ทำเครื่องหมายไว้
+	Locked	ล็อกอยู่
+	Search comments	ค้นหาความคิดเห็น
+	Add a comment	เพิ่มความคิดเห็น
+	No comments yet.	ยังไม่มีความคิดเห็น
+	Pick a tool in the quick bar, or type above.	เลือกเครื่องมือจากแถบด่วน หรือพิมพ์ด้านบน
+	No comments match.	ไม่มีความคิดเห็นที่ตรงกัน
+	Unknown author	ไม่ทราบผู้เขียน
+	No colour	ไม่มีสี
+	Remove checkmark	นำเครื่องหมายถูกออก
+	Mark with checkmark	ทำเครื่องหมายถูก
+	Reply	ตอบกลับ
+	Add a reply	เพิ่มการตอบกลับ
+	Post	โพสต์
+	Page {label}	หน้า {label}
+	{kind} — click to show it on the page	{kind} — คลิกเพื่อแสดงบนหน้า
+	Set status	ตั้งสถานะ
+	Copy text	คัดลอกข้อความ
+	Properties…	คุณสมบัติ…
+	Make Current Properties Default	ตั้งคุณสมบัติปัจจุบันเป็นค่าเริ่มต้น
+	More options	ตัวเลือกเพิ่มเติม
+	Sort by	เรียงลำดับตาม
+	Author	ผู้เขียน
+	Type	ประเภท
+	Colour	สี
+	Show all comments	แสดงความคิดเห็นทั้งหมด
+	Create PDF comment summary…	สร้างสรุปความคิดเห็น PDF…
+	Export all to data file…	ส่งออกทั้งหมดไปยังไฟล์ข้อมูล…
+	Filter comments	กรองความคิดเห็น
+	Status	สถานะ
+	Accepted	ยอมรับแล้ว
+	Rejected	ปฏิเสธแล้ว
+	Cancelled	ยกเลิกแล้ว
+	Completed	เสร็จสิ้นแล้ว
+	Show all	แสดงทั้งหมด
+	Yellow	เหลือง
+	Orange	ส้ม
+	Red	แดง
+	Pink	ชมพู
+	Purple	ม่วง
+	Blue	น้ำเงิน
+	Light blue	ฟ้า
+	Green	เขียว
+	Gray	เทา
+	Black	ดำ
+	Bookmark options	ตัวเลือกที่คั่นหน้า
+	Expand all bookmarks	ขยายที่คั่นหน้าทั้งหมด
+	Expand top-level bookmarks	ขยายที่คั่นหน้าระดับบนสุด
+	Collapse all bookmarks	ย่อที่คั่นหน้าทั้งหมด
+	New bookmark (⌘B)	ที่คั่นหน้าใหม่ (⌘B)
+	This document has no bookmarks.	เอกสารนี้ไม่มีที่คั่นหน้า
+	This document has no layers.	เอกสารนี้ไม่มีเลเยอร์
+	This document has no attachments.	เอกสารนี้ไม่มีไฟล์แนบ
+	Hide layer	ซ่อนเลเยอร์
+	Show layer	แสดงเลเยอร์
+	Set layer visibility	กำหนดการมองเห็นของเลเยอร์
+	on page {label}	บนหน้า {label}
+	Save attachment…	บันทึกไฟล์แนบ…
+	Open in a new tab	เปิดในแท็บใหม่
+	This document has no pages.	เอกสารนี้ไม่มีหน้า
+	Find text	ค้นหาข้อความ
+	No matches	ไม่พบรายการที่ตรงกัน
+	Searching… {s}/{p}	กำลังค้นหา… {s}/{p}
+	{c} of {n}{more}	{c} จาก {n}{more}
+	Previous (⇧⌘G)	ก่อนหน้า (⇧⌘G)
+	Next (⌘G)	ถัดไป (⌘G)
+	Find options	ตัวเลือกการค้นหา
+	Whole words only	เฉพาะคำเต็ม
+	Case-sensitive	แยกตัวพิมพ์เล็ก-ใหญ่
+	Close (Esc)	ปิด (Esc)
+	Align	จัดแนว
+	Top	ด้านบน
+	Bottom	ด้านล่าง
+	Center horizontally	จัดกึ่งกลางแนวนอน
+	Center vertically	จัดกึ่งกลางแนวตั้ง
+	Distribute	กระจาย
+	Horizontally	แนวนอน
+	Vertically	แนวตั้ง
+	Set Fields to Same Size	ตั้งฟิลด์ให้มีขนาดเท่ากัน
+	Height	ความสูง
+	Width	ความกว้าง
+	Both	ทั้งสอง
+	Duplicate…	ทำสำเนา…
+	All pages	ทุกหน้า
+	Odd pages	หน้าคี่
+	Even pages	หน้าคู่
+	Landscape pages	หน้าแนวนอน
+	Portrait pages	หน้าแนวตั้ง
+	Move earlier	ย้ายไปก่อนหน้า
+	Move later	ย้ายไปภายหลัง
+	Back to the document	กลับไปที่เอกสาร
+	Protect Using Password	ป้องกันด้วยรหัสผ่าน
+	Requires user to enter a password for:	กำหนดให้ผู้ใช้ป้อนรหัสผ่านสำหรับ:
+	Viewing	การดู
+	Editing	การแก้ไข
+	Type Password	พิมพ์รหัสผ่าน
+	Re-type Password	พิมพ์รหัสผ่านอีกครั้ง
+	Strength: {s}	ความแข็งแรง: {s}
+	Strong	แข็งแรง
+	Medium	ปานกลาง
+	Weak	อ่อน
+	Advanced Options {chevron}	ตัวเลือกขั้นสูง {chevron}
+	Compatibility	ความเข้ากันได้
+	Acrobat X and later (256-bit AES)	Acrobat X ขึ้นไป (AES 256 บิต)
+	Acrobat 7.0 and later (128-bit AES)	Acrobat 7.0 ขึ้นไป (AES 128 บิต)
+	Acrobat 5.0 and later (128-bit RC4)	Acrobat 5.0 ขึ้นไป (RC4 128 บิต)
+	Acrobat 3.0 and later (40-bit RC4)	Acrobat 3.0 ขึ้นไป (RC4 40 บิต)
+	Encrypt	เข้ารหัส
+	All document contents	เนื้อหาทั้งหมดของเอกสาร
+	All document contents except metadata	เนื้อหาทั้งหมดของเอกสาร ยกเว้นข้อมูลเมตา
+	Printing allowed	อนุญาตให้พิมพ์
+	Low Resolution (150 dpi)	ความละเอียดต่ำ (150 dpi)
+	Changes allowed	อนุญาตให้แก้ไข
+	Inserting, deleting, and rotating pages	การแทรก การลบ และการหมุนหน้า
+	Filling in form fields and signing existing signature fields	การกรอกฟิลด์แบบฟอร์มและการลงนามในฟิลด์ลายเซ็นที่มีอยู่
+	Commenting, filling in form fields, and signing existing signature fields	การแสดงความคิดเห็น การกรอกฟิลด์แบบฟอร์ม และการลงนามในฟิลด์ลายเซ็นที่มีอยู่
+	Any except extracting pages	ทำได้ทุกอย่าง ยกเว้นการแยกหน้าออก
+	Enable copying of text, images, and other content	เปิดให้คัดลอกข้อความ รูปภาพ และเนื้อหาอื่น ๆ
+	Enable text access for screen reader devices for the visually impaired	เปิดให้อุปกรณ์อ่านหน้าจอสำหรับผู้บกพร่องทางการมองเห็นเข้าถึงข้อความ
+	Type a password.	พิมพ์รหัสผ่าน
+	The passwords don't match.	รหัสผ่านไม่ตรงกัน
+	This compatibility level supports only plain ASCII passwords.	ระดับความเข้ากันได้นี้รองรับเฉพาะรหัสผ่านแบบ ASCII ธรรมดา
+	Anyone opening the document will need this password. It's applied when you save.	ทุกคนที่เปิดเอกสารจะต้องใช้รหัสผ่านนี้ จะมีผลเมื่อคุณบันทึก
+	The document opens without a password; this password is needed to change the restrictions. It's applied when you save.	เอกสารจะเปิดได้โดยไม่ต้องใช้รหัสผ่าน รหัสผ่านนี้จำเป็นสำหรับเปลี่ยนข้อจำกัดต่าง ๆ จะมีผลเมื่อคุณบันทึก
+	Recover unsaved documents?	กู้คืนเอกสารที่ยังไม่ได้บันทึกหรือไม่
+	PdfCraft didn't shut down normally. These documents had changes that were autosaved:	PdfCraft ปิดโปรแกรมอย่างผิดปกติ เอกสารเหล่านี้มีการเปลี่ยนแปลงที่บันทึกอัตโนมัติไว้:
+	just now	เมื่อสักครู่
+	{n} min ago	{n} นาทีที่แล้ว
+	{n} h ago	{n} ชม. ที่แล้ว
+	 · password-protected	 · ป้องกันด้วยรหัสผ่าน
+	Recover	กู้คืน
+	Discard	ทิ้ง
+	Version {v}	เวอร์ชัน {v}
+	A clean-room, open-source PDF application written in Rust. MIT OR Apache-2.0.	แอปพลิเคชัน PDF โอเพนซอร์สที่พัฒนาขึ้นใหม่ทั้งหมดโดยไม่ลอกเลียนผู้อื่น เขียนด้วย Rust สัญญาอนุญาต MIT OR Apache-2.0
+	Part of	ส่วนหนึ่งของ
+	Summarize Options	ตัวเลือกการสรุป
+	Choose a layout:	เลือกรูปแบบการจัดวาง:
+	Comments only	ความคิดเห็นเท่านั้น
+	Sort comments by:	เรียงลำดับความคิดเห็นตาม:
+	Create PDF Comment Summary	สร้างสรุปความคิดเห็น PDF
+	Revert to the previously saved version of “{name}”? Changes since then can't be undone afterwards.	กลับไปยังเวอร์ชันที่บันทึกไว้ครั้งก่อนของ “{name}” หรือไม่? การเปลี่ยนแปลงหลังจากนั้นจะเลิกทำไม่ได้ในภายหลัง
+	Number pages	ใส่เลขหน้า
+	Style	รูปแบบ
+	None (prefix only)	ไม่มี (เฉพาะคำนำหน้า)
+	Prefix	คำนำหน้า
+	Start	เริ่ม
+	Labels: {preview}. Later pages keep their labels.	ป้ายกำกับ: {preview} หน้าถัดไปจะคงป้ายกำกับเดิมไว้
+	Even and Odd Pages	หน้าคู่และหน้าคี่
+	Even Pages Only	เฉพาะหน้าคู่
+	Odd Pages Only	เฉพาะหน้าคี่
+	Landscape and Portrait Pages	หน้าแนวนอนและแนวตั้ง
+	Landscape Pages	หน้าแนวนอน
+	Portrait Pages	หน้าแนวตั้ง
+	Duplicate Field	ทำสำเนาฟิลด์
+	Duplicate "{name}" onto:	ทำสำเนา "{name}" ลงบน:
+	1 page selected.	เลือกไว้ 1 หน้า
+	{n} pages selected.	เลือกไว้ {n} หน้า
+	Delete pages after extracting	ลบหน้าหลังจากแยกออก
+	Extract pages as separate files	แยกหน้าเป็นไฟล์แยกกัน
+	Rotate Pages	หมุนหน้า
+	Direction:	ทิศทาง:
+	Clockwise 90 degrees	ตามเข็มนาฬิกา 90 องศา
+	Counterclockwise 90 degrees	ทวนเข็มนาฬิกา 90 องศา
+	180 degrees	180 องศา
+	Pages:	หน้า:
+	All	ทั้งหมด
+	Selection	ส่วนที่เลือก
+	From	จาก
+	Rotate:	หมุน:
+	Repairs	การซ่อมแซม
+	Repair log	บันทึกการซ่อมแซม
+	Split document	แยกเอกสาร
+	Number of pages	จำนวนหน้า
+	Pages per file	จำนวนหน้าต่อไฟล์
+	File size	ขนาดไฟล์
+	At most	ไม่เกิน
+	Top-level bookmarks ({n})	ที่คั่นหน้าระดับบนสุด ({n})
+	Before each selected page (select pages in Organize)	ก่อนหน้าแต่ละหน้าที่เลือก (เลือกหน้าในหน้าจอจัดเรียง)
+	Creates 1 file from {n} pages.	สร้าง 1 ไฟล์จาก {n} หน้า
+	Creates {f} files from {n} pages.	สร้าง {f} ไฟล์จาก {n} หน้า
+	Each file holds as many of the {n} pages as fit.	แต่ละไฟล์จะบรรจุหน้าให้ได้มากที่สุดเท่าที่พอดีจากทั้งหมด {n} หน้า
+	Replace Pages	แทนที่หน้า
+	Original: replace pages	ต้นฉบับ: แทนที่หน้า
+	to	ถึง
+	to {n}	ถึง {n}
+	Replacement: pages of {name}	ไฟล์แทนที่: หน้าของ {name}
+	of {name}	จาก {name}
+	Only the page content changes: links, comments, form fields and bookmarks on the original pages stay.	เฉพาะเนื้อหาของหน้าเท่านั้นที่เปลี่ยน: ลิงก์ ความคิดเห็น ฟิลด์แบบฟอร์ม และที่คั่นหน้าบนหน้าต้นฉบับยังคงอยู่
+	The replacement file doesn't have that many pages.	ไฟล์แทนที่มีจำนวนหน้าไม่เพียงพอ
+	Tagged PDF	PDF แบบมีแท็ก
+	Document Properties	คุณสมบัติเอกสาร
+	Description	คำอธิบาย
+	Initial View	มุมมองเริ่มต้น
+	Security	ความปลอดภัย
+	Fonts	ฟอนต์
+	Advanced	ขั้นสูง
+	Title	ชื่อเรื่อง
+	Subject	หัวเรื่อง
+	Keywords	คำสำคัญ
+	Application	แอปพลิเคชัน
+	PDF producer	โปรแกรมสร้าง PDF
+	Layout and Magnification	เค้าโครงและการขยาย
+	Navigation tab	แท็บนำทาง
+	Page Only	เฉพาะหน้า
+	Bookmarks Panel and Page	แผงที่คั่นหน้าและหน้า
+	Pages Panel and Page	แผงหน้าและหน้า
+	Attachments Panel and Page	แผงไฟล์แนบและหน้า
+	Layers Panel and Page	แผงเลเยอร์และหน้า
+	Page layout	เค้าโครงหน้า
+	Default	ค่าเริ่มต้น
+	Single Page	หน้าเดียว
+	Single Page Continuous	หน้าเดียวแบบต่อเนื่อง
+	Two-Up (Facing)	สองหน้าคู่กัน (หันเข้าหากัน)
+	Two-Up Continuous (Facing)	สองหน้าคู่กันแบบต่อเนื่อง (หันเข้าหากัน)
+	Two-Up (Cover Page)	สองหน้าคู่กัน (มีหน้าปก)
+	Two-Up Continuous (Cover Page)	สองหน้าคู่กันแบบต่อเนื่อง (มีหน้าปก)
+	Magnification	การขยาย
+	Actual Size	ขนาดจริง
+	Fit Page	พอดีหน้า
+	Fit Width	พอดีความกว้าง
+	Fit Height	พอดีความสูง
+	Fit Visible	พอดีส่วนที่มองเห็น
+	Open to page	เปิดที่หน้า
+	of {pages}	จาก {pages}
+	Window Options	ตัวเลือกหน้าต่าง
+	Resize window to initial page	ปรับขนาดหน้าต่างให้พอดีหน้าเริ่มต้น
+	Center window on screen	จัดหน้าต่างให้อยู่กึ่งกลางหน้าจอ
+	Open in Full Screen mode	เปิดในโหมดเต็มหน้าจอ
+	Show:	แสดง:
+	File Name	ชื่อไฟล์
+	Document Title	ชื่อเรื่องเอกสาร
+	User Interface Options	ตัวเลือกอินเทอร์เฟซผู้ใช้
+	Hide menu bar	ซ่อนแถบเมนู
+	Hide toolbars	ซ่อนแถบเครื่องมือ
+	Hide window controls	ซ่อนปุ่มควบคุมหน้าต่าง
+	Security method	วิธีการรักษาความปลอดภัย
+	No security	ไม่มีระบบรักษาความปลอดภัย
+	Restrictions	ข้อจำกัด
+	None — everything is allowed	ไม่มี — อนุญาตทุกอย่าง
+	Password security	ความปลอดภัยด้วยรหัสผ่าน
+	Encryption	การเข้ารหัส
+	Opened with	เปิดด้วย
+	— (protection is applied when you save)	— (การป้องกันจะถูกนำไปใช้เมื่อคุณบันทึก)
+	Owner password (no restrictions apply)	รหัสผ่านเจ้าของ (ไม่มีข้อจำกัดใด ๆ)
+	User password	รหัสผ่านผู้ใช้
+	Change settings…	เปลี่ยนการตั้งค่า…
+	Printing	การพิมพ์
+	Not allowed	ไม่อนุญาต
+	Allowed	อนุญาต
+	High resolution	ความละเอียดสูง
+	Low resolution	ความละเอียดต่ำ
+	Changing the document	การแก้ไขเอกสาร
+	Document assembly	การประกอบเอกสาร
+	Content copying	การคัดลอกเนื้อหา
+	Content copying for accessibility	การคัดลอกเนื้อหาเพื่อการเข้าถึง
+	Commenting	การแสดงความคิดเห็น
+	Filling of form fields	การกรอกข้อมูลในฟิลด์แบบฟอร์ม
+	No fonts are referenced by the pages.	หน้าเหล่านี้ไม่ได้อ้างอิงฟอนต์ใด ๆ
+	PDF version	เวอร์ชัน PDF
+	Location	ตำแหน่ง
+	Page size	ขนาดหน้า
+	Yes	ใช่
+	No	ไม่
+	Revisions	รุ่นแก้ไข
+	View revision {n}	ดูรุ่นแก้ไข {n}
+	Open the file as it was saved then	เปิดไฟล์ตามที่บันทึกไว้ในตอนนั้น
+	Binding	การเย็บเล่ม
+	Left Edge	ขอบซ้าย
+	Right Edge	ขอบขวา
+	Language	ภาษา
+	Saved {place}: {before} → {after} ({pct}% smaller){detail}	บันทึกไปยัง {place}: {before} → {after} (เล็กลง {pct}%){detail}
+	Couldn't save the image: {e}	บันทึกรูปภาพไม่สำเร็จ: {e}
+	Adding images arrives on the web with file pickers for images	การเพิ่มรูปภาพจะพร้อมใช้บนเว็บ พร้อมตัวเลือกไฟล์สำหรับรูปภาพ
+	Replacing images on page {p} arrives on the web with image pickers ({i})	การแทนที่รูปภาพบนหน้า {p} จะพร้อมใช้บนเว็บ พร้อมตัวเลือกรูปภาพ ({i})
+	{name}: choosing images arrives on the web with file pickers for images	{name}: การเลือกรูปภาพจะพร้อมใช้บนเว็บ พร้อมตัวเลือกไฟล์สำหรับรูปภาพ
+	Replacing images arrives on the web with image file pickers	การแทนที่รูปภาพจะพร้อมใช้บนเว็บ พร้อมตัวเลือกไฟล์รูปภาพ
+	Couldn't create a PDF: {e}	สร้าง PDF ไม่สำเร็จ: {e}
+	The clipboard has no image or text	คลิปบอร์ดไม่มีรูปภาพหรือข้อความ
+	On the web, open or drop an image to convert it	บนเว็บ ให้เปิดหรือลากรูปภาพมาวางเพื่อแปลง
+	Couldn't optimize the file: {e}	ปรับไฟล์ให้เหมาะสมไม่สำเร็จ: {e}
+	Couldn't write {path}: {e}	เขียน {path} ไม่สำเร็จ: {e}
+	The form asks to be submitted to {u}; PdfCraft doesn't send form data. Save the document to keep your entries.	แบบฟอร์มขอให้ส่งข้อมูลไปยัง {u}; PdfCraft ไม่ส่งข้อมูลแบบฟอร์ม บันทึกเอกสารเพื่อเก็บข้อมูลที่คุณกรอกไว้
+	{s} actions run in the JavaScript engine (M6)	การทำงาน {s} จะทำงานในเอนจิน JavaScript (M6)
+	{name}: the {other} action isn't supported yet	{name}: ยังไม่รองรับการทำงาน {other}
+	{name} submits the form to {url}; PdfCraft doesn't send form data. Save the document to keep your entries.	{name} ส่งแบบฟอร์มไปยัง {url}; PdfCraft ไม่ส่งข้อมูลแบบฟอร์ม บันทึกเอกสารเพื่อเก็บข้อมูลที่คุณกรอกไว้
+	Export stopped: {e}	การส่งออกหยุดลง: {e}
+	Exported 1 image	ส่งออกรูปภาพ 1 รูป
+	Exported {n} images	ส่งออกรูปภาพ {n} รูป
+	 ({s} not exported: {first})	 ({s} ไม่ได้ส่งออก: {first})
+	Exported the text of 1 page	ส่งออกข้อความของ 1 หน้า
+	Exported the text of {n} pages	ส่งออกข้อความของ {n} หน้า
+	{msg} to {dir}	{msg} ไปยัง {dir}
+	Exporting… {d} of {t}	กำลังส่งออก… {d} จาก {t}
+	Choose a folder for the exported files	เลือกโฟลเดอร์สำหรับไฟล์ที่ส่งออก
+	New {tool} comments will look like this one	ความคิดเห็น {tool} ใหม่จะมีลักษณะเหมือนอันนี้
+	This document can't be checked: it couldn't be read for editing	ตรวจสอบเอกสารนี้ไม่ได้: อ่านไฟล์เพื่อแก้ไขไม่สำเร็จ
+	The checker found no problems in this document.	ตัวตรวจสอบไม่พบปัญหาในเอกสารนี้
+	The checker found 1 problem which may prevent the document from being fully accessible.	ตัวตรวจสอบพบ 1 ปัญหาที่อาจทำให้เอกสารเข้าถึงได้ไม่เต็มที่
+	The checker found {n} problems which may prevent the document from being fully accessible.	ตัวตรวจสอบพบ {n} ปัญหาที่อาจทำให้เอกสารเข้าถึงได้ไม่เต็มที่
+	The text is the same	ข้อความเหมือนกัน
+	1 difference found	พบ 1 ความแตกต่าง
+	{n} differences found	พบ {n} ความแตกต่าง
+	Added 1 comment	เพิ่มความคิดเห็น 1 รายการ
+	Added {n} comments	เพิ่มความคิดเห็น {n} รายการ
+	Choose a folder for the results	เลือกโฟลเดอร์สำหรับผลลัพธ์
+	Files for {name}	ไฟล์สำหรับ {name}
+	An action is already running	กำลังมีการทำงานอยู่แล้ว
+	Running action… file {d} of {t}	กำลังทำงาน… ไฟล์ {d} จาก {t}
+	No unlinked web addresses were found in the text	ไม่พบที่อยู่เว็บที่ยังไม่ได้ทำเป็นลิงก์ในข้อความ
+	Created 1 link	สร้าง 1 ลิงก์
+	Created {n} links	สร้าง {n} ลิงก์
+	Text recognition is already running	กำลังรู้จำข้อความอยู่แล้ว
+	Recognizing text… file {d} of {t}	กำลังรู้จำข้อความ… ไฟล์ {d} จาก {t}
+	Recognizing text… page {d} of {t}	กำลังรู้จำข้อความ… หน้า {d} จาก {t}
+	Recognized 1 word	รู้จำได้ 1 คำ
+	Recognized {n} words	รู้จำได้ {n} คำ
+	{words} on {pages}	{words} บน {pages}
+	; 1 page already had text	; 1 หน้ามีข้อความอยู่แล้ว
+	; {n} pages already had text	; {n} หน้ามีข้อความอยู่แล้ว
+	Recognized {w} words in 1 file	รู้จำได้ {w} คำใน 1 ไฟล์
+	Recognized {w} words in {n} files	รู้จำได้ {w} คำใน {n} ไฟล์
+	; failed: {list}	; ล้มเหลว: {list}
+	1 file done	เสร็จแล้ว 1 ไฟล์
+	{n} files done	เสร็จแล้ว {n} ไฟล์
+	The selected area has been copied ({w} × {h} pixels)	คัดลอกพื้นที่ที่เลือกแล้ว ({w} × {h} พิกเซล)
+	Couldn't take the snapshot: {e}	จับภาพไม่สำเร็จ: {e}
+	Couldn't recover {name}: {e}	กู้คืน {name} ไม่สำเร็จ: {e}
+	The document now conforms to {level}; save it to keep the changes	เอกสารสอดคล้องกับ {level} แล้ว; บันทึกเพื่อเก็บการเปลี่ยนแปลงไว้
+	Fixed what could be fixed; 1 problem remains	แก้ไขเท่าที่แก้ได้แล้ว; เหลือ 1 ปัญหา
+	Fixed what could be fixed; {n} problems remain	แก้ไขเท่าที่แก้ได้แล้ว; เหลือ {n} ปัญหา
+	Custom stamps arrive on the web with file pickers for images	ตราประทับกำหนดเองจะพร้อมใช้บนเว็บ พร้อมตัวเลือกไฟล์สำหรับรูปภาพ
+	{file} is too large for a stamp (at most {n} MB)	{file} มีขนาดใหญ่เกินไปสำหรับตราประทับ (ไม่เกิน {n} MB)
+	Sent to {printer}	ส่งไปยัง {printer} แล้ว
+	Sent to {printer}: {msg}	ส่งไปยัง {printer}: {msg}
+	Choose a folder for the searchable files	เลือกโฟลเดอร์สำหรับไฟล์ที่ค้นหาได้
+	Files are combined from top to bottom. Leave Pages empty to take every page.	ไฟล์จะถูกรวมจากบนลงล่าง เว้นช่องหน้าไว้ว่างเพื่อใช้ทุกหน้า
+	Unlock…	ปลดล็อก…
+	Select a password-protected file first	เลือกไฟล์ที่ป้องกันด้วยรหัสผ่านก่อน
+	Enter the permissions password to allow combining	กรอกรหัสผ่านสิทธิ์เพื่ออนุญาตให้รวมไฟล์
+	Enter the password that opens it	กรอกรหัสผ่านที่ใช้เปิดไฟล์
+	Unlock {name}	ปลดล็อก {name}
+	Unlock {n} files	ปลดล็อก {n} ไฟล์
+	The same password is tried on each file.	จะลองใช้รหัสผ่านเดียวกันกับทุกไฟล์
+	Hide password	ซ่อนรหัสผ่าน
+	Show password	แสดงรหัสผ่าน
+	Wrong password	รหัสผ่านไม่ถูกต้อง
+	The password is only used to read the file; it isn't saved.	รหัสผ่านใช้เพียงเพื่ออ่านไฟล์เท่านั้น; ไม่มีการบันทึกไว้
+	Unlock	ปลดล็อก
+	Opened, but its security settings don't allow combining. Enter the permissions password.	เปิดไฟล์ได้แล้ว แต่การตั้งค่าความปลอดภัยไม่อนุญาตให้รวมไฟล์ กรอกรหัสผ่านสิทธิ์
+	Unlocked: the combined file won't be password-protected	ปลดล็อกแล้ว: ไฟล์ที่รวมจะไม่ถูกป้องกันด้วยรหัสผ่าน
+	Unlocked {n} of {m} files	ปลดล็อกแล้ว {n} จาก {m} ไฟล์
+	Drop PDFs or folders here, or choose them.	ลากไฟล์ PDF หรือโฟลเดอร์มาวางที่นี่ หรือเลือกไฟล์เหล่านั้น
+	Add folder…	เพิ่มโฟลเดอร์…
+	Add folder and subfolders…	เพิ่มโฟลเดอร์และโฟลเดอร์ย่อย…
+	More ways to add files	วิธีเพิ่มไฟล์แบบอื่น
+	Every PDF in the folder	ไฟล์ PDF ทุกไฟล์ในโฟลเดอร์
+	Every PDF in the folder and the folders inside it	ไฟล์ PDF ทุกไฟล์ในโฟลเดอร์และโฟลเดอร์ย่อยทั้งหมด
+	Add folder	เพิ่มโฟลเดอร์
+	Add folder and subfolders	เพิ่มโฟลเดอร์และโฟลเดอร์ย่อย
+	No PDFs found in {folder}	ไม่พบไฟล์ PDF ใน {folder}
+	Added the first {n} PDFs in {folder}	เพิ่มไฟล์ PDF {n} ไฟล์แรกใน {folder} แล้ว
+	Click to sort, drag to move the column. Drag its edge to resize it.	คลิกเพื่อเรียงลำดับ ลากเพื่อย้ายคอลัมน์ ลากขอบคอลัมน์เพื่อปรับขนาด
+	Reset columns	รีเซ็ตคอลัมน์
+	Remove {n} files	นำออก {n} ไฟล์
+	{n} selected	เลือก {n} รายการ
+	sorted ascending	เรียงจากน้อยไปมากแล้ว
+	sorted descending	เรียงจากมากไปน้อยแล้ว
+	Protected: the combined file won't keep its security settings	มีการป้องกัน: ไฟล์ที่รวมจะไม่คงการตั้งค่าความปลอดภัยไว้
+	Add open documents	เพิ่มเอกสารที่เปิดอยู่
+	All open documents	เอกสารที่เปิดอยู่ทั้งหมด
+	No documents are open	ไม่มีเอกสารที่เปิดอยู่
+	Select a file first	เลือกไฟล์ก่อน
+	1 file	1 ไฟล์
+	{n} files	{n} ไฟล์
+	1 file needs attention	มี 1 ไฟล์ที่ต้องจัดการ
+	{n} files need attention	มี {n} ไฟล์ที่ต้องจัดการ
+	{name} can't be combined: {why}	รวม {name} ไม่ได้: {why}
+	Check the pages of {name}: {why}	ตรวจสอบหน้าของ {name}: {why}
+	Add the PDFs to combine	เพิ่มไฟล์ PDF ที่จะรวม
+	File name	ชื่อไฟล์
+	Warnings	คำเตือน
+	Drag to reorder	ลากเพื่อจัดเรียงใหม่
+	{k} of {n}	{k} จาก {n}
+	? of {n}	? จาก {n}
+	Added more than once	เพิ่มไว้มากกว่าหนึ่งครั้ง
+	yesterday	เมื่อวาน
+	{n} days ago	{n} วันที่แล้ว
+	No pages selected	ยังไม่ได้เลือกหน้า
+	Password-protected	ป้องกันด้วยรหัสผ่าน
+	Its security settings don't allow copying pages	การตั้งค่าความปลอดภัยไม่อนุญาตให้คัดลอกหน้า
+	Can't be read: {e}	อ่านไม่ได้: {e}
+	Includes unsaved changes	มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก
+	Pages of {name} to combine, e.g. 1-3, 6	หน้าของ {name} ที่จะรวม เช่น 1-3, 6
+	Remove {name}	นำออก {name}
+	Add files…	เพิ่มไฟล์…
+	Add at least two files	เพิ่มอย่างน้อยสองไฟล์
+	Couldn't add {name}: {e}	เพิ่ม {name} ไม่สำเร็จ: {e}
+	Couldn't combine files: {e}	รวมไฟล์ไม่สำเร็จ: {e}
+	Export comments	ส่งออกความคิดเห็น
+	Export form data	ส่งออกข้อมูลแบบฟอร์ม
+	Comment and form data	ความคิดเห็นและข้อมูลแบบฟอร์ม
+	Export	ส่งออก
+	Select data files to merge	เลือกไฟล์ข้อมูลที่จะรวม
+	Form data and PDF forms	ข้อมูลแบบฟอร์มและแบบฟอร์ม PDF
+	Save the spreadsheet	บันทึกสเปรดชีต
+	Save the accessibility report	บันทึกรายงานการเข้าถึง
+	Save image	บันทึกรูปภาพ
+	Export certificate	ส่งออกใบรับรอง
+	Choose a folder for the extracted pages	เลือกโฟลเดอร์สำหรับหน้าที่แยกออก
+	Choose a folder for the split files	เลือกโฟลเดอร์สำหรับไฟล์ที่แยก
+	Couldn't use {name}: {e}	ใช้ {name} ไม่ได้: {e}
+	Couldn't extract pages: {e}	แยกหน้าไม่ได้: {e}
+	Couldn't write {name}: {e}	เขียน {name} ไม่ได้: {e}
+	Wrote 1 file to {dir}	เขียน 1 ไฟล์ไปที่ {dir}
+	Wrote {n} files to {dir}	เขียน {n} ไฟล์ไปที่ {dir}
+	No pages match those choices	ไม่มีหน้าที่ตรงกับตัวเลือกเหล่านั้น
+	Couldn't split: {e}	แยกไม่ได้: {e}
+	Couldn't summarize comments: {e}	สรุปความคิดเห็นไม่ได้: {e}
+	Couldn't open the result: {e}	เปิดผลลัพธ์ไม่ได้: {e}
+	Importing data arrives on the web with file pickers for data files	การนำเข้าข้อมูลจะมาในเวอร์ชันเว็บ พร้อมตัวเลือกไฟล์สำหรับไฟล์ข้อมูล
+	Exported to {path}	ส่งออกไปยัง {path}
+	Merging data files needs the desktop app	การรวมไฟล์ข้อมูลต้องใช้แอปเดสก์ท็อป
+	Merged 1 file into {path}	รวม 1 ไฟล์เป็น {path}
+	Merged {n} files into {path}	รวม {n} ไฟล์เป็น {path}
+	Combined {n} files	รวม {n} ไฟล์
+	Extracted 1 page	แยกออก 1 หน้า
+	Extracted {n} pages	แยกออก {n} หน้า
+	Created a comment summary	สร้างสรุปความคิดเห็นแล้ว
+	Couldn't open {name}: {e}	เปิด {name} ไม่ได้: {e}
+	Couldn't read {name}: {e}	อ่าน {name} ไม่ได้: {e}
+	Couldn't save: {e}	บันทึกไม่ได้: {e}
+	Downloading attachments on the web arrives with M3.10 ({n} bytes ready)	การดาวน์โหลดไฟล์แนบจะมาในเวอร์ชันเว็บพร้อม M3.10 ({n} ไบต์พร้อมแล้ว)
+	`{command}` {when}	`{command}` {when}
+	ships in milestone {m}	จะมาในไมล์สโตน {m}
+	needs an AI provider (off by default)	ต้องมีผู้ให้บริการ AI (ปิดไว้เป็นค่าเริ่มต้น)
+	is available	พร้อมใช้งาน
+	is not available yet	ยังไม่พร้อมใช้งาน
+	{label} failed: {e}	{label} ล้มเหลว: {e}
+	Undid {label}	เลิกทำ {label} แล้ว
+	Redid {label}	ทำซ้ำ {label} แล้ว
+	A document needs at least one page: copy instead	เอกสารต้องมีอย่างน้อยหนึ่งหน้า: ให้คัดลอกแทน
+	Cut {what}	ตัด {what}
+	Copied {what}	คัดลอก {what} แล้ว
+	1 page	1 หน้า
+	{n} pages	{n} หน้า
+	Copy or cut pages first	คัดลอกหรือตัดหน้าก่อน
+	Couldn't save {name}: {e}	บันทึก {name} ไม่ได้: {e}
+	Saved {name}	บันทึก {name} แล้ว
+	Saved, but reopening failed: {e}	บันทึกแล้ว แต่เปิดใหม่ไม่สำเร็จ: {e}
+	Downloaded {name}	ดาวน์โหลด {name} แล้ว
+	Couldn't download {name}: {e}	ดาวน์โหลด {name} ไม่ได้: {e}
+	Reverted to the last saved version	ย้อนกลับไปยังเวอร์ชันที่บันทึกล่าสุด
+	That didn't work: an internal error stopped it ({m}). Your documents are unchanged.	ไม่สำเร็จ: ข้อผิดพลาดภายในทำให้หยุด ({m}) เอกสารของคุณไม่เปลี่ยนแปลง
+	Nothing to undo	ไม่มีอะไรให้เลิกทำ
+	Nothing to redo	ไม่มีอะไรให้ทำซ้ำ
+	This document has no form fields you can fill in	เอกสารนี้ไม่มีฟิลด์แบบฟอร์มที่กรอกได้
+	This document has no comments to flatten	เอกสารนี้ไม่มีความคิดเห็นที่ต้องทำให้แบน
+	This document has no form fields to flatten	เอกสารนี้ไม่มีฟิลด์แบบฟอร์มที่ต้องทำให้แบน
+	There are no redaction marks (mark text, areas or pages first)	ไม่มีเครื่องหมายปกปิดข้อมูล (ทำเครื่องหมายข้อความ พื้นที่ หรือหน้าก่อน)
+	This document has no {kind} to change	เอกสารนี้ไม่มี {kind} ให้เปลี่ยน
+	header or footer	ส่วนหัวหรือส่วนท้าย
+	watermark	ลายน้ำ
+	background	พื้นหลัง
+	This document isn't password-protected	เอกสารนี้ไม่ได้ป้องกันด้วยรหัสผ่าน
+	Only the document's owner can change its security (open it with the permissions password)	เฉพาะเจ้าของเอกสารเท่านั้นที่เปลี่ยนความปลอดภัยได้ (เปิดด้วยรหัสผ่านสิทธิ์)
+	The document's security settings don't allow this change	การตั้งค่าความปลอดภัยของเอกสารไม่อนุญาตให้ทำการเปลี่ยนแปลงนี้
+	Open a document first	เปิดเอกสารก่อน
+	Security will be removed when you save	ความปลอดภัยจะถูกนำออกเมื่อคุณบันทึก
+	Click text or an image to edit it	คลิกข้อความหรือรูปภาพเพื่อแก้ไข
+	Drag a rectangle to create a link; double-click a link to edit it	ลากเป็นรูปสี่เหลี่ยมเพื่อสร้างลิงก์ ดับเบิลคลิกที่ลิงก์เพื่อแก้ไข
+	There are no redaction marks to apply	ไม่มีเครื่องหมายปกปิดข้อมูลให้ใช้
+	Drag to draw the area where the signature should appear.	ลากเพื่อวาดพื้นที่ที่ต้องการให้ลายเซ็นปรากฏ
+	Couldn't fit the visible content: {e}	จัดเนื้อหาที่มองเห็นให้พอดีไม่ได้: {e}
+	Drag a rectangle around the area to copy	ลากเป็นรูปสี่เหลี่ยมรอบพื้นที่ที่ต้องการคัดลอก
+	Click on the page to add a {tool}, or drag to set its size	คลิกบนหน้าเพื่อเพิ่ม {tool} หรือลากเพื่อกำหนดขนาด
+	Drag a rectangle on a page to crop it; double-click a page for Set Page Boxes	ลากเป็นรูปสี่เหลี่ยมบนหน้าเพื่อครอบตัด ดับเบิลคลิกที่หน้าเพื่อตั้งค่ากรอบหน้า
+	Keep tool selected: on	คงเครื่องมือที่เลือกไว้: เปิด
+	Keep tool selected	คงเครื่องมือที่เลือกไว้
+	Opacity	ความทึบ
+	Line thickness	ความหนาเส้น
+	What word or phrase would you like to search for?	คุณต้องการค้นหาคำหรือวลีใด?
+	Searching… {s} of {p} pages	กำลังค้นหา… {s} จาก {p} หน้า
+	 (searching… {s} of {p} pages)	 (กำลังค้นหา… {s} จาก {p} หน้า)
+	1 instance	1 รายการ
+	{n} instances	{n} รายการ
+	Go to this result	ไปที่ผลลัพธ์นี้
+	Highlight	ไฮไลต์
+	Draw	วาด
+	Polygon	รูปหลายเหลี่ยม
+	Connected lines	เส้นเชื่อมต่อ
+	Eraser	ยางลบ
+	Sign	ลงนาม
+	Certified by {by}	รับรองโดย {by}
+	At least one signature is invalid.	มีอย่างน้อยหนึ่งลายเซ็นที่ไม่ถูกต้อง
+	Signed and all signatures are valid.	ลงนามแล้ว และลายเซ็นทั้งหมดถูกต้อง
+	At least one signature has problems.	มีอย่างน้อยหนึ่งลายเซ็นที่มีปัญหา
+	This document is secured. Some changes are restricted by its security settings.	เอกสารนี้ถูกป้องกันไว้ การเปลี่ยนแปลงบางอย่างถูกจำกัดด้วยการตั้งค่าความปลอดภัย
+	This is a dynamic XFA form, which PdfCraft can't display yet. What you see is the file's placeholder page.	นี่คือแบบฟอร์ม XFA แบบไดนามิก ซึ่ง PdfCraft ยังแสดงผลไม่ได้ สิ่งที่คุณเห็นคือหน้าแทนของไฟล์
+	This form also contains XFA data, which PdfCraft doesn't read yet. You can fill its fields, but Acrobat may show the XFA values instead.	แบบฟอร์มนี้ยังมีข้อมูล XFA ซึ่ง PdfCraft ยังอ่านไม่ได้ คุณกรอกฟิลด์ได้ แต่ Acrobat อาจแสดงค่าจาก XFA แทน
+	This document contains {n} interactive form fields.	เอกสารนี้มีฟิลด์แบบฟอร์มแบบโต้ตอบ {n} ฟิลด์
+	This file was damaged and has been repaired. Saving keeps the repaired version.	ไฟล์นี้เสียหายและได้รับการซ่อมแซมแล้ว การบันทึกจะเก็บเวอร์ชันที่ซ่อมแซมไว้
+	Dismiss	ปิด
+	Hide field highlights	ซ่อนไฮไลต์ของฟิลด์
+	Highlight fields	ไฮไลต์ฟิลด์
+	Security settings	การตั้งค่าความปลอดภัย
+	Details	รายละเอียด
+	Select (V)	เลือก (V)
+	Hand (H)	มือ (H)
+	Delete pages (Delete)	ลบหน้า (Delete)
+	Insert a blank page after the selection	แทรกหน้าเปล่าหลังส่วนที่เลือก
+	Insert pages from a file…	แทรกหน้าจากไฟล์…
+	Extract pages to a new document	แยกหน้าออกเป็นเอกสารใหม่
+	Split into files…	แยกเป็นไฟล์…
+	Select pages	เลือกหน้า
+	Cut	ตัด
+	Copy	คัดลอก
+	Paste after	วางหลัง
+	Rename	เปลี่ยนชื่อ
+	Set to current page ({n})	ตั้งเป็นหน้าปัจจุบัน ({n})
+	Move up	เลื่อนขึ้น
+	Move down	เลื่อนลง
+	Indent	เพิ่มการเยื้อง
+	Outdent	ลดการเยื้อง
+	This document has no form fields.	เอกสารนี้ไม่มีฟิลด์แบบฟอร์ม
+	Tab order: move a field with its arrows.	ลำดับแท็บ: ย้ายฟิลด์ด้วยปุ่มลูกศร
+	Unplaced	ยังไม่วาง
+	Has JavaScript actions (run in M6)	มีการทำงาน JavaScript (ทำงานใน M6)
+	Page	หน้า
+	None	ไม่มี
+	Delete selected fields	ลบฟิลด์ที่เลือก
+	Diagnostic details	รายละเอียดการวินิจฉัย
+	The operation failed.	การดำเนินการล้มเหลว
+	no such document	ไม่มีเอกสารดังกล่าว
+	nothing to undo	ไม่มีอะไรให้เลิกทำ
+	nothing to redo	ไม่มีอะไรให้ทำซ้ำ
+	this document is signed: rewriting it would invalidate its signatures (save it incrementally instead)	เอกสารนี้ลงนามแล้ว: การเขียนทับจะทำให้ลายเซ็นใช้ไม่ได้ (ให้บันทึกแบบเพิ่มพูนแทน)
+	the document is protected by a password	เอกสารถูกป้องกันด้วยรหัสผ่าน
+	the password is incorrect	รหัสผ่านไม่ถูกต้อง
+	the document has no page tree	เอกสารไม่มีโครงสร้างหน้า
+	a document must keep at least one page	เอกสารต้องมีอย่างน้อยหนึ่งหน้า
+	a bookmark cannot be moved inside itself	ไม่สามารถย้ายที่คั่นหน้าเข้าไปในตัวเองได้
+	the title must not be empty	ชื่อเรื่องต้องไม่ว่างเปล่า
+	the document has no form fields	เอกสารไม่มีฟิลด์แบบฟอร์ม
+	there are no redaction marks to apply	ไม่มีเครื่องหมายปกปิดข้อมูลให้ใช้
+	there are no pages to print	ไม่มีหน้าที่จะพิมพ์
+	the document has no tags	เอกสารไม่มีแท็ก
+	{0}: {1}	{0}: {1}
+	the text recognition models are not installed (reinstall PdfCraft, or set PDFCRAFT_MODELS to the folder that holds them)	โมเดลรู้จำข้อความยังไม่ได้ติดตั้ง (ติดตั้ง PdfCraft ใหม่ หรือตั้งค่า PDFCRAFT_MODELS ให้ชี้ไปยังโฟลเดอร์ที่เก็บโมเดล)
+	the image is empty	รูปภาพว่างเปล่า
+	this file isn't XFDF, FDF, XML or text form data	ไฟล์นี้ไม่ใช่ข้อมูลแบบฟอร์ม XFDF, FDF, XML หรือข้อความ
+	nothing in the file matches this document	ไม่มีข้อมูลในไฟล์ที่ตรงกับเอกสารนี้
+	This page couldn't be displayed.\n{e}	ไม่สามารถแสดงหน้านี้ได้\n{e}
+	Go to page {p}	ไปที่หน้า {p}
+	{s} action	การทำงาน {s}
+	Page {p} of {n}	หน้า {p} จาก {n}
+	1 page selected	เลือก 1 หน้า
+	{n} pages selected	เลือก {n} หน้า
+	{name} — unsaved changes	{name} — มีการเปลี่ยนแปลงที่ยังไม่บันทึก
+	{kind} field	ฟิลด์ {kind}
+	Select a file for the stamp	เลือกไฟล์สำหรับตราประทับ
+	JavaScript, e.g. getField("total").value	JavaScript เช่น getField("total").value
+	Font: Helvetica	ฟอนต์: Helvetica
+	e.g. en-US	เช่น en-US
+	Rendering: hayro (bootstrap) · UI: egui · Icons: Lucide (ISC) · Fonts: Inter, JetBrains Mono, Dancing Script (OFL)	การเรนเดอร์: hayro (bootstrap) · UI: egui · ไอคอน: Lucide (ISC) · ฟอนต์: Inter, JetBrains Mono, Dancing Script (OFL)
+	CheckBox	ช่องทำเครื่องหมาย
+	Radio	ปุ่มตัวเลือก
+	PushButton	ปุ่มกด
+	Combo	กล่องคอมโบ
+	List	กล่องรายการ
+	Unknown	ไม่รู้จัก
+	The document has no XMP metadata	เอกสารไม่มีข้อมูลเมตา XMP
+	The title in the metadata and the document information differ	ชื่อเรื่องในข้อมูลเมตากับข้อมูลเอกสารไม่ตรงกัน
+	The document is encrypted	เอกสารถูกเข้ารหัส
+	Device colour is used, but there is no PDF/A output intent	มีการใช้สีแบบ Device แต่ไม่มี Output Intent สำหรับ PDF/A
+	DeviceCMYK is used: it needs a CMYK output intent (not added automatically)	ใช้ DeviceCMYK: ต้องมี Output Intent แบบ CMYK (ระบบไม่เพิ่มให้อัตโนมัติ)
+	The document has additional actions (/AA)	เอกสารมีการทำงานเพิ่มเติม (/AA)
+	The document has document-level JavaScript	เอกสารมี JavaScript ระดับเอกสาร
+	The form asks viewers to make appearances (NeedAppearances)	แบบฟอร์มขอให้โปรแกรมอ่านสร้างลักษณะการแสดงผลของฟิลด์ (NeedAppearances)
+	A form field has additional actions	ฟิลด์แบบฟอร์มมีการทำงานเพิ่มเติม
+	A stream uses LZW compression	สตรีมใช้การบีบอัดแบบ LZW
+	A stream refers to an external file	สตรีมอ้างถึงไฟล์ภายนอก
+	An image asks to be interpolated	รูปภาพขอให้ทำการอินเทอร์โพเลต
+	An image has alternates or OPI information	รูปภาพมีข้อมูลทางเลือกหรือข้อมูล OPI
+	PostScript XObjects aren't allowed	ไม่อนุญาตให้ใช้ PostScript XObjects
+	Embedded files must be PDF/A files themselves (use PDF/A-3 for others)	ไฟล์ที่ฝังต้องเป็นไฟล์ PDF/A เช่นกัน (ใช้ PDF/A-3 สำหรับไฟล์อื่น)
+	An embedded file has no AFRelationship	ไฟล์ที่ฝังไม่มี AFRelationship
+	Select Icon	เลือกไอคอน
+	Choose images	เลือกรูปภาพ
+	{dpi} pixels/inch	{dpi} พิกเซล/นิ้ว
+	Type your {what}.	พิมพ์ {what} ของคุณ
+	Draw your {what} below.	วาด {what} ของคุณด้านล่าง
+	Your name	ชื่อของคุณ
+	Images and text (converted to PDF)	รูปภาพและข้อความ (แปลงเป็น PDF)
+	Images and text	รูปภาพและข้อความ
+	Check Box Style:	รูปแบบช่องทำเครื่องหมาย:
+	Button Style:	รูปแบบปุ่ม:
+	Check	เครื่องหมายถูก
+	Circle	วงกลม
+	Diamond	สี่เหลี่ยมข้าวหลามตัด
+	Square	สี่เหลี่ยมจัตุรัส
+	Star	ดาว
+	{month} {y}	{month} {y}
+	Change {key}	เปลี่ยน {key}
+	Insert pages from {name}	แทรกหน้าจาก {name}
+	Fill in {name}	กรอกข้อมูลใน {name}
+	Set the image of {name}	กำหนดรูปภาพของ {name}
+	Edit script of {name}	แก้ไขสคริปต์ของ {name}
+	Import {name}	นำเข้า {name}
+	Add bookmark	เพิ่มที่คั่นหน้า
+	Rename bookmark	เปลี่ยนชื่อที่คั่นหน้า
+	Delete bookmark	ลบที่คั่นหน้า
+	Move bookmark	ย้ายที่คั่นหน้า
+	Set bookmark destination	กำหนดปลายทางของที่คั่นหน้า
+	Add stamp	เพิ่มตราประทับ
+	Delete comment	ลบความคิดเห็น
+	Edit comment	แก้ไขความคิดเห็น
+	Erase	ลบด้วยยางลบ
+	Lock comment	ล็อกความคิดเห็น
+	Unlock comment	ปลดล็อกความคิดเห็น
+	Move comment	ย้ายความคิดเห็น
+	Resize comment	ปรับขนาดความคิดเห็น
+	Change comment properties	เปลี่ยนคุณสมบัติของความคิดเห็น
+	Add field	เพิ่มฟิลด์
+	Change field properties	เปลี่ยนคุณสมบัติของฟิลด์
+	Delete field	ลบฟิลด์
+	Duplicate field	ทำสำเนาฟิลด์
+	Set tab order	กำหนดลำดับแท็บ
+	Change initial view	เปลี่ยนมุมมองเริ่มต้น
+	Set alternate text	กำหนดข้อความทางเลือก
+	Mark figure as decorative	ทำเครื่องหมายรูปเป็นภาพตกแต่ง
+	Run JavaScript	เรียกใช้ JavaScript
+	Delete document JavaScript	ลบ JavaScript ของเอกสาร
+	Edit document JavaScript	แก้ไข JavaScript ของเอกสาร
+	Edit text	แก้ไขข้อความ
+	Move image	ย้ายรูปภาพ
+	Rotate image	หมุนรูปภาพ
+	Flip image	พลิกรูปภาพ
+	Delete image	ลบรูปภาพ
+	Add header & footer	เพิ่มส่วนหัวและส่วนท้าย
+	Update header & footer	อัปเดตส่วนหัวและส่วนท้าย
+	Update watermark	อัปเดตลายน้ำ
+	Add background	เพิ่มพื้นหลัง
+	Update background	อัปเดตพื้นหลัง
+	Add image	เพิ่มรูปภาพ
+	Edit content	แก้ไขเนื้อหา
+	Delete content	ลบเนื้อหา
+	Remove redaction marks	นำเครื่องหมายปกปิดข้อมูลออก
+	Add link	เพิ่มลิงก์
+	Change link properties	เปลี่ยนคุณสมบัติของลิงก์
+	Delete link	ลบลิงก์
+	Create link	สร้างลิงก์
+	Flatten	ทำให้แบน
+	Add sticky note	เพิ่มโน้ตติดหน้า
+	Add highlight	เพิ่มไฮไลต์
+	Add underline	เพิ่มขีดเส้นใต้
+	Add strikethrough	เพิ่มขีดฆ่า
+	Add squiggly underline	เพิ่มขีดเส้นใต้แบบหยัก
+	Add rectangle	เพิ่มสี่เหลี่ยมผืนผ้า
+	Add oval	เพิ่มวงรี
+	Add arrow	เพิ่มลูกศร
+	Add line	เพิ่มเส้น
+	Add drawing	เพิ่มลายเส้น
+	Add text box	เพิ่มกล่องข้อความ
+	Add checkmark	เพิ่มเครื่องหมายถูก
+	Add cross	เพิ่มเครื่องหมายกากบาท
+	Add dot	เพิ่มจุด
+	Add signature	เพิ่มลายเซ็น
+	Add redaction mark	เพิ่มเครื่องหมายปกปิดข้อมูล
+	Add cloud	เพิ่มเมฆ
+	Add polygon	เพิ่มรูปหลายเหลี่ยม
+	Add connected lines	เพิ่มเส้นเชื่อมต่อ
+	Add callout	เพิ่มคำอธิบาย
+	Add inserted text	เพิ่มข้อความที่แทรก
+	Add file attachment	เพิ่มไฟล์แนบ
+	Set status Accepted	ตั้งสถานะเป็นยอมรับ
+	Set status Rejected	ตั้งสถานะเป็นปฏิเสธ
+	Set status Cancelled	ตั้งสถานะเป็นยกเลิก
+	Set status Completed	ตั้งสถานะเป็นเสร็จสมบูรณ์
+	Set status None	ตั้งสถานะเป็นไม่มี
+	Set status Unmarked	ตั้งสถานะเป็นไม่ได้ทำเครื่องหมาย
+	Save as PDF/A-1b	บันทึกเป็น PDF/A-1b
+	Save as PDF/A-2b	บันทึกเป็น PDF/A-2b
+	Save as PDF/A-3b	บันทึกเป็น PDF/A-3b
+	Fill & Sign: change signature	กรอกและลงนาม: เปลี่ยนลายเซ็น
+	Fill & Sign: change initials	กรอกและลงนาม: เปลี่ยนชื่อย่อ
+	Fill & Sign: remove saved signature	กรอกและลงนาม: นำลายเซ็นที่บันทึกไว้ออก
+	Fill & Sign: remove saved initials	กรอกและลงนาม: นำชื่อย่อที่บันทึกไว้ออก
+	Change signature	เปลี่ยนลายเซ็น
+	Change initials	เปลี่ยนชื่อย่อ
+	Measure distance	วัดระยะทาง
+	Measure perimeter	วัดเส้นรอบรูป
+	Measure area	วัดพื้นที่
+	Set measurement scale	ตั้งมาตราส่วนการวัด
+	Measurement information	ข้อมูลการวัด
+	Measurement snapping	การดูดติดของการวัด
+	Export measurements as CSV	ส่งออกการวัดเป็น CSV
+	Distance	ระยะทาง
+	Perimeter	เส้นรอบรูป
+	Area	พื้นที่
+	Drawing scale	มาตราส่วนของแบบ
+	Snapping	การดูดติด
+	Export measurements	ส่งออกการวัด
+	Open a PDF to measure it.	เปิด PDF เพื่อวัด
+	Click vertices. Enter or double-click finishes a perimeter or area. Click the first point to close an area.	คลิกจุดยอด กด Enter หรือดับเบิลคลิกเพื่อจบเส้นรอบรูปหรือพื้นที่ คลิกจุดแรกเพื่อปิดพื้นที่
+	Shift constrains to 45 degrees. Backspace removes a vertex. Escape cancels.	กด Shift เพื่อบังคับให้เป็น 45 องศา กด Backspace เพื่อลบจุดยอด และกด Escape เพื่อยกเลิก
+	Angle	มุม
+	Click the first point to begin.	คลิกจุดแรกเพื่อเริ่มต้น
+	Snap to drawing	ดูดติดกับแบบ
+	Endpoints	จุดปลาย
+	Midpoints	จุดกึ่งกลาง
+	Intersections	จุดตัด
+	Paths	เส้นทาง
+	Sensitivity	ความไว
+	Unit	หน่วย
+	Decimals	ทศนิยม
+	Calibrate from two points	ปรับเทียบจากสองจุด
+	Entire page	ทั้งหน้า
+	Viewport rectangle in page points (x, y, width, height)	สี่เหลี่ยมวิวพอร์ตในหน่วยพอยต์ของหน้า (x, y, width, height)
+	Viewport	วิวพอร์ต
+	Apply scale	ใช้มาตราส่วน
+	Saved measurements	การวัดที่บันทึกไว้
+	Saved measurements.	การวัดที่บันทึกไว้
+	Endpoint	จุดปลาย
+	Midpoint	จุดกึ่งกลาง
+	Intersection	จุดตัด
+	Path	เส้นทาง
+	This drawing exceeds the snapping limit; only the first paths are used.	แบบนี้เกินขีดจำกัดการดูดติด จึงใช้เฉพาะเส้นทางแรก ๆ
+	Some page content couldn't be read; snapping uses the rest.	เนื้อหาบางส่วนของหน้าอ่านไม่ได้ การดูดติดจะใช้ส่วนที่เหลือ
+	Unsupported measurements	การวัดที่ไม่รองรับ
+	Label	ป้ายกำกับ
+	{n} measurements use an unsupported format and are left out.	การวัด {n} รายการใช้รูปแบบที่ไม่รองรับ จึงถูกตัดออก
+	This area has too many overlapping paths; intersection snapping is limited.	พื้นที่นี้มีเส้นทางทับซ้อนกันมากเกินไป การดูดติดจุดตัดจึงถูกจำกัด
+	This measurement needs at least {n} points.	การวัดนี้ต้องใช้อย่างน้อย {n} จุด
+	Change {what}	เปลี่ยน {what}
+	Cut and stack	ตัดและวางซ้อน
+	Default workspace mode	โหมดพื้นที่ทำงานเริ่มต้น
+	Documents and view	เอกสารและมุมมอง
+	Open email app	เปิดแอปอีเมล
+	Open link	เปิดลิงก์
+	Open this web page?	เปิดหน้าเว็บนี้หรือไม่?
+	Scripts run in a sandbox without file or network access. A script that asks to open a web page needs your permission first. With JavaScript off, Acrobat's standard format, validate and calculate functions still work.	สคริปต์ทำงานในแซนด์บ็อกซ์ที่ไม่มีสิทธิ์เข้าถึงไฟล์หรือเครือข่าย สคริปต์ที่ขอเปิดหน้าเว็บต้องได้รับอนุญาตจากคุณก่อน เมื่อปิด JavaScript ฟังก์ชัน format, validate และ calculate มาตรฐานของ Acrobat ยังทำงานได้
+	Sign yourself	ลงนามด้วยตนเอง
+	Used when opening PDFs. An explicit launch or control mode takes precedence for the session.	ใช้เมื่อเปิด PDF หากระบุโหมดเปิดใช้งานหรือโหมดควบคุมไว้ชัดเจน โหมดนั้นจะมีผลก่อนสำหรับเซสชัน
+	Write this email?	เขียนอีเมลนี้หรือไม่?
+	{who} in this document wants to open this address in your browser:	{who} ในเอกสารนี้ต้องการเปิดที่อยู่นี้ในเบราว์เซอร์ของคุณ:
+	{who} in this document wants to open your email app with this address:	{who} ในเอกสารนี้ต้องการเปิดแอปอีเมลของคุณด้วยที่อยู่นี้:
+	This web address mixes letters from different alphabets, a common way to imitate another site's name.	ที่อยู่เว็บนี้ผสมตัวอักษรจากต่างชุดอักษร ซึ่งเป็นวิธีทั่วไปในการเลียนแบบชื่อของเว็บไซต์อื่น
+	This web address uses letters from another alphabet, which can look like familiar ones.	ที่อยู่เว็บนี้ใช้ตัวอักษรจากชุดอักษรอื่น ซึ่งอาจดูคล้ายตัวอักษรที่คุ้นเคย
+	Create PDF from images	สร้าง PDF จากรูปภาพ
+	Selected image files: {count}	ไฟล์รูปภาพที่เลือก: {count}
+	Use image resolution	ใช้ความละเอียดของรูปภาพ
+	Use each image's embedded DPI; use 72 DPI when it is absent.	ใช้ค่า DPI ที่ฝังในรูปภาพแต่ละรูป และใช้ 72 DPI เมื่อไม่มีค่าดังกล่าว
+	Use 72 DPI (one point per pixel)	ใช้ 72 DPI (หนึ่งพอยต์ต่อพิกเซล)
+	Use custom DPI	ใช้ DPI ที่กำหนดเอง
+	DPI sets the printed page size without resampling the image.	DPI กำหนดขนาดหน้าที่พิมพ์ โดยไม่รีแซมปลิงรูปภาพ
+	Create	สร้าง
+	Dynamic XFA form laid out from its template: {pages}, {fields}.	แบบฟอร์ม XFA แบบไดนามิกที่จัดวางจากเทมเพลต: {pages}, {fields}
+	XFA form: its fields and its XFA data are kept in step, so other viewers show what you fill in.	แบบฟอร์ม XFA: ฟิลด์และข้อมูล XFA จะถูกเก็บให้สอดคล้องกัน โปรแกรมอ่านอื่นจึงแสดงสิ่งที่คุณกรอกไว้ได้
+	Switch to two-page view first to show the cover page	เปลี่ยนเป็นมุมมองแบบสองหน้าก่อนเพื่อแสดงหน้าปก
+	Page display: {layout}	การแสดงหน้า: {layout}
+	Fit to width scrolling	เลื่อนแบบพอดีความกว้าง
+	Fit one full page	พอดีหนึ่งหน้าเต็ม
+	Default page display	การแสดงหน้าเริ่มต้น
+	Default zoom	ซูมเริ่มต้น
+	Used when a PDF doesn't ask for a layout or zoom. Continuous scrolling never snaps between pages.	ใช้เมื่อ PDF ไม่ได้ระบุรูปแบบการจัดวางหรือการซูม การเลื่อนแบบต่อเนื่องจะไม่กระโดดระหว่างหน้า
+	Choose a PNG or JPEG image (up to 4 MiB). Transparency is preserved.	เลือกรูปภาพ PNG หรือ JPEG (ไม่เกิน 4 MiB) ความโปร่งใสจะคงอยู่
+	Couldn't import the signature image: {e}	นำเข้ารูปภาพลายเซ็นไม่สำเร็จ: {e}
+@plural	{n} page|{n} pages	{n} หน้า
+@plural	{n} field|{n} fields	{n} ฟิลด์
+	Create PDF from multiple files…	สร้าง PDF จากหลายไฟล์…
+	Optimizing… removing user data	กำลังปรับให้เหมาะสม… กำลังนำข้อมูลผู้ใช้ออก
+	Optimizing… image {d} of {t}	กำลังปรับให้เหมาะสม… รูปภาพ {d} จาก {t}
+	Optimizing… cleaning up	กำลังปรับให้เหมาะสม… กำลังเก็บกวาด
+	Optimizing… merging identical objects	กำลังปรับให้เหมาะสม… กำลังรวมออบเจกต์ที่เหมือนกัน
+	Optimizing… writing the copy	กำลังปรับให้เหมาะสม… กำลังเขียนสำเนา
+	Cancelling…	กำลังยกเลิก…
+	Created a PDF from {n} files	สร้าง PDF จาก {n} ไฟล์แล้ว
+	PDF, images and text	PDF รูปภาพ และข้อความ
+	Insert a file before page {label}	แทรกไฟล์ก่อนหน้า {label}
+	Insert a file at the end	แทรกไฟล์ต่อท้าย
+	Save pages	บันทึกหน้า
+	Save these pages as one PDF	บันทึกหน้าเหล่านี้เป็น PDF ไฟล์เดียว
+	No changes to save	ไม่มีการเปลี่ยนแปลงที่ต้องบันทึก
+	Created a PDF from {n} files; left out: {names}	สร้าง PDF จาก {n} ไฟล์แล้ว ตัดออก: {names}
+	Created a PDF from the first {n} files	สร้าง PDF จาก {n} ไฟล์แรกแล้ว
+	Go to page…	ไปที่หน้า…
+	Optimization is already running	กำลังปรับให้เหมาะสมอยู่แล้ว
+	Optimization cancelled	ยกเลิกการปรับให้เหมาะสมแล้ว
+	Couldn't optimize the file	ไม่สามารถปรับไฟล์ให้เหมาะสมได้
+	Files are combined in this order. Leave Pages empty to take every page.	ไฟล์จะถูกรวมตามลำดับนี้ เว้นช่องหน้าไว้ว่างเพื่อใช้ทุกหน้า
+	Portable mode is off: {folder} can't be written ({error}). Settings are kept in your user folder instead.	โหมดพกพาปิดอยู่: เขียนไฟล์ลง {folder} ไม่ได้ ({error}) การตั้งค่าจะถูกเก็บไว้ในโฟลเดอร์ผู้ใช้ของคุณแทน
+	PdfCraft is drawing without a graphics processor, so it may be slow. Updating the graphics driver may help.	PdfCraft กำลังวาดภาพโดยไม่ใช้ตัวประมวลผลกราฟิก จึงอาจทำงานช้า การอัปเดตไดรเวอร์กราฟิกอาจช่วยได้
+	Show	แสดง
+	Sort	เรียงลำดับ
+	Reverse the order	กลับลำดับ
+	Grab bag	เบ็ดเตล็ด
+	Table	ตาราง
+	Username	ชื่อผู้ใช้
+	Display name	ชื่อที่แสดง
+	Real name	ชื่อจริง
+	Name (A–Z)	ชื่อ (A–Z)
+	Merged PRs	PR ที่รวมแล้ว
+	PRs	PR
+	Commits	คอมมิต
+	Lines added	บรรทัดที่เพิ่ม
+	+LOC	+LOC
+	Lines deleted	บรรทัดที่ลบ
+	−LOC	−LOC
+	Line delta	ผลต่างของบรรทัด
+	ΔLOC	ΔLOC
+	Binary assets added	ไฟล์ไบนารีที่เพิ่ม
+	+Bin	+Bin
+	Binary assets removed	ไฟล์ไบนารีที่นำออก
+	−Bin	−Bin
+	First commit	คอมมิตแรก
+	First	แรก
+	Last commit	คอมมิตล่าสุด
+	Last	ล่าสุด
+	No contributor data was built into this copy.	สำเนานี้ไม่ได้ฝังข้อมูลผู้มีส่วนร่วมไว้
+	No model credits were built into this copy.	สำเนานี้ไม่ได้ฝังเครดิตโมเดลไว้
+	{n} contributors · {c} commits	{n} ผู้มีส่วนร่วม · {c} คอมมิต
+	Company	บริษัท
+	Model	โมเดล
+	% of all commits	% ของคอมมิตทั้งหมด
+	Lines +/−	บรรทัด +/−
+	@{login}: {prs} PRs, {commits} commits, +{added} / −{deleted} lines (Δ {delta}), +{bin_added} / −{bin_deleted} binary assets, {first} – {last}	@{login}: {prs} PR, {commits} คอมมิต, +{added} / −{deleted} บรรทัด (Δ {delta}), +{bin_added} / −{bin_deleted} ไฟล์ไบนารี, {first} – {last}
+	None of those files can be made into a PDF; use PDFs, images or .txt files	ไม่มีไฟล์ใดในนั้นที่สร้างเป็น PDF ได้ โปรดใช้ไฟล์ PDF รูปภาพ หรือไฟล์ .txt
+	About	เกี่ยวกับ
+	Contributors	ผู้มีส่วนร่วม
+	Models	โมเดล
+	Only continue if you trust this document. An address can carry information from the document, such as what you typed into its form.	โปรดดำเนินการต่อเฉพาะเมื่อคุณเชื่อถือเอกสารนี้ ที่อยู่นี้อาจมีข้อมูลจากเอกสารติดมาด้วย เช่น ข้อความที่คุณกรอกไว้ในแบบฟอร์ม
+	Print single-sided. Keep the sheets in order, cut at the marks, then stack the piles left to right, top to bottom.	พิมพ์ด้านเดียว รักษาลำดับของแผ่นให้ถูกต้อง ตัดตามเครื่องหมาย แล้ววางกองซ้อนจากซ้ายไปขวา บนลงล่าง
+comment menu	Edit	แก้ไข
+	Undo {action}	เลิกทำ {action}
+	Redo {action}	ทำซ้ำ {action}
+signature pad	Type	พิมพ์
+action wizard	Start	เริ่ม
+calendar date	January	มกราคม
+calendar date	February	กุมภาพันธ์
+calendar date	March	มีนาคม
+calendar date	April	เมษายน
+calendar date	May	พฤษภาคม
+calendar date	June	มิถุนายน
+calendar date	July	กรกฎาคม
+calendar date	August	สิงหาคม
+calendar date	September	กันยายน
+calendar date	October	ตุลาคม
+calendar date	November	พฤศจิกายน
+calendar date	December	ธันวาคม
+	Reopen the files that were open when PdfCraft last closed	เปิดไฟล์ที่ยังเปิดอยู่เมื่อปิด PdfCraft ครั้งล่าสุดอีกครั้ง
+	Clear Recent Files	ล้างไฟล์ล่าสุด
+	Remove from Recent	นำออกจากรายการล่าสุด
+	Remove {name} from Recent	นำ {name} ออกจากรายการล่าสุด
+	Inserted text	ข้อความที่แทรก
+	Add {what}	เพิ่ม {what}
+	Use {what}	ใช้ {what}
+	Place saved {what}	วาง {what} ที่บันทึกไว้
+	Remove saved {what}	นำ {what} ที่บันทึกไว้ออก
+	A link	ลิงก์
+	A button	ปุ่ม
+	A script	สคริปต์
+	{who} in this document tried to open an address PdfCraft won't open: {e}.	{who} ในเอกสารนี้พยายามเปิดที่อยู่ที่ PdfCraft ไม่เปิดให้: {e}
+	{who} in this document tried to open an address PdfCraft won't open: {e}. Only web (http, https) and email (mailto) links open from documents.	{who} ในเอกสารนี้พยายามเปิดที่อยู่ที่ PdfCraft ไม่เปิดให้: {e} เอกสารจะเปิดได้เฉพาะลิงก์เว็บ (http, https) และอีเมล (mailto) เท่านั้น
+	Another file dialog is still open. Finish with it first.	ยังมีกล่องโต้ตอบไฟล์อื่นเปิดอยู่ กรุณาจัดการกล่องนั้นให้เสร็จก่อน
+	Couldn't show the file picker. Please try again.	เปิดหน้าต่างเลือกไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง
+	The document changed while you were choosing a file, so nothing was changed.	เอกสารถูกแก้ไขระหว่างที่คุณกำลังเลือกไฟล์ จึงไม่มีการเปลี่ยนแปลงใดเกิดขึ้น
+	The document was closed before it could be saved.	เอกสารถูกปิดไปก่อนที่จะบันทึกได้
+	The pages were extracted but not deleted, because the document changed while you were choosing a folder.	แยกหน้าเหล่านั้นออกแล้วแต่ยังไม่ได้ลบ เนื่องจากเอกสารมีการเปลี่ยนแปลงระหว่างที่คุณเลือกโฟลเดอร์
+	That didn't work: an internal error stopped it ({m}).	ดำเนินการไม่สำเร็จ: เกิดข้อผิดพลาดภายในและหยุดกลางทาง ({m})
+	The Windows store's digital IDs couldn't be listed: {e}	ไม่สามารถแสดงรายการ ID ดิจิทัลของ Windows store ได้: {e}
+	Align fields	จัดแนวฟิลด์
+	Distribute fields	กระจายฟิลด์
+	Match field sizes	ทำให้ขนาดฟิลด์เท่ากัน
+	Mark for redaction	ทำเครื่องหมายสำหรับปกปิดข้อมูล
+	Mark pages for redaction	ทำเครื่องหมายหน้าเพื่อปกปิดข้อมูล
+	Change document properties	เปลี่ยนคุณสมบัติเอกสาร
+	Mark differences	ทำเครื่องหมายความแตกต่าง
+	Run form script	เรียกใช้สคริปต์แบบฟอร์ม
+	Scripted content must be usable with a keyboard and assistive technology. Check the document's scripts.	เนื้อหาที่ใช้สคริปต์ต้องใช้งานได้ด้วยแป้นพิมพ์และเทคโนโลยีช่วยเหลือ โปรดตรวจสอบสคริปต์ของเอกสาร
+	Table rows belong directly in a table or its head, body or foot. Fix the table's tags.	แถวของตารางต้องอยู่ภายในตารางหรือส่วน head, body หรือ foot ของตารางโดยตรง โปรดแก้ไขแท็กของตาราง
+	Basic constraints	ข้อจำกัดพื้นฐาน
+	Certificate authority	หน่วยงานออกใบรับรอง
+	End entity	เอนทิตีปลายทาง
+	SHA-1 digest	ไดเจสต์ SHA-1
+	SHA-256 digest	ไดเจสต์ SHA-256
+	Squiggly	เส้นหยัก
+	Home / End	Home / End
+	H / Space (hold)	H / Space (กดค้าง)
+	Rotation:	การหมุน:
+	Line ending	ปลายเส้น
+	Open arrow	ลูกศรโปร่ง
+	Closed arrow	ลูกศรทึบ
+	Butt	ตัดตรง
+	Reverse open arrow	ลูกศรโปร่งกลับทิศ
+	Reverse closed arrow	ลูกศรทึบกลับทิศ
+	Slash	เส้นทแยง
+	The standard fonts can't draw “{c}” ({code}). Only Western European characters can be added as text for now.	ฟอนต์มาตรฐานไม่สามารถวาด “{c}” ({code}) ได้ ขณะนี้เพิ่มได้เฉพาะตัวอักษรยุโรปตะวันตกเป็นข้อความเท่านั้น
+	Larger pages	หน้าที่ใหญ่ขึ้น
+	Smaller pages	หน้าที่เล็กลง
+	Reset page size	รีเซ็ตขนาดหน้า
+	Flatten Fill & Sign when saving	ทำให้ Fill & Sign แบนราบเมื่อบันทึก
+	Text, marks and signatures become part of the page. Other comments stay editable.	ข้อความ เครื่องหมาย และลายเซ็นจะกลายเป็นส่วนหนึ่งของหน้า ส่วนความคิดเห็นอื่น ๆ ยังแก้ไขได้อยู่
+	Date format	รูปแบบวันที่
+	Fill & Sign dates	วันที่ของ Fill & Sign
+	Pattern	รูปแบบ
+	Today: {date}	วันนี้: {date}
+	yyyy or yy year · m or mm month · mmm or mmmm month name · d or dd day · ddd or dddd weekday. H, h, M, s and t are time letters and can't be used on their own: put {escape} before a letter to show it as is.	yyyy หรือ yy คือปี · m หรือ mm คือเดือน · mmm หรือ mmmm คือชื่อเดือน · d หรือ dd คือวัน · ddd หรือ dddd คือวันในสัปดาห์ ส่วน H, h, M, s และ t เป็นอักษรแทนเวลา จึงใช้เดี่ยว ๆ ไม่ได้: ใส่ {escape} หน้าอักษรเพื่อให้แสดงเป็นตัวอักษรนั้น
+	Same as interface ({language})	เหมือนกับอินเทอร์เฟซ ({language})
+	{chars} can't be written into the PDF yet: Fill & Sign text is Western European only. Pick a numeric format such as dd.mm.yyyy.	{chars} ยังเขียนลงใน PDF ไม่ได้: ข้อความ Fill & Sign รองรับเฉพาะยุโรปตะวันตกเท่านั้น โปรดเลือกรูปแบบตัวเลข เช่น dd.mm.yyyy
+	Opens the printer driver's preferences. They are saved for every print from this computer; the copies, two-sided, grayscale and paper chosen here still apply.	เปิดการตั้งค่าของไดรเวอร์เครื่องพิมพ์ โดยจะบันทึกไว้ใช้กับการพิมพ์ทุกครั้งจากคอมพิวเตอร์เครื่องนี้ ส่วนจำนวนสำเนา การพิมพ์สองหน้า ระดับสีเทา และกระดาษที่เลือกไว้ที่นี่จะยังคงมีผล
+	The printer driver's own settings for this print: paper tray, paper type, finishing and more.	การตั้งค่าของไดรเวอร์เครื่องพิมพ์เองสำหรับการพิมพ์ครั้งนี้: ถาดกระดาษ ชนิดกระดาษ การตกแต่ง และอื่น ๆ
+	Couldn't open the printer's preferences: {e}	เปิดการตั้งค่าของเครื่องพิมพ์ไม่สำเร็จ: {e}
+	Printer properties	คุณสมบัติเครื่องพิมพ์
+	Reset to printer defaults	รีเซ็ตเป็นค่าเริ่มต้นของเครื่องพิมพ์
+	This printer offers no settings of its own.	เครื่องพิมพ์นี้ไม่มีการตั้งค่าของตัวเอง
+certificate	Subject	ผู้ถือใบรับรอง
+	Scroll tabs left	เลื่อนแท็บไปทางซ้าย
+	Scroll tabs right	เลื่อนแท็บไปทางขวา
+	Shared Field Properties	คุณสมบัติฟิลด์ที่ใช้ร่วมกัน
+	{n} fields selected	เลือก {n} ฟิลด์
+	Mixed	ต่างกัน
+	Custom font	ฟอนต์กำหนดเอง
+	Only checked properties will change. Mixed means the selected fields have different values.	ระบบจะเปลี่ยนเฉพาะคุณสมบัติที่ทำเครื่องหมายไว้เท่านั้น ต่างกัน หมายถึงฟิลด์ที่เลือกมีค่าไม่เหมือนกัน
+	Shift- or Ctrl/Command-click to select several fields.	กด Shift หรือ Ctrl/Command ค้างแล้วคลิกเพื่อเลือกหลายฟิลด์
+	Font size 0 uses automatic sizing.	ขนาดฟอนต์ 0 ใช้การปรับขนาดอัตโนมัติ
+	Character limit:	ขีดจำกัดจำนวนอักขระ:
+	Character limit 0 means no limit. A comb of characters needs a limit.	ขีดจำกัดอักขระ 0 หมายถึงไม่จำกัด ส่วนการจัดอักขระแบบหวีต้องกำหนดขีดจำกัด
+	To change locked fields, also set Locked to No.	หากต้องการเปลี่ยนฟิลด์ที่ล็อกไว้ ต้องตั้งค่าล็อกเป็น ไม่ ด้วย
+	Comb of characters	การจัดอักขระแบบหวี
+	The document changed while you were editing field properties.	เอกสารมีการเปลี่ยนแปลงระหว่างที่คุณแก้ไขคุณสมบัติของฟิลด์
+	The document is no longer open.	เอกสารถูกปิดไปแล้ว
+	The field properties dialog is no longer open.	กล่องโต้ตอบคุณสมบัติฟิลด์ถูกปิดไปแล้ว
+	The field properties could not be changed.	ไม่สามารถเปลี่ยนคุณสมบัติของฟิลด์ได้
+	The selected fields could not be found. Select them again.	ไม่พบฟิลด์ที่เลือกไว้ โปรดเลือกอีกครั้ง
+	The field {name} no longer exists.	ไม่มีฟิลด์ {name} อยู่แล้ว
+	A selected field has no widget on any page, so the fields can't be edited together.	ฟิลด์ที่เลือกไม่มีวิดเจ็ตอยู่ในหน้าใด ๆ จึงแก้ไขฟิลด์ทั้งหมดพร้อมกันไม่ได้
+	 ({n} at {dpi} dpi, the largest size they can be drawn at)	 ({n} ที่ {dpi} dpi ซึ่งเป็นขนาดใหญ่ที่สุดที่วาดได้)
+	Text recognition isn't installed: its models are missing (run `cargo xtask models`, or set PDFCRAFT_MODELS).	ยังไม่ได้ติดตั้งการรู้จำข้อความ: ไม่พบโมเดลที่จำเป็น (ให้รัน `cargo xtask models` หรือตั้งค่า PDFCRAFT_MODELS)

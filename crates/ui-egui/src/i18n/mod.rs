@@ -100,7 +100,7 @@ fn plural_ukrainian(n: u64) -> usize {
 }
 
 /// The registry. English first: it is the fallback and the source language.
-pub static LANGUAGES: [LangInfo; 15] = [
+pub static LANGUAGES: [LangInfo; 16] = [
     LangInfo { code: "en", name: "English", source: "", plural: plural_one_other, catalog: OnceLock::new() },
     LangInfo { code: "ja", name: "日本語", source: include_str!("ja.tsv"), plural: plural_none, catalog: OnceLock::new() },
     // Simplified Chinese; `zh`, `zh-CN`, `zh-SG` and `zh-Hans-*` locales resolve here (see `candidates`).
@@ -129,6 +129,8 @@ pub static LANGUAGES: [LangInfo; 15] = [
     LangInfo { code: "uk", name: "Українська", source: include_str!("uk.tsv"), plural: plural_ukrainian, catalog: OnceLock::new() },
     // Italian; every `it-*` locale (`it-IT`) resolves here.
     LangInfo { code: "it", name: "Italiano", source: include_str!("it.tsv"), plural: plural_one_other, catalog: OnceLock::new() },
+    // Thai; every `th-*` locale (`th-TH`, `th_TH.UTF-8`) resolves here. Thai has one plural form.
+    LangInfo { code: "th", name: "ไทย", source: include_str!("th.tsv"), plural: plural_none, catalog: OnceLock::new() },
 ];
 
 impl LangInfo {
@@ -646,7 +648,7 @@ mod tests {
         let error = pdfcraft_engine::ocr::OcrError::NoModels.to_string();
         let notice = "Text recognition isn't installed: its model files are missing. Reinstall PdfCraft, or set PDFCRAFT_MODELS to the folder that holds them.";
         assert!(include_str!("../ocr_ui.rs").contains(notice), "keep in step with ocr_ui.rs");
-        for code in ["bg", "de", "es", "fr", "hu", "ja", "ru", "te", "uk", "zh-hans", "zh-hant"] {
+        for code in ["bg", "de", "es", "fr", "hu", "ja", "ru", "te", "th", "uk", "zh-hans", "zh-hant"] {
             let lang = Lang::from_code(code).expect("registered");
             assert!(has(lang, notice) && has(lang, &error), "{code}");
         }
@@ -709,7 +711,7 @@ mod tests {
             labels.insert(label.to_string());
         }
         assert!(labels.len() > 20 && labels.contains("Comb of characters"), "the scan found the dialog's labels: {labels:?}");
-        for code in ["bg", "de", "es", "fr", "hu", "it", "ja", "pt-br", "ru", "te", "uk", "zh-hans", "zh-hant"] {
+        for code in ["bg", "de", "es", "fr", "hu", "it", "ja", "pt-br", "ru", "te", "th", "uk", "zh-hans", "zh-hant"] {
             let lang = Lang::from_code(code).expect("registered");
             let missing: Vec<_> = labels.iter().filter(|l| !has(lang, l)).collect();
             assert!(missing.is_empty(), "{code} lacks Shared Field Properties labels: {missing:#?}");
@@ -793,6 +795,37 @@ mod tests {
         assert!(literals.len() > 900, "source scan found only {} literals", literals.len());
         let missing: Vec<_> = literals.iter().filter(|label| !has(it, label)).collect();
         assert!(missing.is_empty(), "untranslated Italian UI literals: {missing:#?}");
+    }
+
+    /// Thai translates every registered command, its menu, and every All tools group, section and item.
+    #[test]
+    fn thai_covers_commands_and_catalogue() {
+        let th = Lang::from_code("th").expect("th registered");
+        for command in pdfcraft_engine::commands::COMMANDS {
+            assert!(has(th, command.label), "missing command: {}", command.label);
+            if let Some(menu) = command.menu {
+                assert!(has(th, menu), "missing menu: {menu}");
+            }
+        }
+        for group in pdfcraft_engine::catalog::TOOL_GROUPS {
+            assert!(has(th, group.label), "missing group: {}", group.label);
+            for section in group.sections {
+                assert!(has(th, section.title), "missing section: {}", section.title);
+                for item in section.items {
+                    assert!(has(th, item.label), "missing item: {}", item.label);
+                }
+            }
+        }
+    }
+
+    /// New tl!("literal") labels must not silently fall back to English in Thai.
+    #[test]
+    fn thai_covers_ui_literals() {
+        let th = Lang::from_code("th").expect("th registered");
+        let literals = ui_literals();
+        assert!(literals.len() > 900, "source scan found only {} literals", literals.len());
+        let missing: Vec<_> = literals.iter().filter(|label| !has(th, label)).collect();
+        assert!(missing.is_empty(), "untranslated Thai UI literals: {missing:#?}");
     }
 
     /// With craft-fonts, every Japanese translation has glyphs: with all interface faces (desktop)

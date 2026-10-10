@@ -165,6 +165,17 @@ usage = "Ukrainian UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
 sha256 = "7c043ba0237c3cb7cb0107066722dee309c3265ac8c930d3eadb3a9ac9d4d345"
 
 [[asset]]
+path = "crates/ui-egui/src/i18n/th.tsv"
+title = "Thai interface translation catalog"
+author = "NetCraft Systems (non5217), PdfCraft contributors"
+source = "Contributor-original: clean-room translations of PdfCraft's English UI labels, no proprietary localisation resources"
+licence = "MIT OR Apache-2.0"
+licence_file = "LICENSE-MIT"
+kind = "translation"
+usage = "Thai UI strings, compiled in by crates/ui-egui/src/i18n/mod.rs"
+sha256 = "ed0c8c8973bfe6048857b322b2cb39a2a6cf4adacbd63fa4e62b97972bfef0ac"
+
+[[asset]]
 path = "assets/icons/accessibility.svg"
 title = "Lucide icon \"accessibility\""
 author = "Lucide Contributors (portions Cole Bemis, Feather)"
