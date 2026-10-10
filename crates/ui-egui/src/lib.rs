@@ -492,6 +492,10 @@ pub struct PdfCraftApp {
     pub combine_tab: combine_ui::CombineTab,
     /// The Combine files table's column order and widths (kept in the settings).
     pub combine_columns: combine_ui::Columns,
+    /// The Combine tab's page rasters: the strips' thumbnails and the preview pane.
+    pub combine_preview: combine_ui::CombinePreview,
+    /// What the strips and the preview pane drew this frame, for the pools.
+    pub combine_wants: Vec<(u64, u32, f32, bool)>,
     /// Images waiting for the resolution choice (released on cancel).
     pub image_import: Option<create_ui::ImageImport>,
     /// The custom stamp library, and the stamp being created.
@@ -730,6 +734,8 @@ impl PdfCraftApp {
             combine_draft: Vec::new(),
             combine_tab: Default::default(),
             combine_columns: Default::default(),
+            combine_preview: Default::default(),
+            combine_wants: Vec::new(),
             image_import: None,
             custom_stamps: Vec::new(),
             stamp_draft: Default::default(),

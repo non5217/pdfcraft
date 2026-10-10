@@ -2747,6 +2747,26 @@ impl Session {
         self.write_new(&out)
     }
 
+    /// Combine chosen pages in an explicit order: `order` holds `(source index, page index)`
+    /// pairs for the result, in order, so pages of different files can interleave (A1, B1, A2,
+    /// B2; the Combine files tab arranges pages this way). `passwords` opens encrypted sources by
+    /// position, like [`Self::combine_unlocked`]; the result is not encrypted.
+    pub fn combine_page_order(
+        &self,
+        sources: &[(String, Arc<Vec<u8>>)],
+        order: &[(usize, usize)],
+        passwords: &[Option<&str>],
+    ) -> Result<Arc<Vec<u8>>, EditError> {
+        let docs = sources
+            .iter()
+            .enumerate()
+            .map(|(i, (n, b))| open_source_with(n, b, passwords.get(i).copied().flatten()))
+            .collect::<Result<Vec<_>, _>>()?;
+        let named: Vec<(&str, &pdfcraft_cos::Document)> = sources.iter().map(|(n, _)| n.as_str()).zip(docs.iter()).collect();
+        let out = pdfcraft_organize::combine_page_order(&named, order)?;
+        self.write_new(&out)
+    }
+
     /// New PDF bytes containing copies of `pages` of the document (Extract Pages).
     pub fn extract(&self, id: DocId, pages: &[usize]) -> Result<Arc<Vec<u8>>, EditError> {
         let src = self.cos(id)?;

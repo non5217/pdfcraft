@@ -49,11 +49,11 @@ const MAX_THUMB_DEMAND: usize = 256;
 /// At most this many whole-page rasters are cached beyond the ones on screen.
 const MAX_CACHED_PAGES: usize = 24;
 
-fn rgba_bytes(width: usize, height: usize) -> usize {
+pub(crate) fn rgba_bytes(width: usize, height: usize) -> usize {
     width.saturating_mul(height).saturating_mul(4)
 }
 
-fn texture_bytes(tex: &TextureHandle) -> usize {
+pub(crate) fn texture_bytes(tex: &TextureHandle) -> usize {
     let [w, h] = tex.size();
     rgba_bytes(w, h)
 }
@@ -3509,7 +3509,7 @@ fn organize_grid(view: &mut DocView, info: &DocInfo, editable: bool, dirty: bool
 
 /// A rendered raster as texture data. Its words are premultiplied RGBA bytes, exactly
 /// `Color32`s, so the renderer's buffer becomes the image without a copy on the UI thread.
-fn texture_image(size: [usize; 2], pixels: pdfcraft_render::Pixels) -> egui::ColorImage {
+pub(crate) fn texture_image(size: [usize; 2], pixels: pdfcraft_render::Pixels) -> egui::ColorImage {
     match bytemuck::allocation::try_cast_vec::<u32, Color32>(pixels.into_words()) {
         Ok(px) if px.len() == size[0].saturating_mul(size[1]) => egui::ColorImage::new(size, px),
         Ok(px) => egui::ColorImage::from_rgba_premultiplied(size, bytemuck::cast_slice(&px)),

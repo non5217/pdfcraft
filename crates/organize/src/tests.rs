@@ -330,6 +330,30 @@ fn combine_concatenates_with_a_bookmark_per_file() {
 }
 
 #[test]
+fn combine_page_order_interleaves_sources_with_one_bookmark_each() {
+    // A1, B1, A2, B2: the files alternate page by page.
+    let (a, b) = (doc_a(), doc_b());
+    let out = full_roundtrip(&combine_page_order(&[("Report A", &a), ("Report B", &b)], &[(0, 0), (1, 0), (0, 1), (1, 1)]).unwrap());
+    assert_eq!(labels(&out), ["A1", "B1", "A2", "B2"]);
+    assert_eq!(count_fonts(&out), 2, "one Helvetica and one Times, copied once per source");
+    // One bookmark per source, at its first page in the result, in the sources' own order.
+    let cat = out.get(out.root().unwrap()).as_dict().cloned().unwrap();
+    let outlines = out.get(cat.reference(b"Outlines").unwrap()).as_dict().cloned().unwrap();
+    let first = out.get(outlines.reference(b"First").unwrap()).as_dict().cloned().unwrap();
+    assert_eq!(first.get(b"Title").and_then(|t| t.as_string()).map(|s| s.to_text()).as_deref(), Some("Report A"));
+    assert_eq!(first.get(b"Dest").and_then(|d| d.as_array()).and_then(|a| a[0].as_ref()), Some(pages(&out).unwrap()[0].obj));
+    let second = out.get(first.reference(b"Next").unwrap()).as_dict().cloned().unwrap();
+    assert_eq!(second.get(b"Title").and_then(|t| t.as_string()).map(|s| s.to_text()).as_deref(), Some("Report B"));
+    assert_eq!(second.get(b"Dest").and_then(|d| d.as_array()).and_then(|a| a[0].as_ref()), Some(pages(&out).unwrap()[1].obj));
+    // Consecutive pages of one source come out as one run: A3, A1, B2, B1.
+    let out = full_roundtrip(&combine_page_order(&[("A", &a), ("B", &b)], &[(0, 2), (0, 0), (1, 1), (1, 0)]).unwrap());
+    assert_eq!(labels(&out), ["A3", "A1", "B2", "B1"]);
+    // A source index or page that doesn't exist is an error, not a panic.
+    assert!(matches!(combine_page_order(&[("A", &a)], &[(1, 0)]), Err(OrganizeError::NoSuchPage(0))));
+    assert!(matches!(combine_page_order(&[("A", &a)], &[(0, 9)]), Err(OrganizeError::NoSuchPage(9))));
+}
+
+#[test]
 fn inherited_attributes_travel_with_copied_pages() {
     let out = full_roundtrip(&extract_pages(&doc_b(), &[1]).unwrap());
     let p = page_dict(&out, 0);

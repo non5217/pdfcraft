@@ -2942,6 +2942,18 @@ evidence = ["crates/ui-egui/tests/editing.rs::column_headings_sort_the_list_and_
 notes = "Sort by any column (name in natural order, pages, size, modified, warnings), ascending or descending; multi-select (Ctrl/Shift) and move up/down, Alt+arrows or drag; every change undoable. doc_combine combines in the order its paths are given."
 
 [[feature]]
+id = "organize.combine-arrange-pages"
+title = "Arrange and preview the pages of each file before combining"
+area = "D"
+tier = "P1"
+milestone = "M4"
+status = "shipped"
+commands = ["page.combine"]
+tools = ["doc_combine"]
+evidence = ["crates/ui-egui/tests/editing.rs::a_files_pages_show_and_hide_with_its_strip", "crates/ui-egui/tests/editing.rs::deleting_a_page_leaves_it_out_of_the_combined_file", "crates/ui-egui/tests/editing.rs::dragging_a_page_into_another_file_interleaves_the_result", "crates/organize/src/tests.rs::combine_page_order_interleaves_sources_with_one_bookmark_each", "crates/engine/src/tests.rs::combine_page_order_interleaves_files_and_opens_protected_sources"]
+notes = "The chevron in a row shows that file's pages as a thumbnail strip (page labels, click/Ctrl/Shift selection, drag to any gap — inside the file or between another file's pages, so the result interleaves them; Delete takes pages out of the result and removing a file's last page removes the file). Clicking a page opens the preview pane beside the list (zoom in/out, fit). The Pages field stays the quick way to type a range and is kept in step both ways. Headless combine keeps its per-file page ranges (doc_combine); the ordered page list is the tab's."
+
+[[feature]]
 id = "organize.combine-options"
 title = "Combine options (file size, convert to PDF/A, include open files)"
 area = "D"

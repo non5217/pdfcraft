@@ -361,6 +361,25 @@ fn combine_extract_split_and_insert_from_file() {
     assert!(matches!(bad, Err(EditError::Source(_))));
 }
 
+#[test]
+fn combine_page_order_interleaves_files_and_opens_protected_sources() {
+    let mut s = Session::new();
+    let a = Arc::new(fixture(3));
+    let b = Arc::new(fixture(2));
+    // A3, B1, B2, A1, A2: no whole-file combination can produce this sequence.
+    let order = [(0usize, 2usize), (1, 0), (1, 1), (0, 0), (0, 1)];
+    let bytes = s.combine_page_order(&[("a.pdf".into(), a), ("b.pdf".into(), b)], &order, &[]).unwrap();
+    let id = s.open_new("Combined.pdf", bytes).unwrap();
+    assert_eq!(page_texts(&s, id), ["Page 3", "Page 1", "Page 2", "Page 1", "Page 2"]);
+    assert_eq!(s.get(id).unwrap().info.outline.len(), 2, "one bookmark per file");
+    // An encrypted source is opened with its password; without one the combine fails.
+    let locked = protected("pw", "owner", -1);
+    assert!(s.combine_page_order(&[("locked.pdf".into(), locked.clone())], &[(0, 0)], &[]).is_err());
+    let one = s.combine_page_order(&[("locked.pdf".into(), locked)], &[(0, 1), (0, 0)], &[Some("pw")]).unwrap();
+    let id = s.open_new("Unlocked.pdf", one).unwrap();
+    assert_eq!(page_texts(&s, id), ["Page 2", "Page 1"]);
+}
+
 /// A minimal baseline JPEG (headers only; the data is embedded as is).
 fn jpeg_bytes() -> Vec<u8> {
     let mut v = vec![0xFF, 0xD8];

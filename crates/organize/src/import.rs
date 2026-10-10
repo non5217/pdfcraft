@@ -488,14 +488,9 @@ pub fn combine(sources: &[(&str, &Document)]) -> Result<Document, OrganizeError>
 /// Combine Files with chosen pages: each source contributes `pages` (0-based, in that order;
 /// `None` for all of them). Bookmarks that point at pages left out lose their destination.
 pub fn combine_selected(sources: &[(&str, &Document, Option<&[usize]>)]) -> Result<Document, OrganizeError> {
-    let mut out = Document::new_empty();
-    let mut marks = Vec::new();
-    let mut attachments = Vec::new();
-    // The first source's print standard, and what its pages brought along; it carries over
-    // only when every source declares the same one.
-    let mut standard: Option<(crate::pdfx::PrintStandard, &Document, HashMap<ObjRef, ObjRef>)> = None;
-    let mut agreed = true;
-    for (title, src, chosen) in sources {
+    // The order the Combine files list shows: each file's chosen pages, files one after another.
+    let mut order = Vec::new();
+    for (index, (_, src, chosen)) in sources.iter().enumerate() {
         let n = crate::page_count(src)?;
         let pages: Vec<usize> = match chosen {
             Some(p) => {
@@ -506,15 +501,64 @@ pub fn combine_selected(sources: &[(&str, &Document, Option<&[usize]>)]) -> Resu
             }
             None => (0..n).collect(),
         };
-        let at = crate::page_count(&out)?;
-        let imported = import_pages_mapped(&mut out, src, &pages, at)?;
-        if let Some(first) = imported.pages.first() {
-            marks.push((title.to_string(), *first, *src, imported.page_map));
+        order.extend(pages.into_iter().map(|page| (index, page)));
+    }
+    let named: Vec<(&str, &Document)> = sources.iter().map(|(title, doc, _)| (*title, *doc)).collect();
+    combine_page_order(&named, &order)
+}
+
+/// Combine chosen pages in an explicit order: `order` lists `(source index, page index)` pairs
+/// for the result, in order, so pages of different sources can interleave (A1, B1, A2, B2).
+/// Consecutive pages of one source are copied in a single run.
+///
+/// Each source that contributes pages gets a top-level bookmark (its `title`) pointing at its
+/// first page, in the sources' own order, like [`combine`]; the source's own bookmarks are nested
+/// (collapsed) under its entry, and its document-level attachments are carried over. When every
+/// source declares the same print standard (PDF/X with the same output intent), so does the result.
+pub fn combine_page_order(sources: &[(&str, &Document)], order: &[(usize, usize)]) -> Result<Document, OrganizeError> {
+    let mut out = Document::new_empty();
+    // Per source: where its copied pages went (bookmark destinations), what it brought along (the
+    // print standard), and its first copied page (its bookmark).
+    let mut page_maps: Vec<HashMap<ObjRef, ObjRef>> = vec![HashMap::new(); sources.len()];
+    let mut copied: Vec<HashMap<ObjRef, ObjRef>> = vec![HashMap::new(); sources.len()];
+    let mut firsts: Vec<Option<ObjRef>> = vec![None; sources.len()];
+    let mut i = 0;
+    while i < order.len() {
+        let (index, page) = order[i];
+        let Some((_, src)) = sources.get(index) else { return Err(OrganizeError::NoSuchPage(page)) };
+        let mut run = vec![page];
+        let mut j = i + 1;
+        while j < order.len() && order[j].0 == index {
+            run.push(order[j].1);
+            j += 1;
         }
+        let at = crate::page_count(&out)?;
+        let imported = import_pages_mapped(&mut out, src, &run, at)?;
+        copied[index].extend(imported.objects);
+        page_maps[index].extend(imported.page_map);
+        if firsts[index].is_none() {
+            firsts[index] = imported.pages.first().copied();
+        }
+        i = j;
+    }
+    let marks: Vec<(String, ObjRef, &Document, HashMap<ObjRef, ObjRef>)> = sources
+        .iter()
+        .enumerate()
+        .filter_map(|(index, (title, src))| {
+            let first = firsts[index]?;
+            Some((title.to_string(), first, *src, std::mem::take(&mut page_maps[index])))
+        })
+        .collect();
+    let mut attachments = Vec::new();
+    // The first source's print standard, and what its pages brought along; it carries over
+    // only when every source declares the same one.
+    let mut standard: Option<(crate::pdfx::PrintStandard, &Document, HashMap<ObjRef, ObjRef>)> = None;
+    let mut agreed = true;
+    for (index, (_, src)) in sources.iter().enumerate() {
         collect_attachments(&mut out, src, &mut attachments);
         let declared = crate::pdfx::PrintStandard::of(src);
         match &standard {
-            None => standard = Some((declared, *src, imported.objects)),
+            None => standard = Some((declared, *src, std::mem::take(&mut copied[index]))),
             Some((first, _, _)) => agreed &= first.same_as(&declared),
         }
     }

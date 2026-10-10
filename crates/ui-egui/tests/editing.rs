@@ -788,6 +788,69 @@ fn alt_arrows_move_the_selected_file() {
     assert_eq!(h.state().combine_selection(), [1]);
 }
 
+/// The pages of a file show and hide with its strip; the preview pane opens on a page.
+#[test]
+fn a_files_pages_show_and_hide_with_its_strip() {
+    let mut h = combine_of(&[("one.pdf", 3)]);
+    h.get_by_label_contains("Expand · one.pdf");
+    assert!(h.query_by_label_contains("Page 1 · one.pdf").is_none(), "the strip starts closed");
+    h.get_by_label_contains("Expand · one.pdf").click();
+    h.run_steps(2);
+    for page in ["Page 1 · one.pdf", "Page 3 · one.pdf"] {
+        h.get_by_label_contains(page);
+    }
+    // The preview pane follows the clicked page, with its zoom controls.
+    h.get_by_label_contains("Page 2 · one.pdf").click();
+    h.run_steps(3);
+    assert_eq!(h.state().combine_tab.preview_page.map(|p| p.page), Some(1), "the pane shows the clicked page");
+    h.get_by_label("Zoom in");
+    h.get_by_label("Zoom out");
+    h.get_by_label("Fit");
+    h.get_by_label_contains("Collapse · one.pdf").click();
+    h.run_steps(2);
+    assert!(h.query_by_label_contains("Page 1 · one.pdf").is_none(), "collapsed again");
+}
+
+/// Deleting a page takes it out of the result, and the Pages field follows.
+#[test]
+fn deleting_a_page_leaves_it_out_of_the_combined_file() {
+    let mut h = combine_of(&[("one.pdf", 3), ("two.pdf", 2)]);
+    h.get_by_label_contains("Expand · one.pdf").click();
+    h.run_steps(2);
+    h.get_by_label_contains("Page 2 · one.pdf").click();
+    h.run_steps(2);
+    assert_eq!(h.state().combine_tab.pages_selected.len(), 1, "the click selects the page");
+    h.key_press(Key::Delete);
+    h.run_steps(3);
+    assert!(h.query_by_label_contains("Page 2 · one.pdf").is_none(), "the page left the result");
+    h.get_by_label_contains("2 of 3");
+    h.get_by_label("Combine").click();
+    h.run_steps(3);
+    assert_eq!(texts_of(h.state(), 1), ["Page 1", "Page 3", "Page 1", "Page 2"]);
+}
+
+/// A page dragged into another file's pages sits where it was dropped, so the result interleaves
+/// the files (A1, A2, B1, A3, B2 here).
+#[test]
+fn dragging_a_page_into_another_file_interleaves_the_result() {
+    let mut h = combine_of(&[("one.pdf", 3), ("two.pdf", 2)]);
+    h.get_by_label_contains("Expand · one.pdf").click();
+    h.run_steps(2);
+    assert_eq!(h.state().combine_tab.expanded.len(), 1, "one strip open");
+    h.get_by_label_contains("Expand · two.pdf").click();
+    h.run_steps(2);
+    assert_eq!(h.state().combine_tab.expanded.len(), 2, "both strips open");
+    assert_eq!(h.state().combine_tab.order.len(), 5, "both files' pages are in the result");
+    assert!(h.query_by_label_contains("Page 1 · two.pdf").is_some(), "two.pdf's pages are drawn");
+    let from = h.get_by_label_contains("Page 3 · one.pdf").rect().center();
+    let to = h.get_by_label_contains("Page 2 · two.pdf").rect().left_center() + egui::vec2(2.0, 0.0);
+    drag(&mut h, from, to);
+    h.run_steps(3);
+    h.get_by_label("Combine").click();
+    h.run_steps(3);
+    assert_eq!(texts_of(h.state(), 1), ["Page 1", "Page 2", "Page 1", "Page 3", "Page 2"]);
+}
+
 fn combine_names(h: &Harness<'static, PdfCraftApp>) -> Vec<String> {
     h.state().combine_draft.iter().map(|f| f.name.clone()).collect()
 }

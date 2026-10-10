@@ -183,7 +183,7 @@ Unsaved documents carry a dot on their tab, and closing or quitting asks before 
 
 ## Combine and split without losing a thing
 
-**Combine files** merges any number of PDFs into one. Each file gets a bookmark, with its own bookmarks nested underneath.
+**Combine files** merges any number of PDFs into one. Each file gets a bookmark, with its own bookmarks nested underneath. The chevron in a file's row shows its pages as thumbnails: drag a page to reorder it — inside the file or between another file's pages, so the result interleaves files — take pages out of the result with Delete, and see the selected page larger (with zoom) in the preview pane beside the list.
 
 **Extract** copies the pages you select into a new document. **Split** divides a document every *n* pages, or before the pages you choose.
 

@@ -3,6 +3,14 @@
 //! being combined. Rows are selected like files in a file manager (click, Ctrl/⌘+click,
 //! Shift+click), moved with the toolbar, the keyboard or by dragging, and sorted by clicking a
 //! column heading; PDFs dropped on the tab join the list. Every change to the list can be undone.
+//!
+//! The pages themselves are arranged too: the chevron in a row shows that file's page strip —
+//! thumbnails in result order, where pages are selected, taken out of the result (Delete) and
+//! dragged to any gap, inside the file or between another file's pages, so the result can
+//! interleave them (A1, B1, A2, B2). Clicking a page opens the preview pane beside the list, with
+//! zoom. The strips are what Combine merges: `CombineTab::order` lists the pages in result order,
+//! and a range typed into a Pages field replaces that file's pages. Moving rows or sorting keeps
+//! each file's own page order but re-forms the file blocks; the result is never encrypted.
 
 use std::cmp::Ordering;
 use std::collections::BTreeSet;
@@ -128,6 +136,15 @@ enum HeadingEvent {
     Reset,
 }
 
+/// One page of the result: which listed file it comes from and which of its pages (0-based).
+/// The tab's `order` lists these in the order Combine will merge them, so pages of different
+/// files can interleave (A1, B1, A2, B2).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct PageRef {
+    pub file: u64,
+    pub page: u32,
+}
+
 /// The Combine files tab. It shows in the Home slot (`active == None`) while `focused`.
 #[derive(Clone, Debug, Default)]
 pub struct CombineTab {
@@ -140,6 +157,20 @@ pub struct CombineTab {
     cursor: Option<u64>,
     /// The column the list is sorted by and whether ascending; cleared when rows are moved.
     pub sort: Option<(SortKey, bool)>,
+    /// The pages of the result, in order; the page strips reorder and delete entries here. The
+    /// file rows keep their own part of it in step (see the `order` helpers below).
+    pub order: Vec<PageRef>,
+    /// The files whose page strip is shown.
+    pub expanded: BTreeSet<u64>,
+    /// The selected pages, by [`PageRef`]; Delete removes them from the result.
+    pub pages_selected: BTreeSet<PageRef>,
+    /// Where a Shift+click in a strip starts, and the page the preview pane shows.
+    page_anchor: Option<PageRef>,
+    pub preview_page: Option<PageRef>,
+    /// The pages being dragged, while one is.
+    pub page_drag: Option<Vec<PageRef>>,
+    /// The preview pane's zoom: `None` fits the pane; otherwise the scale is kept as is.
+    pub pane_zoom: Option<f32>,
     undo: Vec<Snapshot>,
     redo: Vec<Snapshot>,
     /// The list as it was when a Pages field took the keyboard, recorded on its first change.
@@ -191,6 +222,8 @@ struct Assessed {
     problem: Option<String>,
     lock: Option<Lock>,
     notes: Vec<String>,
+    /// The pages' sizes and labels, for the page strip's thumbnails.
+    page_info: Option<Arc<Vec<pdfcraft_render::PageInfo>>>,
 }
 
 enum AssessError {
@@ -217,7 +250,10 @@ fn assess(bytes: &Arc<Vec<u8>>, password: Option<&str>) -> Result<Assessed, Asse
         None => pdfcraft_engine::source_page_count(bytes, password).unwrap_or(0),
     };
     let encrypted = password.is_some() || info.as_ref().is_some_and(|i| i.encrypted);
-    let warnings = info.map(|i| i.warnings).unwrap_or_default();
+    let warnings = info.as_ref().map(|i| i.warnings.clone()).unwrap_or_default();
+    // The page sizes and labels drive the page strip's thumbnails; the rest of the inspection
+    // is not needed once the list is staged.
+    let page_info = info.map(|i| Arc::new(i.pages));
     let (problem, lock) = match check {
         Ok(()) => (None, None),
         Err(SourceProblem::Password) => (Some(tl!("Password-protected").to_string()), Some(Lock::Open)),
@@ -239,7 +275,7 @@ fn assess(bytes: &Arc<Vec<u8>>, password: Option<&str>) -> Result<Assessed, Asse
         });
     }
     notes.extend(warnings.into_iter().take(5));
-    Ok(Assessed { pages, problem, lock, notes })
+    Ok(Assessed { pages, problem, lock, notes, page_info })
 }
 
 #[derive(Clone, Debug)]
@@ -247,6 +283,107 @@ struct Snapshot {
     files: Vec<CombineFile>,
     selected: BTreeSet<u64>,
     sort: Option<(SortKey, bool)>,
+    order: Vec<PageRef>,
+    pages_selected: BTreeSet<PageRef>,
+}
+
+/// The pages `file` contributes, in result order.
+fn pages_of(order: &[PageRef], file: u64) -> Vec<u32> {
+    order.iter().filter(|p| p.file == file).map(|p| p.page).collect()
+}
+
+/// The pages of one file between `a` and `b` in that file's result order (Shift+click in a strip).
+fn all_pages_of(tab: &CombineTab, a: PageRef, b: PageRef) -> Vec<PageRef> {
+    if a.file != b.file {
+        return vec![b];
+    }
+    let list = pages_of(&tab.order, a.file);
+    let (Some(pa), Some(pb)) = (list.iter().position(|p| *p == a.page), list.iter().position(|p| *p == b.page)) else { return vec![b] };
+    let (lo, hi) = if pa <= pb { (pa, pb) } else { (pb, pa) };
+    list[lo..=hi].iter().map(|page| PageRef { file: a.file, page: *page }).collect()
+}
+
+/// A range string for exactly these pages, in this order: "" when that is every page of the file
+/// in order, otherwise compacted runs ("1-2, 4", or "5-3" for a run that counts down).
+fn range_of_pages(pages: &[u32], total: usize) -> String {
+    if pages.len() == total && pages.iter().enumerate().all(|(i, p)| *p as usize == i) {
+        return String::new();
+    }
+    let mut parts: Vec<String> = Vec::new();
+    let mut i = 0;
+    while i < pages.len() {
+        let start = pages[i];
+        let step: i64 = if i + 1 < pages.len() { i64::from(pages[i + 1]) - i64::from(start) } else { 0 };
+        if step == 1 || step == -1 {
+            let mut j = i + 1;
+            while j + 1 < pages.len() && i64::from(pages[j + 1]) - i64::from(pages[j]) == step {
+                j += 1;
+            }
+            if j > i {
+                parts.push(format!("{}-{}", start + 1, pages[j] + 1));
+                i = j + 1;
+                continue;
+            }
+        }
+        parts.push((start + 1).to_string());
+        i += 1;
+    }
+    parts.join(", ")
+}
+
+/// The 0-based pages a range string takes, or `None` when it doesn't parse or takes none.
+fn pages_from_range(range: &str, total: usize) -> Option<Vec<u32>> {
+    let range = range.trim();
+    if range.is_empty() {
+        return (total > 0).then(|| (0..total as u32).collect());
+    }
+    let pages = pdfcraft_engine::print::select_pages(total, Some(range), &[], pdfcraft_engine::print::Subset::All, false).ok()?;
+    if pages.is_empty() || pages.iter().any(|p| *p > u32::MAX as usize) {
+        return None;
+    }
+    Some(pages.into_iter().map(|p| p as u32).collect())
+}
+
+/// Replace `file`'s pages in the order with `pages`, where its first page sits now (at the end
+/// when it has none yet, e.g. after every page was deleted and the file was restored by undo).
+fn set_file_pages(order: &mut Vec<PageRef>, file: u64, pages: &[u32]) {
+    let at = order.iter().position(|p| p.file == file).unwrap_or(order.len());
+    order.retain(|p| p.file != file);
+    let at = at.min(order.len());
+    order.splice(at..at, pages.iter().map(|page| PageRef { file, page: *page }));
+}
+
+/// Drop `file`'s pages from the order.
+fn remove_file_pages(order: &mut Vec<PageRef>, file: u64) {
+    order.retain(|p| p.file != file);
+}
+/// Move the pages `moving` so they sit at `to`, which counts positions in the order without
+/// them (the same convention as the Organize grid's drag).
+fn move_pages(order: &mut Vec<PageRef>, moving: &[PageRef], to: usize) {
+    let mut taken: Vec<PageRef> = Vec::with_capacity(moving.len());
+    let mut rest: Vec<PageRef> = Vec::with_capacity(order.len());
+    for p in order.drain(..) {
+        if moving.contains(&p) {
+            taken.push(p);
+        } else {
+            rest.push(p);
+        }
+    }
+    let at = to.min(rest.len());
+    rest.splice(at..at, taken);
+    *order = rest;
+}
+
+/// Rebuild the order after the rows were sorted or moved: the files in their new row order, each
+/// keeping the pages it had (its own page order survives; interleaving between files does not).
+fn reorder_to_rows(order: &mut Vec<PageRef>, files: &[CombineFile]) {
+    let mut out = Vec::with_capacity(order.len());
+    for f in files {
+        for page in pages_of(order, f.id) {
+            out.push(PageRef { file: f.id, page });
+        }
+    }
+    *order = out;
 }
 
 /// A file arriving in the list (picked, dropped or already open).
@@ -267,6 +404,8 @@ pub struct CombineFile {
     pub pages: usize,
     /// The pages to take ("" = all).
     pub range: String,
+    /// The pages' sizes and labels, when the file could be inspected (the page strip).
+    pub page_info: Option<Arc<Vec<pdfcraft_render::PageInfo>>>,
     /// When the file was last modified (desktop picks and drops only).
     pub modified: Option<SystemTime>,
     /// Why the file can't be combined (password, security settings), if so.
@@ -290,6 +429,7 @@ impl CombineFile {
         self.lock = a.lock;
         self.password = password;
         self.notes = self.origin_note.iter().cloned().chain(a.notes).collect();
+        self.page_info = a.page_info;
         self.checked = None;
     }
 
@@ -347,6 +487,20 @@ enum RowAction {
     /// Unlock… on row `i` (and the rest of the selection, if it is selected), or on the
     /// selection (`None`); the password box opens at the position.
     Unlock(Option<usize>, egui::Pos2),
+    /// A click on a page of a strip (Ctrl/⌘ toggles it, Shift selects the range from the anchor).
+    ClickPage(PageRef, Modifiers),
+    /// The dragged pages (or the selection when empty) go to `to`, an index in the order that
+    /// does not count them.
+    DropPages {
+        moving: Vec<PageRef>,
+        to: usize,
+    },
+    /// Take the selected pages out of the result.
+    RemovePages,
+    /// Show or hide the pages of row `i`.
+    TogglePages(usize),
+    /// The toolbar's "Show pages" / "Hide pages" for every row.
+    ShowPages(bool),
 }
 
 /// What the table reports besides row actions.
@@ -361,6 +515,9 @@ struct TableEvents {
 pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
     let t = Tokens::get(ui.ctx());
     let files_hovering = ui.ctx().input(|i| !i.raw.hovered_files.is_empty());
+    // Every Pages field (and anything that changed one outside the table) lands in the page order
+    // before the list reads it.
+    app.combine_sync_order_from_ranges();
     // Ranges are checked before anything below reads them.
     let checks: Vec<Result<usize, String>> = app.combine_draft.iter_mut().map(CombineFile::selection).collect();
     let n = app.combine_draft.len();
@@ -368,9 +525,11 @@ pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
     app.combine_tab.selected.retain(|id| ids.contains(id));
     let selected: Vec<bool> = ids.iter().map(|id| app.combine_tab.selected.contains(id)).collect();
     let count = selected.iter().filter(|s| **s).count();
-    let blocker = blocker(&app.combine_draft, &checks);
-    let mut events = TableEvents { action: keyboard(ui, n, count > 0), ..Default::default() };
+    let blocker = blocker(&app.combine_draft, &checks, &app.combine_tab.order);
+    let mut events = TableEvents { action: keyboard(ui, n, count > 0, !app.combine_tab.pages_selected.is_empty()), ..Default::default() };
     let mut combine = false;
+    // What the strips and the preview pane want drawn, collected while they draw.
+    app.combine_wants.clear();
 
     egui::Frame::NONE.inner_margin(egui::Margin::symmetric(28, 20)).show(ui, |ui| {
         // Title and Combine.
@@ -437,6 +596,21 @@ pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 events.action = Some(RowAction::Unlock(None, unlock.rect.left_bottom() + vec2(0.0, 6.0)));
             }
             separator(ui, &t);
+            // The pages of the selected files: show or hide their strips, and take pages out of
+            // the result.
+            let pages_selected = app.combine_tab.pages_selected.len();
+            let any_expanded = !app.combine_tab.expanded.is_empty();
+            let all_expanded = any_expanded && app.combine_draft.iter().all(|f| app.combine_tab.expanded.contains(&f.id));
+            if tool(ui, pages_selected > 0, "trash-2", tl!("Delete"), tl!("Delete")).clicked() {
+                events.action = Some(RowAction::RemovePages);
+            }
+            if tool(ui, n > 0 && !all_expanded, "chevron-down", tl!("Expand"), tl!("Expand")).clicked() {
+                events.action = Some(RowAction::ShowPages(true));
+            }
+            if tool(ui, any_expanded, "chevron-up", tl!("Collapse"), tl!("Collapse")).clicked() {
+                events.action = Some(RowAction::ShowPages(false));
+            }
+            separator(ui, &t);
             let (undo, redo) = (!app.combine_tab.undo.is_empty(), !app.combine_tab.redo.is_empty());
             if tool(ui, undo, "undo-2", tl!("Undo"), tl!("Nothing to undo")).clicked() {
                 app.execute("edit.undo");
@@ -451,49 +625,71 @@ pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
         });
         ui.add_space(10.0);
 
-        // The list, in a card that highlights while files are dragged over the window.
+        // The list, in a card that highlights while files are dragged over the window; the page
+        // preview sits beside it while a page is selected.
+        let pane = app.combine_tab.preview_page.is_some();
         let footer_h = 34.0;
-        let card_h = (ui.available_height() - footer_h).max(120.0);
-        let stroke = if files_hovering { Stroke::new(2.0, t.accent) } else { Stroke::new(1.0, t.border) };
-        egui::Frame::NONE.fill(t.card).stroke(stroke).corner_radius(CornerRadius::same(t.radius)).inner_margin(egui::Margin::symmetric(8, 6)).show(
-            ui,
-            |ui| {
-                ui.set_min_height(card_h - 12.0);
-                ui.set_width(ui.available_width());
-                if n == 0 {
-                    empty_state(app, ui, &t, files_hovering);
-                } else {
-                    let table_events = table(app, ui, &t, &checks, &selected);
-                    events.range_focused |= table_events.range_focused;
-                    events.range_changed |= table_events.range_changed;
-                    if table_events.action.is_some() {
-                        events.action = table_events.action;
-                    }
-                }
-            },
-        );
-
-        // Totals.
-        ui.add_space(8.0);
-        if n > 0 {
-            ui.horizontal(|ui| {
-                let pages: usize = checks.iter().filter_map(|c| c.as_ref().ok()).sum();
-                let size: usize = app.combine_draft.iter().map(|f| f.bytes.len()).sum();
-                let files = if n == 1 { tl!("1 file").to_string() } else { crate::i18n::fmt(tl!("{n} files"), &[("n", &n.to_string())]) };
-                let pages = if pages == 1 { tl!("1 page").to_string() } else { crate::i18n::fmt(tl!("{n} pages"), &[("n", &pages.to_string())]) };
-                ui.label(egui::RichText::new(format!("{files} · {pages} · {}", crate::panels::human_size(size))).color(t.text_muted));
-                let bad = app.combine_draft.iter().zip(&checks).filter(|(f, c)| f.problem.is_some() || c.is_err()).count();
-                if bad > 0 {
-                    ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
-                        let text = if bad == 1 {
-                            tl!("1 file needs attention").to_string()
+        let full_h = ui.available_height();
+        let pane_w = 320.0;
+        let left_w = if pane { (ui.available_width() - pane_w - 12.0).max(240.0) } else { ui.available_width() };
+        let mut pane_events = TableEvents::default();
+        ui.horizontal_top(|ui| {
+            ui.allocate_ui_with_layout(vec2(left_w, full_h), Layout::top_down(Align::Min), |ui| {
+                let card_h = (ui.available_height() - footer_h).max(120.0);
+                let stroke = if files_hovering { Stroke::new(2.0, t.accent) } else { Stroke::new(1.0, t.border) };
+                egui::Frame::NONE
+                    .fill(t.card)
+                    .stroke(stroke)
+                    .corner_radius(CornerRadius::same(t.radius))
+                    .inner_margin(egui::Margin::symmetric(8, 6))
+                    .show(ui, |ui| {
+                        ui.set_min_height(card_h - 12.0);
+                        ui.set_width(ui.available_width());
+                        if n == 0 {
+                            empty_state(app, ui, &t, files_hovering);
                         } else {
-                            crate::i18n::fmt(tl!("{n} files need attention"), &[("n", &bad.to_string())])
-                        };
-                        ui.label(egui::RichText::new(text).color(ERROR));
+                            let table_events = table(app, ui, &t, &checks, &selected);
+                            events.range_focused |= table_events.range_focused;
+                            events.range_changed |= table_events.range_changed;
+                            if table_events.action.is_some() {
+                                events.action = table_events.action;
+                            }
+                        }
+                    });
+
+                // Totals.
+                ui.add_space(8.0);
+                if n > 0 {
+                    ui.horizontal(|ui| {
+                        let pages: usize = checks.iter().filter_map(|c| c.as_ref().ok()).sum();
+                        let size: usize = app.combine_draft.iter().map(|f| f.bytes.len()).sum();
+                        let files = if n == 1 { tl!("1 file").to_string() } else { crate::i18n::fmt(tl!("{n} files"), &[("n", &n.to_string())]) };
+                        let pages =
+                            if pages == 1 { tl!("1 page").to_string() } else { crate::i18n::fmt(tl!("{n} pages"), &[("n", &pages.to_string())]) };
+                        ui.label(egui::RichText::new(format!("{files} · {pages} · {}", crate::panels::human_size(size))).color(t.text_muted));
+                        let bad = app.combine_draft.iter().zip(&checks).filter(|(f, c)| f.problem.is_some() || c.is_err()).count();
+                        if bad > 0 {
+                            ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                                let text = if bad == 1 {
+                                    tl!("1 file needs attention").to_string()
+                                } else {
+                                    crate::i18n::fmt(tl!("{n} files need attention"), &[("n", &bad.to_string())])
+                                };
+                                ui.label(egui::RichText::new(text).color(ERROR));
+                            });
+                        }
                     });
                 }
             });
+            if pane {
+                ui.add_space(12.0);
+                ui.allocate_ui_with_layout(vec2(pane_w, full_h), Layout::top_down(Align::Min), |ui| {
+                    preview_pane(app, ui, &t, &mut pane_events);
+                });
+            }
+        });
+        if pane_events.action.is_some() {
+            events.action = pane_events.action;
         }
     });
 
@@ -506,6 +702,11 @@ pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
     {
         app.combine_push_undo(before);
     }
+    // Letting go ends a page drag, wherever it happened (a drop inside a strip has already been
+    // taken and applied above).
+    if ui.input(|i| i.pointer.any_released()) {
+        app.combine_tab.page_drag = None;
+    }
     unlock_prompt(app, ui.ctx());
     if let Some(action) = events.action {
         app.combine_apply(action);
@@ -513,6 +714,18 @@ pub(crate) fn page(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
     if combine && blocker.is_none() {
         app.combine_staged();
     }
+    // Page rasters: ask the pools for what the strips and the pane drew, take what is ready, and
+    // forget the files that are no longer shown (their pools' threads end with them).
+    let wants = std::mem::take(&mut app.combine_wants);
+    let live: BTreeSet<u64> = app
+        .combine_draft
+        .iter()
+        .map(|f| f.id)
+        .filter(|id| app.combine_tab.expanded.contains(id) || app.combine_tab.preview_page.is_some_and(|p| p.file == *id))
+        .collect();
+    app.combine_preview_requests(&wants);
+    app.combine_preview.take(ui.ctx(), &live.iter().copied().collect::<Vec<_>>());
+    app.combine_preview.retire(&live);
 }
 
 /// Unlock…'s password box, floating below what opened it. Enter unlocks, Escape or a click
@@ -607,7 +820,7 @@ fn tool(ui: &mut egui::Ui, enabled: bool, icon: &str, label: &str, disabled_why:
 }
 
 /// Why Combine can't run yet, if so.
-fn blocker(files: &[CombineFile], checks: &[Result<usize, String>]) -> Option<String> {
+fn blocker(files: &[CombineFile], checks: &[Result<usize, String>], order: &[PageRef]) -> Option<String> {
     if files.len() < 2 {
         return Some(tl!("Add at least two files").to_string());
     }
@@ -619,12 +832,19 @@ fn blocker(files: &[CombineFile], checks: &[Result<usize, String>]) -> Option<St
             return Some(crate::i18n::fmt(tl!("Check the pages of {name}: {why}"), &[("name", &f.name), ("why", e)]));
         }
     }
+    // The strips can take every page of a file out of the result: say so before combining.
+    for f in files {
+        if !order.iter().any(|p| p.file == f.id) {
+            let why = tl!("No pages selected");
+            return Some(crate::i18n::fmt(tl!("Check the pages of {name}: {why}"), &[("name", &f.name), ("why", why)]));
+        }
+    }
     None
 }
 
 /// While no text field has the keyboard: Up/Down select (Shift extends), Alt+Up/Down move the
-/// selection, Delete removes it, Ctrl/⌘+A selects every file.
-fn keyboard(ui: &egui::Ui, n: usize, any_selected: bool) -> Option<RowAction> {
+/// selection, Delete removes it (the selected pages first), Ctrl/⌘+A selects every file.
+fn keyboard(ui: &egui::Ui, n: usize, any_selected: bool, pages_selected: bool) -> Option<RowAction> {
     if n == 0 || ui.ctx().memory(|m| m.focused().is_some()) {
         return None;
     }
@@ -640,9 +860,11 @@ fn keyboard(ui: &egui::Ui, n: usize, any_selected: bool) -> Option<RowAction> {
             if i.consume_key(Modifiers::ALT, Key::ArrowDown) {
                 return Some(RowAction::MoveDown);
             }
-            if i.consume_key(Modifiers::NONE, Key::Delete) || i.consume_key(Modifiers::NONE, Key::Backspace) {
-                return Some(RowAction::Remove);
-            }
+        }
+        // Delete removes the selected pages from the result; the files themselves only when no
+        // page is selected.
+        if (pages_selected || any_selected) && (i.consume_key(Modifiers::NONE, Key::Delete) || i.consume_key(Modifiers::NONE, Key::Backspace)) {
+            return Some(if pages_selected { RowAction::RemovePages } else { RowAction::Remove });
         }
         for (down, key) in [(false, Key::ArrowUp), (true, Key::ArrowDown)] {
             if i.consume_key(Modifiers::NONE, key) {
@@ -890,137 +1112,162 @@ fn table_body(
                 }
                 *shown = Some(out);
             }
+            let mut expanded_ids: BTreeSet<u64> = app.combine_tab.expanded.clone();
+            expanded_ids.retain(|id| app.combine_draft.iter().any(|f| f.id == *id));
+            let viewport = body.ui_mut().clip_rect();
             for i in 0..n {
-                let Some(f) = app.combine_draft.get_mut(i) else { break };
-                let check = rows.checks.get(i).cloned().unwrap_or(Ok(f.pages));
-                body.row(32.0, |mut row| {
-                    row.set_selected(rows.selected.get(i).copied().unwrap_or(false));
-                    // Drag handle.
-                    row.col(|ui| {
-                        let id = ui.id().with(("combine-drag", f.id));
-                        ui.dnd_drag_source(id, i, |ui| {
-                            let (rect, resp) = ui.allocate_exact_size(vec2(12.0, 18.0), Sense::hover());
-                            grip(ui, rect, if resp.hovered() || rows.dragging { t.text_muted } else { t.text_faint });
-                        })
-                        .response
-                        .on_hover_cursor(egui::CursorIcon::Grab)
-                        .on_hover_text(tl!("Drag to reorder"));
-                    });
-                    for kind in order {
-                        row.col(|ui| match kind {
-                            SortKey::Name => {
-                                ui.add(icons::image("file-text", 16.0, t.icon));
-                                ui.add(egui::Label::new(crate::bidi::visual(&f.name).as_ref()).truncate().selectable(false));
-                            }
-                            // The range field and how many pages it takes.
-                            SortKey::Pages => {
-                                let edit = ui.add_enabled(
-                                    f.problem.is_none(),
-                                    egui::TextEdit::singleline(&mut f.range).hint_text(tl!("All pages")).desired_width(88.0),
-                                );
-                                // A visible field on plain and striped rows alike; red when the range is wrong.
-                                let border = if check.is_err() { Stroke::new(1.5, ERROR) } else { Stroke::new(1.0, t.border) };
-                                ui.painter().rect_stroke(edit.rect, CornerRadius::same(4), border, egui::StrokeKind::Inside);
-                                if let Err(e) = &check {
-                                    edit.clone().on_hover_text(e);
-                                } else {
-                                    edit.clone()
-                                        .on_hover_text(crate::i18n::fmt(tl!("Pages of {name} to combine, e.g. 1-3, 6"), &[("name", &f.name)]));
-                                }
-                                if edit.gained_focus() {
-                                    events.range_focused = true;
-                                    events.action = Some(RowAction::Click(i, Modifiers::NONE));
-                                }
-                                if edit.changed() {
-                                    events.range_changed = true;
-                                }
-                                let count = match (&check, f.problem.is_some()) {
-                                    (_, true) => "—".to_string(),
-                                    (Ok(k), _) => crate::i18n::fmt(tl!("{k} of {n}"), &[("k", &k.to_string()), ("n", &f.pages.to_string())]),
-                                    (Err(_), _) => crate::i18n::fmt(tl!("? of {n}"), &[("n", &f.pages.to_string())]),
-                                };
-                                ui.label(egui::RichText::new(count).small().color(if check.is_err() { ERROR } else { t.text_faint }));
-                            }
-                            SortKey::Size => {
-                                ui.label(egui::RichText::new(crate::panels::human_size(f.bytes.len())).color(t.text_muted));
-                            }
-                            SortKey::Modified => match f.modified {
-                                Some(m) => {
-                                    ui.label(egui::RichText::new(ago(m)).color(t.text_muted)).on_hover_text(utc_stamp(m));
-                                }
-                                None => {
-                                    ui.label(egui::RichText::new("—").color(t.text_faint));
-                                }
-                            },
-                            // Blocking problems first, in red.
-                            SortKey::Warnings => {
-                                let mut errors: Vec<String> = f.problem.iter().cloned().collect();
-                                if let Err(e) = &check {
-                                    errors.push(e.clone());
-                                }
-                                let mut warnings = f.notes.clone();
-                                if rows.twice.get(i).copied().unwrap_or(false) {
-                                    warnings.push(tl!("Added more than once").to_string());
-                                }
-                                let (icon, colour, first) = match (errors.first(), warnings.first()) {
-                                    (Some(e), _) => ("circle-x", ERROR, e.clone()),
-                                    (None, Some(w)) => ("triangle-alert", WARNING, w.clone()),
-                                    (None, None) => return,
-                                };
-                                let all = errors.iter().chain(&warnings).cloned().collect::<Vec<_>>().join("\n");
-                                ui.add(icons::image(icon, 15.0, colour));
-                                if f.lock.is_some() {
-                                    let link =
-                                        ui.add(egui::Link::new(egui::RichText::new(tl!("Unlock…")).color(t.accent))).on_hover_text(match f.lock {
-                                            Some(Lock::Permissions) => tl!("Enter the permissions password to allow combining"),
-                                            _ => tl!("Enter the password that opens it"),
-                                        });
-                                    if link.clicked() {
-                                        events.action = Some(RowAction::Unlock(Some(i), link.rect.left_bottom() + vec2(0.0, 6.0)));
+                let strip_open = {
+                    let Some(f) = app.combine_draft.get_mut(i) else { break };
+                    let check = rows.checks.get(i).cloned().unwrap_or(Ok(f.pages));
+                    let mut open = false;
+                    body.row(32.0, |mut row| {
+                        row.set_selected(rows.selected.get(i).copied().unwrap_or(false));
+                        // Drag handle.
+                        row.col(|ui| {
+                            let id = ui.id().with(("combine-drag", f.id));
+                            ui.dnd_drag_source(id, i, |ui| {
+                                let (rect, resp) = ui.allocate_exact_size(vec2(12.0, 18.0), Sense::hover());
+                                grip(ui, rect, if resp.hovered() || rows.dragging { t.text_muted } else { t.text_faint });
+                            })
+                            .response
+                            .on_hover_cursor(egui::CursorIcon::Grab)
+                            .on_hover_text(tl!("Drag to reorder"));
+                        });
+                        for kind in order {
+                            row.col(|ui| match kind {
+                                SortKey::Name => {
+                                    // The chevron shows and hides this file's pages.
+                                    let open = expanded_ids.contains(&f.id);
+                                    let (icon, tip) = if open { ("chevron-down", tl!("Collapse")) } else { ("chevron-right", tl!("Expand")) };
+                                    let a11y = format!("{tip} · {}", f.name);
+                                    if icons::button(ui, icon, 18.0, false, &a11y).clicked() {
+                                        events.action = Some(RowAction::TogglePages(i));
                                     }
+                                    ui.add(icons::image("file-text", 16.0, t.icon));
+                                    ui.add(egui::Label::new(crate::bidi::visual(&f.name).as_ref()).truncate().selectable(false));
                                 }
-                                ui.add(
-                                    egui::Label::new(egui::RichText::new(first).color(if colour == ERROR { ERROR } else { t.text }))
-                                        .truncate()
-                                        .selectable(false),
-                                )
-                                .on_hover_text(all);
-                            }
-                        });
-                    }
-                    let response = row.response();
-                    if f.lock.is_some() {
-                        let at = response.rect.left_bottom();
-                        response.context_menu(|ui| {
-                            if ui
-                                .add(egui::Button::image_and_text(icons::image("lock-open", 15.0, ui.visuals().text_color()), tl!("Unlock…")))
-                                .clicked()
-                            {
-                                events.action = Some(RowAction::Unlock(Some(i), at));
-                                ui.close();
-                            }
-                        });
-                    }
-                    if response.clicked() {
-                        let modifiers = response.ctx.input(|i| i.modifiers);
-                        events.action = Some(RowAction::Click(i, modifiers));
-                    }
-                    // A row dragged over this one goes where the line is drawn.
-                    if let Some(from) = response.dnd_hover_payload::<usize>().map(|p| *p) {
-                        let r = response.rect;
-                        let y = if from > i { r.top() } else { r.bottom() };
-                        if from != i {
-                            response.ctx.layer_painter(egui::LayerId::new(egui::Order::Foreground, egui::Id::new("combine-drop-line"))).hline(
-                                r.x_range(),
-                                y,
-                                Stroke::new(2.0, t.accent),
-                            );
+                                // The range field and how many pages it takes.
+                                SortKey::Pages => {
+                                    let edit = ui.add_enabled(
+                                        f.problem.is_none(),
+                                        egui::TextEdit::singleline(&mut f.range).hint_text(tl!("All pages")).desired_width(88.0),
+                                    );
+                                    // A visible field on plain and striped rows alike; red when the range is wrong.
+                                    let border = if check.is_err() { Stroke::new(1.5, ERROR) } else { Stroke::new(1.0, t.border) };
+                                    ui.painter().rect_stroke(edit.rect, CornerRadius::same(4), border, egui::StrokeKind::Inside);
+                                    if let Err(e) = &check {
+                                        edit.clone().on_hover_text(e);
+                                    } else {
+                                        edit.clone()
+                                            .on_hover_text(crate::i18n::fmt(tl!("Pages of {name} to combine, e.g. 1-3, 6"), &[("name", &f.name)]));
+                                    }
+                                    if edit.gained_focus() {
+                                        events.range_focused = true;
+                                        events.action = Some(RowAction::Click(i, Modifiers::NONE));
+                                    }
+                                    if edit.changed() {
+                                        events.range_changed = true;
+                                    }
+                                    let count = match (&check, f.problem.is_some()) {
+                                        (_, true) => "—".to_string(),
+                                        (Ok(k), _) => crate::i18n::fmt(tl!("{k} of {n}"), &[("k", &k.to_string()), ("n", &f.pages.to_string())]),
+                                        (Err(_), _) => crate::i18n::fmt(tl!("? of {n}"), &[("n", &f.pages.to_string())]),
+                                    };
+                                    ui.label(egui::RichText::new(count).small().color(if check.is_err() { ERROR } else { t.text_faint }));
+                                }
+                                SortKey::Size => {
+                                    ui.label(egui::RichText::new(crate::panels::human_size(f.bytes.len())).color(t.text_muted));
+                                }
+                                SortKey::Modified => match f.modified {
+                                    Some(m) => {
+                                        ui.label(egui::RichText::new(ago(m)).color(t.text_muted)).on_hover_text(utc_stamp(m));
+                                    }
+                                    None => {
+                                        ui.label(egui::RichText::new("—").color(t.text_faint));
+                                    }
+                                },
+                                // Blocking problems first, in red.
+                                SortKey::Warnings => {
+                                    let mut errors: Vec<String> = f.problem.iter().cloned().collect();
+                                    if let Err(e) = &check {
+                                        errors.push(e.clone());
+                                    }
+                                    let mut warnings = f.notes.clone();
+                                    if rows.twice.get(i).copied().unwrap_or(false) {
+                                        warnings.push(tl!("Added more than once").to_string());
+                                    }
+                                    let (icon, colour, first) = match (errors.first(), warnings.first()) {
+                                        (Some(e), _) => ("circle-x", ERROR, e.clone()),
+                                        (None, Some(w)) => ("triangle-alert", WARNING, w.clone()),
+                                        (None, None) => return,
+                                    };
+                                    let all = errors.iter().chain(&warnings).cloned().collect::<Vec<_>>().join("\n");
+                                    ui.add(icons::image(icon, 15.0, colour));
+                                    if f.lock.is_some() {
+                                        let link = ui.add(egui::Link::new(egui::RichText::new(tl!("Unlock…")).color(t.accent))).on_hover_text(
+                                            match f.lock {
+                                                Some(Lock::Permissions) => tl!("Enter the permissions password to allow combining"),
+                                                _ => tl!("Enter the password that opens it"),
+                                            },
+                                        );
+                                        if link.clicked() {
+                                            events.action = Some(RowAction::Unlock(Some(i), link.rect.left_bottom() + vec2(0.0, 6.0)));
+                                        }
+                                    }
+                                    ui.add(
+                                        egui::Label::new(egui::RichText::new(first).color(if colour == ERROR { ERROR } else { t.text }))
+                                            .truncate()
+                                            .selectable(false),
+                                    )
+                                    .on_hover_text(all);
+                                }
+                            });
                         }
-                    }
-                    if let Some(from) = response.dnd_release_payload::<usize>().map(|p| *p) {
-                        events.action = Some(RowAction::Drop { from, to: i });
-                    }
-                });
+                        let response = row.response();
+                        if f.lock.is_some() {
+                            let at = response.rect.left_bottom();
+                            response.context_menu(|ui| {
+                                if ui
+                                    .add(egui::Button::image_and_text(icons::image("lock-open", 15.0, ui.visuals().text_color()), tl!("Unlock…")))
+                                    .clicked()
+                                {
+                                    events.action = Some(RowAction::Unlock(Some(i), at));
+                                    ui.close();
+                                }
+                            });
+                        }
+                        if response.clicked() {
+                            let modifiers = response.ctx.input(|i| i.modifiers);
+                            events.action = Some(RowAction::Click(i, modifiers));
+                        }
+                        // A row dragged over this one goes where the line is drawn.
+                        if let Some(from) = response.dnd_hover_payload::<usize>().map(|p| *p) {
+                            let r = response.rect;
+                            let y = if from > i { r.top() } else { r.bottom() };
+                            if from != i {
+                                response.ctx.layer_painter(egui::LayerId::new(egui::Order::Foreground, egui::Id::new("combine-drop-line"))).hline(
+                                    r.x_range(),
+                                    y,
+                                    Stroke::new(2.0, t.accent),
+                                );
+                            }
+                        }
+                        if let Some(from) = response.dnd_release_payload::<usize>().map(|p| *p) {
+                            events.action = Some(RowAction::Drop { from, to: i });
+                        }
+                        open = expanded_ids.contains(&f.id);
+                    });
+                    open
+                };
+                // The file's pages, when its strip is open: a row of its own, drawn from the row's
+                // first cell across the whole table (that column does not clip, and the strip
+                // cell is the only one in the row, so nothing overlaps its thumbnails).
+                if strip_open {
+                    body.row(STRIP_H, |mut row| {
+                        row.set_selected(false);
+                        row.col(|ui| strip(app, ui, t, i, viewport, events));
+                    });
+                }
             }
         });
 }
@@ -1159,13 +1406,26 @@ impl PdfCraftApp {
     }
 
     fn combine_snapshot(&self) -> Snapshot {
-        Snapshot { files: self.combine_draft.clone(), selected: self.combine_tab.selected.clone(), sort: self.combine_tab.sort }
+        Snapshot {
+            files: self.combine_draft.clone(),
+            selected: self.combine_tab.selected.clone(),
+            sort: self.combine_tab.sort,
+            order: self.combine_tab.order.clone(),
+            pages_selected: self.combine_tab.pages_selected.clone(),
+        }
     }
 
     fn combine_restore(&mut self, s: Snapshot) {
         self.combine_draft = s.files;
         self.combine_tab.selected = s.selected;
         self.combine_tab.sort = s.sort;
+        self.combine_tab.order = s.order;
+        self.combine_tab.pages_selected = s.pages_selected;
+        self.combine_tab.page_drag = None;
+        // The page the preview pane shows may be gone.
+        if self.combine_tab.preview_page.is_some_and(|p| !self.combine_tab.order.contains(&p)) {
+            self.combine_tab.preview_page = None;
+        }
         self.combine_tab.range_edit = None;
         // A Pages field with the keyboard would otherwise keep typing into the restored list
         // without an undo step.
@@ -1203,7 +1463,13 @@ impl PdfCraftApp {
         let (from, to) =
             if undo { (&mut self.combine_tab.undo, &mut self.combine_tab.redo) } else { (&mut self.combine_tab.redo, &mut self.combine_tab.undo) };
         let Some(state) = from.pop() else { return };
-        let now = Snapshot { files: self.combine_draft.clone(), selected: self.combine_tab.selected.clone(), sort: self.combine_tab.sort };
+        let now = Snapshot {
+            files: self.combine_draft.clone(),
+            selected: self.combine_tab.selected.clone(),
+            sort: self.combine_tab.sort,
+            order: self.combine_tab.order.clone(),
+            pages_selected: self.combine_tab.pages_selected.clone(),
+        };
         to.push(now);
         self.combine_restore(state);
     }
@@ -1228,6 +1494,8 @@ impl PdfCraftApp {
         });
         *list = keyed.into_iter().map(|(_, f)| f).collect();
         self.combine_tab.sort = Some((key, ascending));
+        // The page blocks follow the new row order; each file keeps its own page order.
+        reorder_to_rows(&mut self.combine_tab.order, &self.combine_draft);
     }
 
     fn combine_apply(&mut self, action: RowAction) {
@@ -1302,12 +1570,19 @@ impl PdfCraftApp {
                     }
                 }
                 self.combine_tab.sort = None;
+                // The page blocks follow their rows; each file keeps its own page order.
+                reorder_to_rows(&mut self.combine_tab.order, &self.combine_draft);
             }
             RowAction::Remove => {
                 let Some(first) = ids.iter().position(|id| tab.selected.contains(id)) else { return };
                 self.combine_record();
                 let sel = std::mem::take(&mut self.combine_tab.selected);
                 self.combine_draft.retain(|f| !sel.contains(&f.id));
+                for id in &sel {
+                    remove_file_pages(&mut self.combine_tab.order, *id);
+                }
+                self.combine_tab.pages_selected.retain(|p| !sel.contains(&p.file));
+                self.combine_tab.expanded.retain(|id| !sel.contains(id));
                 // The file that took the first removed one's place is selected next.
                 let next = self.combine_draft.get(first).or(self.combine_draft.last()).map(|f| f.id);
                 self.combine_tab.selected = next.into_iter().collect();
@@ -1328,6 +1603,7 @@ impl PdfCraftApp {
                 *list = rest;
                 self.combine_tab.selected = moving;
                 self.combine_tab.sort = None;
+                reorder_to_rows(&mut self.combine_tab.order, &self.combine_draft);
             }
             RowAction::Unlock(row, at) => {
                 let locked: BTreeSet<u64> = self.combine_draft.iter().filter(|f| f.lock.is_some()).map(|f| f.id).collect();
@@ -1349,6 +1625,103 @@ impl PdfCraftApp {
                 let ascending = !matches!(tab.sort, Some((k, true)) if k == key);
                 self.combine_record();
                 self.combine_sort(key, ascending);
+                reorder_to_rows(&mut self.combine_tab.order, &self.combine_draft);
+            }
+            RowAction::ClickPage(page, m) => {
+                tab.preview_page = Some(page);
+                if m.shift {
+                    let from = tab.page_anchor.unwrap_or(page);
+                    let (lo, hi) = if from <= page { (from, page) } else { (page, from) };
+                    if !m.command {
+                        tab.pages_selected.clear();
+                    }
+                    tab.pages_selected.extend(all_pages_of(tab, lo, hi));
+                } else if m.command {
+                    if !tab.pages_selected.remove(&page) {
+                        tab.pages_selected.insert(page);
+                    }
+                    tab.page_anchor = Some(page);
+                } else {
+                    tab.pages_selected = BTreeSet::from([page]);
+                    tab.page_anchor = Some(page);
+                }
+            }
+            RowAction::DropPages { moving, to } => {
+                let moving = if moving.is_empty() { tab.pages_selected.iter().copied().collect::<Vec<_>>() } else { moving };
+                if moving.is_empty() {
+                    return;
+                }
+                let before = tab.order.clone();
+                let mut order = std::mem::take(&mut tab.order);
+                move_pages(&mut order, &moving, to);
+                let moved = order != before;
+                tab.order = order;
+                if moved {
+                    self.combine_tab.pages_selected = moving.iter().copied().collect();
+                    self.combine_refresh_ranges();
+                }
+            }
+            RowAction::RemovePages => {
+                let dropping: Vec<PageRef> = self.combine_tab.pages_selected.iter().copied().collect();
+                if dropping.is_empty() {
+                    return;
+                }
+                self.combine_record();
+                self.combine_tab.order.retain(|p| !dropping.contains(p));
+                self.combine_tab.pages_selected.clear();
+                self.combine_tab.page_drag = None;
+                if self.combine_tab.preview_page.is_some_and(|p| dropping.contains(&p)) {
+                    self.combine_tab.preview_page = None;
+                }
+                // A file with no pages left has nothing to contribute: it leaves the list.
+                let empty: Vec<u64> =
+                    self.combine_draft.iter().map(|f| f.id).filter(|id| !self.combine_tab.order.iter().any(|p| p.file == *id)).collect();
+                if !empty.is_empty() {
+                    self.combine_draft.retain(|f| !empty.contains(&f.id));
+                    self.combine_tab.selected.retain(|id| !empty.contains(id));
+                    self.combine_tab.expanded.retain(|id| !empty.contains(id));
+                }
+                self.combine_refresh_ranges();
+            }
+            RowAction::TogglePages(i) => {
+                let Some(&id) = ids.get(i) else { return };
+                if !self.combine_tab.expanded.remove(&id) {
+                    self.combine_tab.expanded.insert(id);
+                }
+            }
+            RowAction::ShowPages(show) => {
+                self.combine_tab.expanded = if show { self.combine_draft.iter().map(|f| f.id).collect() } else { BTreeSet::new() };
+            }
+        }
+    }
+
+    /// Keep every file's Pages field in step with the order, after a page-level change.
+    fn combine_refresh_ranges(&mut self) {
+        let order = self.combine_tab.order.clone();
+        for f in &mut self.combine_draft {
+            let pages = pages_of(&order, f.id);
+            f.range = range_of_pages(&pages, f.pages);
+        }
+    }
+
+    /// Take each file's Pages field as the truth about which pages it contributes. Runs every
+    /// frame; it only rewrites the order when the field and the order disagree (a range typed in
+    /// the table, or a change made outside it — tests, automation), so a drag's arrangement and
+    /// the field's text stay as the user left them.
+    fn combine_sync_order_from_ranges(&mut self) {
+        let mut changed = false;
+        for f in &self.combine_draft {
+            let Some(pages) = pages_from_range(&f.range, f.pages) else { continue };
+            if pages_of(&self.combine_tab.order, f.id) != pages {
+                set_file_pages(&mut self.combine_tab.order, f.id, &pages);
+                changed = true;
+            }
+        }
+        if changed {
+            let order = self.combine_tab.order.clone();
+            self.combine_tab.pages_selected.retain(|p| order.contains(p));
+            if self.combine_tab.preview_page.is_some_and(|p| !order.contains(&p)) {
+                self.combine_tab.preview_page = None;
             }
         }
     }
@@ -1358,6 +1731,9 @@ impl PdfCraftApp {
         let showing = self.combine_showing();
         self.combine_tab = CombineTab::default();
         self.combine_draft.clear();
+        // The page rasters go with it (the pools' threads end with them).
+        self.combine_preview = CombinePreview::default();
+        self.combine_wants.clear();
         if showing {
             self.active = self.views.len().checked_sub(1);
         }
@@ -1390,6 +1766,7 @@ impl PdfCraftApp {
                 bytes,
                 pages: 0,
                 range: String::new(),
+                page_info: None,
                 modified,
                 problem: None,
                 lock: None,
@@ -1403,14 +1780,24 @@ impl PdfCraftApp {
         }
         if !added.is_empty() {
             self.combine_record();
+            let mut fresh = Vec::new();
             for mut f in added {
                 f.id = self.combine_tab.next_id;
                 self.combine_tab.next_id = self.combine_tab.next_id.wrapping_add(1);
+                fresh.push(f.id);
                 self.combine_draft.push(f);
             }
-            // A sorted list stays sorted; new files simply join the end otherwise.
+            // A sorted list stays sorted (which re-forms the page order); new files otherwise join
+            // the end of the list and of the page order.
             if let Some((key, ascending)) = self.combine_tab.sort {
                 self.combine_sort(key, ascending);
+            } else {
+                for f in &self.combine_draft {
+                    if fresh.contains(&f.id) {
+                        let pages = pages_from_range(&f.range, f.pages).unwrap_or_default();
+                        self.combine_tab.order.extend(pages.into_iter().map(|page| PageRef { file: f.id, page }));
+                    }
+                }
             }
         }
         self.open_combine_tab();
@@ -1509,12 +1896,16 @@ impl PdfCraftApp {
             return;
         }
         let count = files.len();
-        let sources: Vec<(String, Arc<Vec<u8>>, Option<String>)> = files
-            .iter()
-            .map(|f| (crate::files::strip_pdf(&f.name).to_string(), f.bytes.clone(), Some(f.range.clone()).filter(|r| !r.trim().is_empty())))
-            .collect();
+        let index_of: std::collections::HashMap<u64, usize> = files.iter().enumerate().map(|(i, f)| (f.id, i)).collect();
+        let sources: Vec<(String, Arc<Vec<u8>>)> = files.iter().map(|f| (crate::files::strip_pdf(&f.name).to_string(), f.bytes.clone())).collect();
+        // The pages the strips left, in the order they show; render order is result order.
+        let order: Vec<(usize, usize)> = self.combine_tab.order.iter().filter_map(|p| index_of.get(&p.file).map(|i| (*i, p.page as usize))).collect();
+        if order.is_empty() {
+            self.notify_fmt("Nothing to combine: no pages are selected", &[]);
+            return;
+        }
         let passwords: Vec<Option<&str>> = files.iter().map(|f| f.password.as_ref().map(|p| p.0.as_str())).collect();
-        match self.session.combine_unlocked(&sources, &passwords) {
+        match self.session.combine_page_order(&sources, &order, &passwords) {
             Ok(bytes) => {
                 self.close_combine_tab();
                 let message = crate::i18n::fmt(tl!("Combined {n} files"), &[("n", &count.to_string())]);
@@ -1523,5 +1914,468 @@ impl PdfCraftApp {
             // The list stays, so the user can fix it.
             Err(e) => self.notify_fmt("Couldn't combine files: {e}", &[("e", &e.to_string())]),
         }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Pages of the listed files: the strip under an expanded file, and the preview pane beside the
+// list. Both draw rasters from a per-file render pool, created while the file is shown.
+// ---------------------------------------------------------------------------------------------
+
+/// The height of an expanded file's page strip row.
+const STRIP_H: f32 = 136.0;
+/// A thumbnail's height inside a strip.
+const STRIP_THUMB_H: f32 = 92.0;
+/// Rasters taken from the pools per frame, so a long strip fills in without a hitch.
+const PREVIEW_PER_FRAME: usize = 4;
+/// Thumbnails and pane rasters kept: bytes capped, the least recently drawn dropped first.
+const PREVIEW_BYTES: usize = 24 * 1024 * 1024;
+const PREVIEW_MAX: usize = 512;
+/// Files whose render pool stays alive (each holds a thread).
+const PREVIEW_POOLS: usize = 4;
+/// Zoom steps of the preview pane.
+const PANE_ZOOM_STEP: f32 = 1.25;
+
+/// Rasters of the Combine tab wear these tag bits: the top one marks them as its work, the next
+/// the preview pane (rather than a strip), and bits 24..47 the file's id.
+const COMBINE_TAG: u64 = 1 << 59;
+const COMBINE_PANE: u64 = 1 << 58;
+const COMBINE_FILE_SHIFT: u32 = 24;
+const COMBINE_FILE_MASK: u64 = 0xFF_FFFF;
+
+/// The Combine tab's page rasters: a lazily created render pool per shown file, the strips'
+/// thumbnails and the preview pane's page.
+#[derive(Default)]
+pub struct CombinePreview {
+    pools: std::collections::HashMap<u64, pdfcraft_render::RenderPool>,
+    /// (file, page) → strip thumbnail.
+    thumbs: std::collections::HashMap<(u64, u32), egui::TextureHandle>,
+    /// The preview pane's raster, with the file, page and scale it was made for.
+    pane: Option<(u64, u32, f32, egui::TextureHandle)>,
+    /// When each raster was last drawn, and the counter ordering them (for eviction).
+    used: std::collections::HashMap<(u64, u32), u64>,
+    tick: u64,
+    bytes: usize,
+}
+
+impl CombinePreview {
+    /// The pool for `file`, created on first use; an unlocked file's password is passed on so its
+    /// pages can be drawn.
+    fn pool(&mut self, file: u64, bytes: &Arc<Vec<u8>>, password: Option<&Secret>) -> &pdfcraft_render::RenderPool {
+        self.pools.entry(file).or_insert_with(|| {
+            let config = pdfcraft_render::RenderConfig { password: password.map(|p| Arc::from(p.0.as_str())), ..Default::default() };
+            pdfcraft_render::RenderPool::new(bytes.clone(), 1, config)
+        })
+    }
+
+    /// A cached raster: a strip thumbnail is a thumbnail whatever it was rendered at, while the
+    /// pane only counts at the scale it asks for.
+    fn cached(&mut self, file: u64, page: u32, scale: f32, pane: bool) -> Option<egui::TextureHandle> {
+        self.tick += 1;
+        let tick = self.tick;
+        if pane {
+            let (f, p, s, tex) = self.pane.as_ref()?;
+            if *f != file || *p != page || (*s - scale).abs() > 0.001 {
+                return None;
+            }
+            let tex = tex.clone();
+            self.used.insert((file, page), tick);
+            return Some(tex);
+        }
+        let tex = self.thumbs.get(&(file, page))?.clone();
+        self.used.insert((file, page), tick);
+        Some(tex)
+    }
+
+    /// Take the finished rasters (a few per frame) and turn them into textures.
+    fn take(&mut self, ctx: &egui::Context, files: &[u64]) {
+        let mut taken = 0;
+        for id in files {
+            let Some(pool) = self.pools.get(id) else { continue };
+            while taken < PREVIEW_PER_FRAME {
+                let Some(r) = pool.try_recv() else { break };
+                taken += 1;
+                let size = [r.width as usize, r.height as usize];
+                if r.error.is_some() || r.rgba.len() != crate::canvas::rgba_bytes(size[0], size[1]) {
+                    continue;
+                }
+                let file = (r.request.tag >> COMBINE_FILE_SHIFT) & COMBINE_FILE_MASK;
+                let img = crate::canvas::texture_image(size, r.rgba);
+                let tex = ctx.load_texture(format!("combine-{file}-{}-{:#x}", r.request.page, r.request.tag), img, egui::TextureOptions::LINEAR);
+                self.bytes += crate::canvas::rgba_bytes(size[0], size[1]);
+                if r.request.tag & COMBINE_PANE != 0 {
+                    self.pane = Some((file, r.request.page as u32, r.request.scale, tex));
+                } else {
+                    self.thumbs.insert((file, r.request.page as u32), tex);
+                }
+            }
+        }
+        self.evict();
+    }
+
+    /// Drop the least recently drawn rasters while over the budget.
+    fn evict(&mut self) {
+        while self.bytes > PREVIEW_BYTES || self.thumbs.len() + usize::from(self.pane.is_some()) > PREVIEW_MAX {
+            let mut all: Vec<((u64, u32), u64)> = self.thumbs.keys().map(|k| (*k, self.used.get(k).copied().unwrap_or(0))).collect();
+            if let Some((file, page, _, _)) = &self.pane {
+                all.push(((*file, *page), self.used.get(&(*file, *page)).copied().unwrap_or(0)));
+            }
+            let Some((oldest, _)) = all.into_iter().min_by_key(|(_, tick)| *tick) else { break };
+            if self.pane.as_ref().is_some_and(|(f, p, _, _)| (*f, *p) == oldest) {
+                self.pane = None;
+            } else if let Some(tex) = self.thumbs.remove(&oldest) {
+                let [w, h] = tex.size();
+                self.bytes = self.bytes.saturating_sub(crate::canvas::rgba_bytes(w, h));
+            }
+            self.used.remove(&oldest);
+        }
+    }
+
+    /// Forget the files that are no longer shown; their pools' threads end with them.
+    fn retire(&mut self, live: &BTreeSet<u64>) {
+        self.pools.retain(|id, _| live.contains(id));
+        self.thumbs.retain(|(id, _), _| live.contains(id));
+        self.used.retain(|(id, _), _| live.contains(id));
+        if self.pane.as_ref().is_some_and(|(id, _, _, _)| !live.contains(id)) {
+            self.pane = None;
+        }
+    }
+}
+
+impl PdfCraftApp {
+    /// The zoom a strip's thumbnails are rendered at: `STRIP_THUMB_H` points tall.
+    fn combine_thumb_scale(&self, ppp: f32, page_height: f32) -> f32 {
+        (STRIP_THUMB_H * ppp / page_height.max(1.0)).clamp(0.05, 2.0)
+    }
+
+    /// A strip thumbnail, asking the file's pool for it when it isn't drawn yet.
+    fn combine_thumb(&mut self, file: u64, page: u32, scale: f32) -> Option<egui::TextureHandle> {
+        if let Some(tex) = self.combine_preview.cached(file, page, scale, false) {
+            return Some(tex);
+        }
+        if !self.combine_wants.iter().any(|(f, p, _, pane)| *f == file && *p == page && !*pane) {
+            self.combine_wants.push((file, page, scale, false));
+        }
+        None
+    }
+
+    /// The preview pane's raster at exactly this scale, same contract.
+    fn combine_pane_tex(&mut self, file: u64, page: u32, scale: f32) -> Option<egui::TextureHandle> {
+        if let Some(tex) = self.combine_preview.cached(file, page, scale, true) {
+            return Some(tex);
+        }
+        if !self.combine_wants.iter().any(|(f, p, s, pane)| *f == file && *p == page && *pane && (*s - scale).abs() < 0.001) {
+            self.combine_wants.push((file, page, scale, true));
+        }
+        None
+    }
+
+    /// Set the pools' demand to what the strips and the pane are about to draw.
+    fn combine_preview_requests(&mut self, wants: &[(u64, u32, f32, bool)]) {
+        let mut by_file: std::collections::HashMap<u64, Vec<pdfcraft_render::RenderRequest>> = std::collections::HashMap::new();
+        for (file, page, scale, pane) in wants {
+            let Some(f) = self.combine_draft.iter().find(|f| f.id == *file) else { continue };
+            if !pane && self.combine_preview.thumbs.contains_key(&(*file, *page)) {
+                continue;
+            }
+            let tag = COMBINE_TAG | if *pane { COMBINE_PANE } else { 0 } | ((*file & COMBINE_FILE_MASK) << COMBINE_FILE_SHIFT);
+            self.combine_preview.pool(*file, &f.bytes, f.password.as_ref());
+            by_file.entry(*file).or_default().push(pdfcraft_render::RenderRequest {
+                page: *page as usize,
+                kind: pdfcraft_render::RequestKind::Pixels,
+                tile: None,
+                scale: *scale,
+                tag,
+            });
+        }
+        for (file, requests) in by_file {
+            if let Some(pool) = self.combine_preview.pools.get(&file) {
+                pool.set_queue(requests);
+            }
+        }
+        // Only the files still asked for keep a pool (and its thread).
+        if self.combine_preview.pools.len() > PREVIEW_POOLS {
+            let live: BTreeSet<u64> = wants.iter().map(|(f, _, _, _)| *f).collect();
+            let mut keep: Vec<u64> = self.combine_preview.pools.keys().copied().filter(|id| live.contains(id)).collect();
+            keep.truncate(PREVIEW_POOLS);
+            let keep: BTreeSet<u64> = keep.into_iter().collect();
+            self.combine_preview.retire(&keep);
+        }
+        if !wants.is_empty()
+            && let Some(ctx) = &self.ctx
+        {
+            ctx.request_repaint();
+        }
+    }
+}
+
+/// The pages' size and label in a listed file, when it could be inspected.
+fn page_size(info: Option<&Vec<pdfcraft_render::PageInfo>>, page: u32) -> (f32, f32) {
+    info.and_then(|i| i.get(page as usize)).map(|p| (p.width.max(1.0), p.height.max(1.0))).unwrap_or((612.0, 792.0))
+}
+
+fn page_label(info: Option<&Vec<pdfcraft_render::PageInfo>>, page: u32) -> String {
+    info.and_then(|i| i.get(page as usize)).map(|p| p.label.clone()).unwrap_or_else(|| (page + 1).to_string())
+}
+
+/// One file's pages, drawn under its row: thumbnails in result order, selectable, draggable and
+/// removable. The strip is drawn from the row's first cell and clipped to the table's viewport
+/// (the cell itself is only as wide as the drag-handle column).
+fn strip(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, index: usize, viewport: Rect, events: &mut TableEvents) {
+    let Some(file) = app.combine_draft.get(index) else { return };
+    let id = file.id;
+    let locked = file.lock.is_some() || file.problem.is_some();
+    // What the strip needs from the file, before `app` is borrowed again below.
+    let name = file.name.clone();
+    let info = file.page_info.clone();
+    let why = file.problem.clone().unwrap_or_else(|| tl!("Password-protected").to_string());
+    let pages: Vec<u32> = pages_of(&app.combine_tab.order, id);
+    let order_at: Vec<usize> = app.combine_tab.order.iter().enumerate().filter(|(_, p)| p.file == id).map(|(i, _)| i).collect();
+    let band = Rect::from_min_size(ui.max_rect().min, vec2((viewport.right() - ui.max_rect().left()).max(120.0), ui.max_rect().height()));
+    ui.set_clip_rect(band.intersect(viewport));
+    // The cell is only as wide as the drag-handle column: claim the whole band so the row is laid
+    // out to the table's width and the thumbnails have the room.
+    ui.allocate_rect(band, Sense::hover());
+    ui.painter().rect_filled(band.shrink2(vec2(0.0, 2.0)), CornerRadius::same(4), t.pasteboard);
+    let inner = band.shrink2(vec2(8.0, 8.0));
+    let ppp = ui.ctx().pixels_per_point();
+    let selected: BTreeSet<PageRef> = app.combine_tab.pages_selected.clone();
+    let dragging = app.combine_tab.page_drag.clone();
+    let pointer = ui.input(|i| i.pointer.hover_pos());
+    // Where the pointer was let go this frame, from the event itself: the pointer is gone by the
+    // time the frame's state is read.
+    let release_pos = ui.input(|i| {
+        i.events.iter().find_map(|e| match e {
+            egui::Event::PointerButton { pos, pressed: false, button: egui::PointerButton::Primary, .. } => Some(*pos),
+            _ => None,
+        })
+    });
+    let mut cells: Vec<(usize, Rect)> = Vec::new();
+    let mut action = None;
+    ui.scope_builder(egui::UiBuilder::new().max_rect(inner).layout(Layout::left_to_right(Align::Min)), |ui| {
+        egui::ScrollArea::horizontal().id_salt(("combine-strip", id)).show(ui, |ui| {
+            ui.horizontal(|ui| {
+                ui.spacing_mut().item_spacing.x = 6.0;
+                if pages.is_empty() {
+                    ui.label(egui::RichText::new(tl!("No pages selected")).color(t.text_faint));
+                    return;
+                }
+                if locked {
+                    ui.add(icons::image("lock", 16.0, t.text_faint)).on_hover_text(&why);
+                }
+                for (pos, page) in pages.iter().enumerate() {
+                    let (pw, ph) = page_size(info.as_deref(), *page);
+                    let scale = app.combine_thumb_scale(ppp, ph);
+                    let (w, h) = ((pw * scale / ppp).clamp(28.0, 200.0), STRIP_THUMB_H);
+                    let (rect, response) = ui.allocate_exact_size(vec2(w, h + 16.0), Sense::click_and_drag());
+                    let image = Rect::from_min_size(rect.min, vec2(w, h));
+                    let page_ref = PageRef { file: id, page: *page };
+                    let label = page_label(info.as_deref(), *page);
+                    let a11y = format!("{} · {name}", crate::i18n::fmt(tl!("Page {label}"), &[("label", &label)]));
+                    response.widget_info(|| egui::WidgetInfo::selected(egui::WidgetType::Button, true, selected.contains(&page_ref), &a11y));
+                    ui.painter().rect_filled(image, CornerRadius::same(2), t.field);
+                    if let Some(tex) = app.combine_thumb(id, *page, scale) {
+                        ui.painter().image(tex.id(), image, Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)), Color32::WHITE);
+                    }
+                    let border = if selected.contains(&page_ref) { Stroke::new(2.0, t.accent) } else { Stroke::new(1.0, t.divider) };
+                    ui.painter().rect_stroke(image, CornerRadius::same(2), border, egui::StrokeKind::Inside);
+                    ui.painter().text(rect.center_bottom() - vec2(0.0, 8.0), egui::Align2::CENTER_CENTER, &label, theme::regular(11.0), t.text_muted);
+                    cells.push((order_at[pos], rect));
+                    if response.clicked() {
+                        action = Some(RowAction::ClickPage(page_ref, response.ctx.input(|i| i.modifiers)));
+                    }
+                    if response.drag_started() && !dragging.is_some() {
+                        let mut moving: Vec<PageRef> = if selected.contains(&page_ref) {
+                            app.combine_tab.order.iter().copied().filter(|p| selected.contains(p)).collect()
+                        } else {
+                            vec![page_ref]
+                        };
+                        if moving.is_empty() {
+                            moving.push(page_ref);
+                        }
+                        app.combine_tab.pages_selected = moving.iter().copied().collect();
+                        app.combine_tab.page_drag = Some(moving);
+                    }
+                    response.on_hover_cursor(egui::CursorIcon::Grab).on_hover_text(tl!("Drag to reorder"));
+                }
+            });
+        });
+    });
+    // While dragging: the gap the pages would go to, drawn as a bar; letting go drops them there.
+    // Only the strip the pointer is over takes the drop.
+    if let (Some(moving), Some(p)) = (dragging, release_pos.filter(|p| band.contains(*p))) {
+        app.combine_tab.page_drag = None;
+        if let Some(gap) = strip_gap(&cells, p) {
+            // `to` counts positions without the moving pages.
+            let to = gap - moving.iter().filter(|m| app.combine_tab.order.iter().position(|q| q == *m).is_some_and(|i| i < gap)).count();
+            events.action = Some(RowAction::DropPages { moving, to });
+        }
+    } else if let (Some(moving), Some(p)) = (app.combine_tab.page_drag.clone(), pointer.filter(|p| band.contains(*p)))
+        && let Some(gap) = strip_gap(&cells, p)
+    {
+        let x = match cells.iter().find(|(i, _)| *i == gap) {
+            Some((_, r)) => r.left() - 3.0,
+            None => cells.last().map_or(inner.left(), |(_, r)| r.right() + 3.0),
+        };
+        ui.painter().line_segment([egui::pos2(x, inner.top() + 8.0), egui::pos2(x, inner.bottom() - 12.0)], Stroke::new(3.0, t.accent));
+        ui.painter().text(
+            p + vec2(14.0, 14.0),
+            egui::Align2::LEFT_TOP,
+            if moving.len() == 1 { tl!("1 page").to_string() } else { crate::i18n::fmt(tl!("{n} pages"), &[("n", &moving.len().to_string())]) },
+            theme::medium(12.0),
+            t.accent_text,
+        );
+    }
+    if let Some(a) = action {
+        events.action = Some(a);
+    }
+}
+
+/// The gap of the strip the pointer is at: an index into the tab's order.
+fn strip_gap(cells: &[(usize, Rect)], p: egui::Pos2) -> Option<usize> {
+    let (i, r) = cells.iter().min_by(|(_, a), (_, b)| a.distance_sq_to_pos(p).total_cmp(&b.distance_sq_to_pos(p)))?;
+    Some(if p.x < r.center().x { *i } else { i + 1 })
+}
+
+/// The preview pane beside the list: the page the strips last clicked, larger, with zoom.
+fn preview_pane(app: &mut PdfCraftApp, ui: &mut egui::Ui, t: &Tokens, events: &mut TableEvents) {
+    let Some(page) = app.combine_tab.preview_page else { return };
+    let Some(f) = app.combine_draft.iter().find(|f| f.id == page.file) else { return };
+    let name = f.name.clone();
+    let info = f.page_info.clone();
+    let (pw, ph) = page_size(info.as_deref(), page.page);
+    let label = page_label(info.as_deref(), page.page);
+    let pages = pages_of(&app.combine_tab.order, page.file);
+    let position = pages.iter().position(|p| *p == page.page).map_or(0, |i| i + 1);
+    egui::Frame::NONE
+        .fill(t.card)
+        .stroke(Stroke::new(1.0, t.border))
+        .corner_radius(CornerRadius::same(t.radius))
+        .inner_margin(egui::Margin::same(10))
+        .show(ui, |ui| {
+            ui.set_width(ui.available_width());
+            ui.horizontal(|ui| {
+                ui.add(icons::image("file-text", 15.0, t.icon));
+                ui.add(egui::Label::new(egui::RichText::new(crate::bidi::visual(&name).as_ref()).font(theme::medium(13.0))).truncate());
+                ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                    if icons::button(ui, "x", 24.0, false, tl!("Close")).clicked() {
+                        app.combine_tab.preview_page = None;
+                    }
+                });
+            });
+            ui.label(egui::RichText::new(crate::i18n::fmt(tl!("Page {label}"), &[("label", &label)])).font(theme::medium(12.5)));
+            ui.label(
+                egui::RichText::new(crate::i18n::fmt(tl!("{k} of {n}"), &[("k", &position.to_string()), ("n", &pages.len().to_string())]))
+                    .small()
+                    .color(t.text_faint),
+            );
+            ui.add_space(6.0);
+            ui.horizontal(|ui| {
+                ui.spacing_mut().item_spacing.x = 4.0;
+                let fit_scale = pane_fit_scale(ui, pw, ph);
+                let scale = app.combine_tab.pane_zoom.unwrap_or(fit_scale);
+                if icons::button(ui, "zoom-out", 26.0, false, tl!("Zoom out")).clicked() {
+                    app.combine_tab.pane_zoom = Some((scale / PANE_ZOOM_STEP).max(0.05));
+                }
+                if icons::button(ui, "maximize", 26.0, app.combine_tab.pane_zoom.is_none(), tl!("Fit")).clicked() {
+                    app.combine_tab.pane_zoom = None;
+                }
+                if icons::button(ui, "zoom-in", 26.0, false, tl!("Zoom in")).clicked() {
+                    app.combine_tab.pane_zoom = Some((scale * PANE_ZOOM_STEP).min(8.0));
+                }
+                ui.label(egui::RichText::new(format!("{:.0}%", scale * 100.0)).small().color(t.text_muted));
+                ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
+                    if widgets::pill_button(ui, tl!("Delete"), false).clicked() {
+                        app.combine_tab.pages_selected = BTreeSet::from([page]);
+                        events.action = Some(RowAction::RemovePages);
+                    }
+                });
+            });
+            ui.add_space(6.0);
+            let fit_scale = pane_fit_scale(ui, pw, ph);
+            let scale = app.combine_tab.pane_zoom.unwrap_or(fit_scale);
+            let (w, h) = (pw * scale, ph * scale);
+            egui::ScrollArea::both().id_salt(("combine-pane", page.file, page.page)).show(ui, |ui| {
+                let (rect, _) = ui.allocate_exact_size(vec2(w.max(24.0), h.max(24.0)), Sense::hover());
+                ui.painter().rect_filled(rect, CornerRadius::same(2), t.field);
+                if let Some(tex) = app.combine_pane_tex(page.file, page.page, scale) {
+                    ui.painter().image(tex.id(), rect, Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)), Color32::WHITE);
+                }
+                ui.painter().rect_stroke(rect, CornerRadius::same(2), Stroke::new(1.0, t.divider), egui::StrokeKind::Inside);
+            });
+        });
+}
+
+/// The scale at which a page fits the pane's remaining box.
+fn pane_fit_scale(ui: &egui::Ui, pw: f32, ph: f32) -> f32 {
+    let avail = ui.available_size();
+    (avail.x.max(48.0) / pw.max(1.0)).min(avail.y.max(48.0) / ph.max(1.0)).clamp(0.05, 8.0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn p(file: u64, page: u32) -> PageRef {
+        PageRef { file, page }
+    }
+
+    /// A file row for the order helpers: only the fields they read matter.
+    fn file(id: u64, pages: usize) -> CombineFile {
+        CombineFile {
+            id,
+            name: format!("{id}.pdf"),
+            bytes: Arc::new(Vec::new()),
+            pages,
+            range: String::new(),
+            page_info: None,
+            modified: None,
+            problem: None,
+            lock: None,
+            password: None,
+            notes: Vec::new(),
+            origin_note: None,
+            checked: None,
+        }
+    }
+
+    #[test]
+    fn ranges_round_trip_through_page_lists() {
+        assert_eq!(range_of_pages(&[0, 1, 2], 3), "", "every page in order stays \"all pages\"");
+        assert_eq!(range_of_pages(&[0, 1, 3], 4), "1-2, 4");
+        assert_eq!(range_of_pages(&[2, 1, 0], 3), "3-1");
+        assert_eq!(range_of_pages(&[1], 3), "2");
+        assert_eq!(pages_from_range("", 4), Some(vec![0, 1, 2, 3]));
+        assert_eq!(pages_from_range("3, 1", 3), Some(vec![2, 0]));
+        assert_eq!(pages_from_range("1-2, 4", 4), Some(vec![0, 1, 3]));
+        assert_eq!(pages_from_range("0", 3), None, "the field counts from 1");
+        assert_eq!(pages_from_range("nonsense", 3), None);
+    }
+
+    #[test]
+    fn page_edits_rewrite_the_order() {
+        // A1 A2 A3 B1 B2, then B1 moves between A1 and A2: A1 B1 A2 A3 B2.
+        let mut order = vec![p(1, 0), p(1, 1), p(1, 2), p(2, 0), p(2, 1)];
+        move_pages(&mut order, &[p(2, 0)], 1);
+        assert_eq!(order, vec![p(1, 0), p(2, 0), p(1, 1), p(1, 2), p(2, 1)]);
+        // Deleting a page leaves the file's other pages in their order.
+        order.retain(|x| *x != p(1, 1));
+        assert_eq!(pages_of(&order, 1), [0, 2]);
+        assert_eq!(range_of_pages(&pages_of(&order, 1), 3), "1, 3");
+        // A typed range replaces that file's pages where its first page was.
+        set_file_pages(&mut order, 1, &[2, 0]);
+        assert_eq!(order, vec![p(1, 2), p(1, 0), p(2, 0), p(2, 1)]);
+        // Row reordering: blocks follow the rows, each file keeps its own page order.
+        let files = vec![file(2, 2), file(1, 3)];
+        reorder_to_rows(&mut order, &files);
+        assert_eq!(order, vec![p(2, 0), p(2, 1), p(1, 2), p(1, 0)]);
+    }
+
+    #[test]
+    fn shift_selection_stays_inside_one_strip() {
+        let tab = CombineTab { order: vec![p(1, 0), p(2, 0), p(1, 1), p(1, 2)], ..Default::default() };
+        assert_eq!(all_pages_of(&tab, p(1, 0), p(1, 2)), [p(1, 0), p(1, 1), p(1, 2)]);
+        assert_eq!(all_pages_of(&tab, p(1, 2), p(1, 0)), [p(1, 0), p(1, 1), p(1, 2)], "either direction");
+        assert_eq!(all_pages_of(&tab, p(1, 0), p(2, 0)), [p(2, 0)], "another file's page is not part of the range");
     }
 }
